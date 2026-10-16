@@ -1,0 +1,7 @@
+"0",""
+"0","# Anteil geschätzter Datumsangaben"
+"0","gl |>"
+"0","  summarise("
+"0","    start_geschaetzt = mean(!datum_exakt_start),"
+"0","    ende_geschaetzt  = mean(!datum_exakt_end)"
+"0","  )"

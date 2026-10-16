@@ -1,0 +1,7 @@
+"0","#| label: fig-hist"
+"0","#| fig-cap: ""Verteilung der geodätischen Massenbilanz (längste Periode je Gletscher)"""
+"0",""
+"0","ggplot(gl_lang, aes(bgeod_mwe_a)) +"
+"0","  geom_histogram(bins = 50, fill = ""#2a7ab0"") +"
+"0","  geom_vline(xintercept = median(gl_lang$bgeod_mwe_a), linetype = ""dashed"") +"
+"0","  labs(x = ""Massenbilanz [m w.e. a⁻¹]"", y = ""Anzahl Gletscher"")"

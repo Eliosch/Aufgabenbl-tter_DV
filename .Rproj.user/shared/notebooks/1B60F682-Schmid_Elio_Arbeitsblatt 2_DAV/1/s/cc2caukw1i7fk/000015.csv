@@ -1,0 +1,6 @@
+"0",""
+"0","# Gleiche Namen bei verschiedenen IDs"
+"0","gl |>"
+"0","  distinct(sgi_id, name) |>"
+"0","  count(name) |>"
+"0","  filter(n > 1)"

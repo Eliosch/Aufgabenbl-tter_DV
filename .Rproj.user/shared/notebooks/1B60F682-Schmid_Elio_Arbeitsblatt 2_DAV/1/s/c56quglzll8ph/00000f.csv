@@ -1,0 +1,8 @@
+"0","#| label: fig-box"
+"0","#| fig-cap: ""Massenbilanz nach Grössenklasse"""
+"0",""
+"0","gl_lang |>"
+"0","  filter(!is.na(groessenklasse)) |>"
+"0","  ggplot(aes(groessenklasse, bgeod_mwe_a)) +"
+"0","  geom_boxplot(fill = ""#9ecae1"") +"
+"0","  labs(x = ""Flächenklasse [km²]"", y = ""Massenbilanz [m w.e. a⁻¹]"")"
