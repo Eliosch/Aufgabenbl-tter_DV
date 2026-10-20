@@ -1,0 +1,490 @@
+---
+title: "Massenbilanz der Schweizer Gletscher nach Höhenstufen"
+subtitle: "Arbeitsblatt 2, zweiter Datensatz – Principles of Data Visualization, Herbstsemester 2026"
+author: "Elio Schmid"
+date: "2026-10-19"
+date-modified: today
+date-format: "DD.MM.YYYY"
+lang: de-CH   # bei babel-Fehler (ngerman) alternativ: lang: de
+number-sections: true
+fig-cap-location: bottom
+crossref:
+  fig-title: "Abbildung"
+format:
+  # HTML zuerst: der Render-Button in RStudio erzeugt das erste Format
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    toc-title: "Inhalt"
+    embed-resources: true        # eine einzige HTML-Datei inkl. aller Bilder
+    link-external-newwindow: true
+    fig-width: 8
+    fig-height: 5
+    echo: true
+    code-fold: true              # Code ist vorhanden, aber eingeklappt
+    code-summary: "Code anzeigen"
+    code-tools: true
+  pdf:
+    echo: false
+    documentclass: scrartcl
+    papersize: a4
+    fontsize: 11pt
+    linestretch: 1.3
+    geometry:
+      - margin=2.5cm
+    header-includes: |
+      \usepackage[T1]{fontenc}
+      \usepackage{helvet}
+      \renewcommand{\familydefault}{\sfdefault}
+      % Fusszeile: Titel links, Seitenzahl rechts (auch auf der Titelseite)
+      \usepackage{scrlayer-scrpage}
+      \clearpairofpagestyles
+      \ifoot{Arbeitsblatt 2 (Höhenstufen) -- Principles of Data Visualization}
+      \ofoot{\pagemark}
+      \pagestyle{scrheadings}
+      % Standard-Titelblock von Quarto unterdruecken (Titelseite wird unten selbst gebaut)
+      \AtBeginDocument{\let\maketitle\relax}
+execute:
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+theme_set(theme_minimal(base_size = 12))
+
+pfad <- "massbalance_observation_elevationbins.csv"   # ggf. anpassen
+```
+
+<!-- ===================== TITELSEITE (nur PDF) ===================== -->
+
+::: {.content-visible when-format="pdf"}
+```{=latex}
+\thispagestyle{scrheadings}
+\vspace*{0.5cm}
+\begin{center}
+{\bfseries\fontsize{24}{30}\selectfont Massenbilanz der Schweizer Gletscher nach Höhenstufen\par}
+\vspace{1cm}
+{\bfseries\fontsize{16}{20}\selectfont Arbeitsblatt 2, zweiter Datensatz\par}
+\vspace{0.3cm}
+{\bfseries\fontsize{16}{20}\selectfont Principles of Data Visualization -- Herbstsemester 2026\par}
+\vspace{0.8cm}
+\end{center}
+```
+
+```{r}
+#| label: titelbild
+#| eval: !expr knitr::is_latex_output()
+#| fig-align: center
+#| fig-width: 8
+#| fig-height: 5
+#| out-width: "65%"
+
+# Nur für die PDF-Titelseite: Höhenprofil der Massenbilanz, Grosser Aletschgletscher
+z <- read_lines(pfad)
+d <- read_csv(I(paste(z[-(1:9)], collapse = "\n")),
+              col_names = c("name", "id", "d0", "dw", "d1", "Bw", "Bs", "Ba",
+                            "area", "hmin", "hmax", "obs"),
+              col_types = cols(.default = "c"))
+d |>
+  filter(name == "Grosser Aletschgletscher") |>
+  mutate(jahr = as.integer(str_sub(d1, 1, 4)), Ba = as.numeric(Ba) / 1000,
+         h = (as.numeric(hmin) + as.numeric(hmax)) / 2,
+         dekade = factor(jahr %/% 10 * 10)) |>
+  group_by(dekade, h) |>
+  summarise(Ba = mean(Ba), .groups = "drop") |>
+  ggplot(aes(Ba, h, colour = dekade)) +
+  geom_path() +
+  scale_colour_grey(start = 0.8, end = 0.1) +
+  labs(x = "Massenbilanz [m w.e.]", y = "Höhe [m ü. M.]", colour = "Dekade")
+```
+
+```{=latex}
+\vfill
+\noindent
+\begin{tabular}{@{}p{4cm}p{10cm}@{}}
+Autor: & Elio Schmid,\\
+       & FH Graubünden, MSc Data Visualization\\[1em]
+Dozentin: & PD Dr. rer. nat. Helena Jambor\\[1em]
+Ort, Datum: & Bern, 19.10.2026
+\end{tabular}
+\newpage
+```
+:::
+
+<!-- ===================== KOPFANGABEN (nur HTML) ===================== -->
+
+:::: {.content-visible when-format="html"}
+**Autor:** Elio Schmid, FH Graubünden, MSc Data Visualization\
+**Dozentin:** PD Dr. rer. nat. Helena Jambor\
+**Ort, Datum:** Bern, 19.10.2026
+
+::: callout-note
+Dieses Dokument ist in Bearbeitung und wird laufend ergänzt. Das Datum der letzten Änderung steht im Titelblock oben.
+:::
+::::
+
+<!-- ===================== INHALT ===================== -->
+
+# Zweiter Datensatz: Massenbilanz nach Höhenstufen
+
+Nach dem ersten Datensatz zur Volumenänderung (geodätische Perioden, die sich überlappen) habe ich einen zweiten Datensatz von GLAMOS ausgewählt: die glaziologische Massenbilanz der Beobachtungsperiode, aufgeteilt nach Höhenstufen. Ich erhoffe mir davon vor allem bessere Möglichkeiten für Auswertungen über die Zeit, weil die Messungen jährlich erfolgen und sich nicht überlappen.
+
+## Datensatz
+
+Der Datensatz ist bei GLAMOS verfügbar und wird mit der Quelle zitiert: GLAMOS (2025). *Swiss Glacier Mass Balance*, release 2025, Glacier Monitoring Switzerland, doi:10.18750/massbalance.2025.r2025.
+
+Eine Zeile beschreibt **einen Gletscher in einem Beobachtungsjahr und einer Höhenstufe** (meist 50 oder 100 m hoch). Für jede Höhenstufe gibt es die Winterbilanz (Bw), die Sommerbilanz (Bs) und die Jahresbilanz (Ba). Die Jahresbilanz ist die Summe aus Winter- und Sommerbilanz. Eine Bilanz von −3000 mm w.e. bedeutet, dass in dieser Höhenstufe im Mittel eine Wasserschicht von 3 m verloren ging.
+
+```{r}
+#| label: variablen
+
+tibble(
+  Variable = c("glacier_name", "glacier_id", "date_start", "date_end_winter",
+               "date_end", "Bw", "Bs", "Ba", "area_km2", "h_min", "h_max", "observer"),
+  Bedeutung = c("Name des Gletschers",
+                "ID gemäss Swiss Glacier Inventory",
+                "Beginn der Beobachtungsperiode",
+                "Ende der Winterbeobachtung",
+                "Ende der Beobachtungsperiode",
+                "Winterbilanz der Höhenstufe",
+                "Sommerbilanz der Höhenstufe",
+                "Jahresbilanz der Höhenstufe (Bw + Bs)",
+                "Fläche der Höhenstufe",
+                "Untergrenze der Höhenstufe",
+                "Obergrenze der Höhenstufe",
+                "Spalte ohne erkennbare Bedeutung (siehe Datenqualität)"),
+  Einheit = c("–", "–", "yyyy-mm-dd", "yyyy-mm-dd", "yyyy-mm-dd",
+              "mm w.e.", "mm w.e.", "mm w.e.", "km²", "m ü. M.", "m ü. M.", "–")
+) |>
+  knitr::kable()
+```
+
+## Daten einlesen
+
+Die Datei hat 9 Kopfzeilen: 3 Zeilen Lizenz und Zitierhinweis, eine Titelzeile, eine Zeile mit den ausführlichen Namen, eine mit den Kurznamen und eine mit den Einheiten. Die Daten beginnen in Zeile 10. Weil die Kopfzeile für die erste Spalte keinen Kurznamen hat, vergebe ich die Spaltennamen selbst.
+
+```{r}
+#| label: einlesen
+
+zeilen <- read_lines(pfad)
+
+roh <- read_csv(
+  I(paste(zeilen[-(1:9)], collapse = "\n")),
+  col_names = c("glacier_name", "glacier_id", "date_start", "date_end_winter",
+                "date_end", "Bw", "Bs", "Ba", "area_km2", "h_min", "h_max",
+                "observer"),
+  col_types = cols(
+    .default        = col_double(),
+    glacier_name    = col_character(),
+    glacier_id      = col_character(),
+    date_start      = col_date(),
+    date_end_winter = col_date(),
+    date_end        = col_date()
+  ),
+  trim_ws = TRUE
+)
+
+glimpse(roh)
+```
+
+## Bereinigung
+
+Die Daten sind deutlich sauberer als beim ersten Datensatz: keine fehlenden Werte, ISO-Datum und keine Platzhalter wie 99 oder 00. Trotzdem sind drei Schritte nötig.
+
+- Die Spalte `observer` wird entfernt, weil sie in allen Zeilen identisch zur Obergrenze der Höhenstufe ist (Prüfung unten).
+- Pro Beobachtungsjahr (Jahr des Periodenendes) wird die Dauer berechnet. Perioden, die deutlich von einem Jahr abweichen, werden für Zeitreihen ausgeschlossen.
+- Für Zeitreihen pro Gletscher wird die Bilanz der Höhenstufen mit der Fläche gewichtet. Eine Höhenstufe mit wenig Fläche zählt damit entsprechend wenig. Das ist wichtig, weil einzelne sehr kleine Stufen extreme Werte haben.
+
+```{r}
+#| label: bereinigung
+
+# Prüfung: observer = h_max?
+all(roh$observer == roh$h_max)
+# Prüfung: Ba = Bw + Bs?
+all.equal(roh$Ba, roh$Bw + roh$Bs)
+
+hoehenstufen <- roh |>
+  select(-observer) |>
+  mutate(
+    jahr       = year(date_end),
+    dauer_tage = as.numeric(date_end - date_start),
+    h_mitte    = (h_min + h_max) / 2
+  )
+
+# Eine Zeile pro Gletscher und Jahr: flächengewichtete Mittel, in m w.e.
+gl_jahr <- hoehenstufen |>
+  group_by(glacier_id, glacier_name, jahr) |>
+  summarise(
+    n_stufen   = n(),
+    n_perioden = n_distinct(date_start),
+    dauer_tage = first(dauer_tage),
+    flaeche    = sum(area_km2),
+    Bw         = weighted.mean(Bw, area_km2) / 1000,
+    Bs         = weighted.mean(Bs, area_km2) / 1000,
+    Ba         = weighted.mean(Ba, area_km2) / 1000,
+    .groups    = "drop"
+  ) |>
+  mutate(dauer_ok = dauer_tage >= 300 & dauer_tage <= 450)
+
+# Für Zeitreihen verwendet
+gl_jahr_ok <- gl_jahr |> filter(dauer_ok)
+```
+
+## Datenqualität
+
+```{r}
+#| label: qualitaet
+
+# Fehlende Werte
+hoehenstufen |>
+  summarise(across(c(Bw, Bs, Ba, area_km2), ~ sum(is.na(.x))))
+
+# Mehr als eine Beobachtungsperiode im selben Jahr?
+sum(gl_jahr$n_perioden > 1)
+
+# Auffällige Perioden (nicht ca. ein Jahr)
+gl_jahr |>
+  filter(!dauer_ok) |>
+  select(glacier_name, jahr, dauer_tage)
+
+# Reihenfolge der Daten: liegt das Ende der Winterbeobachtung innerhalb der Periode?
+sum(hoehenstufen$date_end_winter <= hoehenstufen$date_start |
+    hoehenstufen$date_end_winter >= hoehenstufen$date_end)
+
+# Grösse der Höhenstufen
+count(hoehenstufen, stufe_m = h_max - h_min)
+summary(hoehenstufen$area_km2)
+```
+
+Die Beobachtungen dazu:
+
+- Es gibt keine fehlenden Werte und pro Gletscher und Jahr genau eine Beobachtungsperiode.
+- Fast alle Perioden dauern rund 365 Tage (Median 365). Fünf Gletscherjahre sind auffällig: eine Periode von nur 5 Tagen (Griesgletscher 2020), eine mit −14 Tagen (Enddatum vor Startdatum, Vadret dal Corvatsch 2020), eine von 732 Tagen (Ofentalgletscher 1966, zwei Jahre) und zwei von 291 und 297 Tagen (Ghiacciaio del Basòdino 2007, Vadret dal Corvatsch 2022). Diese schliesse ich für Zeitreihen aus. Leicht längere Perioden bis 450 Tage (z. B. Basòdino 2006) lasse ich drin, denn sie entsprechen einem normalen Jahr mit verschobenem Messtermin.
+- Bei 27 Zeilen liegt das Ende der Winterbeobachtung nicht zwischen Start und Ende der Periode. Das betrifft nur die Winter-/Sommeraufteilung dieser Zeilen und ist ein Hinweis auf Erfassungsfehler bei den Daten.
+- Die Fläche einzelner Höhenstufen reicht von 0.00007 bis 8.2 km². Sehr kleine Stufen haben teils extreme Bilanzwerte, beim Claridenfirn bis −86 m w.e. in einem Jahr. Das ist physikalisch nicht plausibel und entsteht vermutlich durch die Extrapolation auf eine winzige Fläche. Mit der Flächengewichtung fallen diese Werte kaum ins Gewicht.
+- Beim Grossen Aletschgletscher liegt die Bilanz der tiefsten Stufen (um 2000 m ü. M.) in den 2010er-Jahren bei über −12 m w.e. Das ist gross, aber bei der Zungenregion eines so grossen Gletschers erklärbar.
+
+## Basiskennzahlen
+
+```{r}
+#| label: kennzahlen
+
+tibble(
+  anzahl_zeilen    = nrow(hoehenstufen),
+  anzahl_gletscher = n_distinct(hoehenstufen$glacier_id),
+  anzahl_gl_jahre  = nrow(gl_jahr),
+  jahr_von         = min(gl_jahr$jahr),
+  jahr_bis         = max(gl_jahr$jahr),
+  median_Ba        = median(gl_jahr_ok$Ba),
+  anteil_negativ   = mean(gl_jahr_ok$Ba < 0)
+)
+
+# Zeitliche Abdeckung pro Gletscher
+abdeckung <- gl_jahr_ok |>
+  group_by(glacier_name) |>
+  summarise(von = min(jahr), bis = max(jahr), n_jahre = n(),
+            groesste_luecke = max(c(1, diff(sort(jahr)))), .groups = "drop") |>
+  arrange(desc(n_jahre))
+
+head(abdeckung, 12)
+
+# Anzahl Gletscher mit Messwert pro Jahr
+gl_jahr_ok |>
+  count(jahr) |>
+  filter(jahr %in% c(1920, 1940, 1960, 1980, 2000, 2010, 2020, 2025))
+```
+
+## Erste Übersicht
+
+```{r}
+#| label: fig-hist
+#| fig-cap: "Verteilung der Jahresbilanz pro Gletscher und Jahr (flächengewichtet)"
+
+ggplot(gl_jahr_ok, aes(Ba)) +
+  geom_histogram(bins = 50, fill = "grey40") +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
+  labs(x = "Jahresbilanz [m w.e.]", y = "Anzahl Gletscherjahre")
+```
+
+```{r}
+#| label: fig-erste-zeit
+#| fig-cap: "Erste Übersicht: Jahresbilanz aller Gletscherjahre über die Zeit"
+
+ggplot(gl_jahr_ok, aes(jahr, Ba)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_point(alpha = 0.4, colour = "grey30") +
+  labs(x = "Jahr", y = "Jahresbilanz [m w.e.]")
+```
+
+Die Punktwolke zeigt schon auf den ersten Blick einen Trend zu negativeren Werten, aber auch, dass die Anzahl Punkte pro Jahr stark schwankt. Ein einfacher Mittelwert pro Jahr würde deshalb Veränderungen der Gletscherauswahl mit echten Veränderungen vermischen. Das greife ich in Ansatz 1 auf.
+
+## Visualisierungsansätze
+
+Wie beim ersten Datensatz dokumentiere ich jeden Ansatz nach demselben Raster: Frage, analytische Aufgabe, Diagrammtyp mit Marks und Channels, was funktioniert hat und was ich verworfen habe.
+
+```{r}
+#| label: ansaetze-vorbereitung
+
+# Gletscher mit (fast) lückenloser Reihe ab 1990: konstantes Sample für Zeitvergleiche
+konstant <- gl_jahr_ok |>
+  filter(jahr >= 1990) |>
+  count(glacier_id, glacier_name) |>
+  filter(n >= 34)
+
+konstant$glacier_name
+
+reihe_konstant <- gl_jahr_ok |>
+  filter(glacier_id %in% konstant$glacier_id, jahr >= 1990) |>
+  group_by(jahr) |>
+  summarise(n = n(), Bw = mean(Bw), Bs = mean(Bs), Ba = mean(Ba), .groups = "drop")
+```
+
+### Ansatz 1: Jahresbilanz im Zeitverlauf mit konstantem Sample
+
+**Frage:** Wie hat sich die Jahresbilanz der Schweizer Gletscher seit 1990 entwickelt?
+
+**Analytische Aufgabe:** Trend über die Zeit und Extremjahre erkennen.
+
+**Marks und Channels:** Linien (Mark). Die Zeit liegt auf der x-Position, die Jahresbilanz auf der y-Position. Die dünnen grauen Linien sind die einzelnen Gletscher, die dicke schwarze Linie ist der Mittelwert über ein konstantes Sample von Gletschern, die in praktisch allen Jahren seit 1990 gemessen wurden. Mit dem konstanten Sample bildet die Linie echte Veränderungen ab und nicht Veränderungen der Gletscherauswahl.
+
+```{r}
+#| label: fig-ansatz1
+#| fig-cap: "Ansatz 1: Jahresbilanz seit 1990, einzelne Gletscher (grau) und Mittel des konstanten Samples (schwarz)"
+#| fig-width: 9
+#| fig-height: 4.5
+
+gl_jahr_ok |>
+  filter(jahr >= 1990) |>
+  ggplot(aes(jahr, Ba)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_line(aes(group = glacier_id), colour = "grey75", linewidth = 0.3) +
+  geom_line(data = reihe_konstant, colour = "grey10", linewidth = 1.2) +
+  annotate("text", x = 2022, y = -4.9, label = "2022", size = 3.5) +
+  labs(x = "Jahr", y = "Jahresbilanz [m w.e.]",
+       caption = paste0("Schwarz: Mittel von ", nrow(konstant),
+                        " Gletschern mit fast lückenloser Reihe."))
+```
+
+**Was funktioniert hat:** Mit dem konstanten Sample von acht Gletschern ist die Linie über die ganze Zeit vergleichbar. Das Mittel fällt von rund −0.6 m w.e. in den 1990er-Jahren auf −1.5 m w.e. in den 2020er-Jahren. Das Jahr 2022 sticht mit −3.1 m w.e. klar heraus, und alle 27 Gletscher, die 2022 gemessen wurden, haben eine negative Bilanz (zwischen −1.2 und −4.7 m w.e.). In den 36 Jahren seit 1990 ist das Mittel nur in zwei Jahren (1993 und 2001) knapp positiv.
+
+**Verworfen:** Ein Mittelwert über alle verfügbaren Gletscher pro Jahr. Die Zahl der Gletscher steigt von 10 im Jahr 2000 auf bis zu 31. Der Mittelwert würde deshalb zum Teil die Veränderung der Auswahl abbilden und nicht die Entwicklung der Gletscher. Die grauen Linien zeigen ausserdem, dass die Gletscher untereinander ähnlich verlaufen, im Gegensatz zum ersten Datensatz, wo die Zeitwerte nur sehr grob zuzuordnen waren.
+
+### Ansatz 2: Heatmap aller Gletscher über die Zeit
+
+**Frage:** Welche Gletscher wurden wann gemessen, und welche Jahre waren für alle Gletscher gleichzeitig extrem?
+
+**Analytische Aufgabe:** Muster über Gletscher und Zeit erkennen, Datenlücken sichtbar machen.
+
+**Marks und Channels:** Rechtecke (Mark) in einem Raster. Die x-Position zeigt das Jahr, die y-Position den Gletscher (sortiert nach dem ersten Messjahr), die Farbe die Jahresbilanz auf einer divergierenden Skala mit Mitte bei null. Weisse Felder bedeuten, dass kein Wert vorliegt. So sehen wir Datenlücken und Werte in derselben Grafik.
+
+```{r}
+#| label: fig-ansatz2
+#| fig-cap: "Ansatz 2: Jahresbilanz pro Gletscher und Jahr (Farbe: Rot = Verlust, Blau = Zuwachs)"
+#| fig-width: 9
+#| fig-height: 7
+
+reihenfolge <- gl_jahr_ok |>
+  group_by(glacier_name) |>
+  summarise(erster = min(jahr), n = n(), .groups = "drop") |>
+  arrange(desc(erster), desc(n))
+
+gl_jahr_ok |>
+  mutate(glacier_name = factor(glacier_name, levels = reihenfolge$glacier_name)) |>
+  ggplot(aes(jahr, glacier_name, fill = Ba)) +
+  geom_tile() +
+  scale_fill_gradient2(low = "#b2182b", mid = "white", high = "#2166ac",
+                       midpoint = 0, limits = c(-3, 3), oob = scales::squish) +
+  labs(x = "Jahr", y = NULL, fill = "Ba\n[m w.e.]") +
+  theme(panel.grid = element_blank(), axis.text.y = element_text(size = 7))
+```
+
+**Was funktioniert hat:** Die Heatmap beantwortet zwei Fragen gleichzeitig. Erstens zeigt sie die Datenlage: Drei Gletscher (Silvretta, Aletsch, Claridenfirn) wurden seit 1915 gemessen, eine grössere Gruppe ab Mitte der 1950er-Jahre, die meisten anderen erst seit etwa 2010. Der Rhonegletscher hat zwei getrennte Blöcke (1885 bis 1909 und ab 2007). Zweitens sieht man, dass einzelne Jahre bei fast allen Gletschern gleichzeitig dunkelrot sind (2022, 2003), während die Blautöne der 1960er- und 1970er-Jahre fast verschwunden sind.
+
+**Verworfen:** Eine Sortierung nach Gletschername, weil dann kein Muster erkennbar war. Die Farbskala ist bei ±3 m w.e. abgeschnitten, damit einzelne Extremwerte die Skala nicht dominieren. Der genaue Wert ist deshalb schwer ablesbar (Farbe ist ein ungenauer Channel), dafür ist das Muster sofort erkennbar.
+
+### Ansatz 3: Winter- und Sommerbilanz getrennt
+
+**Frage:** Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?
+
+**Analytische Aufgabe:** Zerlegung einer Grösse in ihre Komponenten und Vergleich über die Zeit.
+
+**Marks und Channels:** Balken (Mark) vom Nullpunkt aus. Die Winterbilanz (Zugewinn) zeigt nach oben, die Sommerbilanz (Verlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 1.
+
+```{r}
+#| label: fig-ansatz3
+#| fig-cap: "Ansatz 3: Winterbilanz (oben), Sommerbilanz (unten) und Jahresbilanz (Linie), Mittel des konstanten Samples"
+#| fig-width: 9
+#| fig-height: 4.5
+
+reihe_konstant |>
+  pivot_longer(c(Bw, Bs), names_to = "saison", values_to = "wert") |>
+  mutate(saison = recode(saison, Bw = "Winterbilanz", Bs = "Sommerbilanz")) |>
+  ggplot(aes(jahr, wert)) +
+  geom_hline(yintercept = 0, colour = "grey50") +
+  geom_col(aes(fill = saison), width = 0.8) +
+  geom_line(data = reihe_konstant, aes(y = Ba), colour = "grey10", linewidth = 1) +
+  scale_fill_manual(values = c(Winterbilanz = "#9ecae1", Sommerbilanz = "#e08a2c")) +
+  labs(x = "Jahr", y = "Bilanz [m w.e.]", fill = NULL) +
+  theme(legend.position = "bottom")
+```
+
+**Was funktioniert hat:** Die Aufteilung zeigt, dass die Winterbilanz im Mittel stabil blieb (rund +1.3 m w.e., Trend nur etwa −0.03 m w.e. pro Jahrzehnt), während die Sommerbilanz deutlich negativer wird (Trend rund −0.27 m w.e. pro Jahrzehnt, von −2.0 auf −2.8 m w.e. in den 2020er-Jahren). Die Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation 0.93, mit der Winterbilanz nur 0.48). Auch das Jahr 2022 erklärt sich so: Die Schneemenge im Winter war unterdurchschnittlich (0.85 m w.e.), vor allem aber war die Sommerschmelze mit −3.9 m w.e. die höchste im Sample.
+
+**Verworfen:** Zwei getrennte Linien für Winter und Sommer. Mit Balken vom Nullpunkt aus sieht man besser, dass beide Anteile gegeneinander aufgehen, und die Länge der Balken ist besser vergleichbar als die Lage von Linien. Die Daten stammen aus einem Sample von nur acht Gletschern und gelten damit nur für diese Gruppe.
+
+### Ansatz 4: Höhenprofil der Massenbilanz
+
+**Frage:** In welchen Höhen geht die Masse verloren, und hat sich das Profil über die Dekaden verändert?
+
+**Analytische Aufgabe:** Zusammenhang zwischen Höhe und Bilanz sowie Vergleich zwischen Zeiträumen.
+
+**Marks und Channels:** Linien (Mark) pro Dekade. Die x-Position zeigt die mittlere Jahresbilanz der Höhenstufe, die y-Position die Höhe über Meer, die Helligkeit die Dekade. Die Höhe liegt vertikal, wie wir es von einem Berg erwarten. Das Beispiel beschränkt sich auf den Grossen Aletschgletscher, weil er als einziger über alle Höhen und praktisch alle Jahre gemessen wurde.
+
+```{r}
+#| label: fig-ansatz4
+#| fig-cap: "Ansatz 4: Mittlere Jahresbilanz je Höhenstufe und Dekade, Grosser Aletschgletscher"
+#| fig-width: 8
+#| fig-height: 5
+
+hoehenstufen |>
+  semi_join(gl_jahr_ok, by = c("glacier_id", "jahr")) |>
+  filter(glacier_name == "Grosser Aletschgletscher") |>
+  mutate(dekade = factor(jahr %/% 10 * 10)) |>
+  group_by(dekade, h_mitte) |>
+  summarise(Ba = mean(Ba) / 1000, n = n(), .groups = "drop") |>
+  filter(n >= 5) |>
+  ggplot(aes(Ba, h_mitte, colour = dekade)) +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_path(linewidth = 0.8) +
+  scale_colour_grey(start = 0.85, end = 0.05) +
+  labs(x = "Mittlere Jahresbilanz [m w.e.]", y = "Höhe [m ü. M.]", colour = "Dekade")
+```
+
+**Was funktioniert hat:** Das Profil zeigt klar, wo die Bilanz kippt: Oberhalb von etwa 3000 m ü. M. bleibt die Bilanz positiv, darunter wird der Verlust zur Zunge hin sehr gross. In den ersten Dekaden lag die Grenze zwischen Zuwachs und Verlust bei rund 2950 m, in den 2000er- und 2010er-Jahren bei etwa 3050 m und in den 2020er-Jahren bei rund 3250 m. Das Profil der 2020er-Jahre ist über ein breites Höhenband deutlich nach links verschoben, die Bilanz auf 3050 m ist von +0.7 auf −1.1 m w.e. gefallen. Die Höhe als vertikale Achse entspricht der Intuition eines Berges.
+
+**Verworfen:** Ein Streudiagramm aller Einzelwerte (zu unübersichtlich) und die Darstellung mehrerer Gletscher in einer Grafik, weil sie sich bei den Höhenlagen kaum überlappen. Die tiefsten Stufen (unter etwa 1800 m) sind unsicher: Sie beruhen auf wenigen Jahren pro Dekade und sehr kleinen Flächen, und die Linien schwanken dort stark. Das Profil in den 2020er-Jahren umfasst erst 6 Jahre.
+
+## Zwischenfazit
+
+**Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert, und Winter- und Sommerbilanz erlauben es, den Verlust zu erklären. Der Preis dafür ist die kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 (1920) und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nur für ein konstantes Sample möglich.
+
+**Favorit:** Ansatz 1 (Zeitverlauf mit konstantem Sample), ergänzt durch Ansatz 3. Zusammen zeigen sie, dass die Gletscher seit 1990 im Mittel immer mehr verlieren und dass der Sommer der Grund dafür ist. Ansatz 2 würde ich als Datenübersicht beibehalten, weil er auf einen Blick zeigt, wie die Datenlage aussieht.
+
+**Verworfen:** Der Mittelwert über alle Gletscher pro Jahr (Zusammensetzung ändert sich), das einfache Streudiagramm der ersten Übersicht und die ungewichtete Mittelung der Höhenstufen (kleine Stufen mit extremen Werten würden dominieren).
+
+**Offene Punkte:**
+
+- Ein kumulativer Verlauf (Summe der Jahresbilanzen ab 1990) könnte die Entwicklung noch anschaulicher machen.
+- Ansatz 4 könnte für weitere Gletscher oder als Animation über die Jahre getestet werden.
+- Die Farbwahl der Heatmap (Rot–Blau) sollte ich noch auf Farbsehschwäche prüfen.
+- Die beiden Datensätze (Volumenänderung und Höhenstufen) liessen sich verknüpfen, um die geodätischen mit den glaziologischen Werten zu vergleichen.
+
+## Peer-Feedback und nächste Iteration
+
+::: callout-note
+Wird nach der Vorlesung mit dem Feedback der anderen Studierenden ergänzt.
+:::

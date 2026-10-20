@@ -1,14 +1,32 @@
 ---
 title: "Auswertung eines Datensatzes"
+subtitle: "Arbeitsblatt 2 – Principles of Data Visualization, Herbstsemester 2026"
 author: "Elio Schmid"
 date: "2026-10-06"
+date-modified: today
+date-format: "DD.MM.YYYY"
 lang: de-CH   # bei babel-Fehler (ngerman) alternativ: lang: de
 number-sections: true
 fig-cap-location: bottom
 crossref:
   fig-title: "Abbildung"
 format:
+  # HTML zuerst: der Render-Button in RStudio erzeugt das erste Format
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 2
+    toc-title: "Inhalt"
+    embed-resources: true        # eine einzige HTML-Datei inkl. aller Bilder
+    link-external-newwindow: true
+    fig-width: 8
+    fig-height: 5
+    echo: true
+    code-fold: true              # Code ist vorhanden, aber eingeklappt
+    code-summary: "Code anzeigen"
+    code-tools: true
   pdf:
+    echo: false
     documentclass: scrartcl
     papersize: a4
     fontsize: 11pt
@@ -28,41 +46,29 @@ format:
       % Standard-Titelblock von Quarto unterdruecken (Titelseite wird unten selbst gebaut)
       \AtBeginDocument{\let\maketitle\relax}
 execute:
-  echo: false
   warning: false
   message: false
 ---
 
 ```{r}
 #| label: setup
+
 library(tidyverse)
 library(readxl)   # einmalig installieren mit: install.packages("readxl")
 
-# Daten einlesen -- Dateinamen anpassen (Spalten: ID, steps, bmi, Gender mit "m"/"f").
-# Bei mehreren Tabellenblättern das Blatt angeben: read_excel("daten.xlsx", sheet = "Tabelle1")
+# Daten Teil 1: Excel-Datei mit den Spalten ID, steps, bmi, Gender ("m"/"f")
 daten <- read_excel("Daten.xlsx") |>
   mutate(Gender = factor(Gender, levels = c("m", "f")))
 
-# Hilfsfunktion: zeigt eine Bilddatei an oder, falls sie fehlt, einen grauen Platzhalter.
-bild_oder_platzhalter <- function(datei, text = datei) {
-  if (file.exists(datei)) {
-    knitr::include_graphics(datei)
-  } else {
-    par(mar = c(0, 0, 0, 0))
-    plot.new()
-    rect(0, 0, 1, 1, col = "grey90", border = "grey60")
-    text(0.5, 0.5, paste("Platzhalter:", text))
-  }
-}
-
-# Streudiagramm Schritte und BMI nach Geschlecht (wird mehrfach verwendet)
+# Streudiagramm Schritte und BMI nach Geschlecht (Titelblatt der PDF-Version)
 p_streu <- ggplot(daten, aes(x = steps, y = bmi)) +
   geom_point(alpha = 0.4) +
   facet_wrap(~ Gender)
 ```
 
-<!-- ===================== TITELSEITE ===================== -->
+<!-- ===================== TITELSEITE (nur PDF) ===================== -->
 
+::: {.content-visible when-format="pdf"}
 ```{=latex}
 \thispagestyle{scrheadings}
 \vspace*{0.5cm}
@@ -96,6 +102,19 @@ Ort, Datum: & Bern, 06.10.2026
 \end{tabular}
 \newpage
 ```
+:::
+
+<!-- ===================== KOPFANGABEN (nur HTML) ===================== -->
+
+:::: {.content-visible when-format="html"}
+**Autor:** Elio Schmid, FH Graubünden, MSc Data Visualization\
+**Dozentin:** PD Dr. rer. nat. Helena Jambor\
+**Ort, Datum:** Bern, 06.10.2026
+
+::: callout-note
+Dieses Dokument ist in Bearbeitung und wird laufend ergänzt. Das Datum der letzten Änderung steht im Titelblock oben.
+:::
+::::
 
 <!-- ===================== INHALT ===================== -->
 
@@ -130,7 +149,7 @@ Wenn wir die Daten in einem Streudiagramm darstellen, sehen wir dass dadurch ein
 
 In der folgenden Abbildung wurde dem Streudiagramm die dazugehörige Regressionsgerade hinzugefügt. Die Punkte folgen keiner einfachen linearen Beziehung.
 
-![](images/clipboard-1767619340.png)
+![Streudiagramm je Gender mit Regressionsgerade](images/clipboard-1767619340.png)
 
 ## Welche weiteren Schlüsse können ihr bilden, oder Hypothesen aufstellen?
 
@@ -149,19 +168,19 @@ Dieser Chart ist insofern interessant, als dass sich relativ gut erkennen lässt
 
 ## Violine Plot
 
-![](violineplot.png)
+![Violinplot des BMI je Gender](violineplot.png)
 
 Bei diesem Chart hatte ich in der Erstellung Mühe. Die Visualisierung sagt aus, welche BMI's wie häufig vorkommen. Jedoch zieht es mir den Chart unter die X-Achse obschon keine Werte unter 14 bestehen. Somit stufe ich diesen Chart als wenig hilfreich ein.
 
 ## Contour Plot
 
-![](Contourplot.png)
+![Contour Plot zu Schritten und BMI](Contourplot.png)
 
 Zusätzliche Darstellung zum Streudiagramm, wo mit der Farbgebung eine Art Heatmap erstellt wird. Je dunkler desto mehr Datenpunkte sind in einem Bereich vorhanden.
 
 ## Line Chart
 
-![](linechart.png)
+![Durchschnittlicher BMI nach Anzahl Schritte, je Gender](linechart.png)
 
 In dieser Visualisierung wird der durchschnittliche BMI bei einer gewissen Anzahl Schritte als Linien Chart dargestellt. Die Daten der Jungen sind in Orange und die Daten der Mädchen in Blau dargestellt. Die Visualisierung liest sich wie folgt. Der durchschnittliche BMI der Jungen, die 0 tägliche Schritte absolvierten ist 15 (genau 1 Beobachtung). Aus dieser Grafik können wir lesen, dass der BMI je nach Anzahl Schritte von eher Tief zu eher Hoch schwankt.
 
@@ -175,33 +194,50 @@ Alles in Allem finde ich, dass für die Darstellung dieser Daten das Streudiagra
 
 Anfang Oktober habe ich einen Artikel von SRF über den Gletscherschwund in der Schweiz gelesen. Der Artikel ist hier [verlinkt.](https://www.srf.ch/wissen/klimawandel/eisverlust-2026-massive-gletscherschmelze-so-viel-eis-verschwand-im-hitzesommer) Darin wird auf Daten von Glamos - Glacier Monitoring in Switzerland verwiesen. Das Thema interessiert mich insofern, als dass ich relativ viel in den Bergen unterwegs bin. Auf der Website von Glamos finden wir Daten zu Bestand, Längenänderung, Massenbilanz, Volumenänderung sowie Szenarien. Die Daten unterscheiden sich in Stichtagsmessungen und Zeitreihen. Es werden Flächen-, Ausdehnungs- und Geodaten erfasst. In meiner Analyse möchte ich mich auf die Volumenänderung konzentrieren. Ich kann mir aber vorstellen auch Bestandesdaten einfliessen zu lassen oder Längenänderungen. Dies werde ich im Zuge der Auswertung wohl feststellen. Der Datensatz, den ich analysieren möchte, lässt sich [hier](https://doi.glamos.ch/data/volumechange/volumechange_2025_r2025.html) einsehen.
 
+Nach der ersten Auseinandersetzung mit dem Datensatz, muss ich festhalten, dass es doch schwerer ist diesen Auszuwerten als vorerst angenommen. Die Beobachtungen überschneiden sich und Aussagen zu Entwicklungen über eine Zeitdistanz sind anspruchsvoll. Sie können höchsten für einen gewissen Teil der Gletscher erfolgen.
+
 # Aufgabe 3
 
-## Setup
+## Datensatz
+
+Der Datensatz beinhaltet die Daten der Volumenänderung, mittlere Dickenänderungen, jährliche geodätische Massenbilanz. Die Zahlen werden aus dem Vergleich von digitalen Höhenmodellen basierend auf Luftbildern ermittelt. Dies ermöglicht die Berechnung von Volumenänderungen der Gletscher über Jahre bis Jahrzehnte. Änderungen des Gletschervolumens wurden in geodätische Massenbilanzen umgerechnet unter der Annahme einer Dichte von 850 kg/m³. Der Datensatz enthält alle verfügbaren Beobachtungen bis heute für die wichtigsten Schweizer Gletscher und wird als CSV-Datei geliefert.
+
+Der Datensatz enthält 16 Variablen und 19'017 Beobachtungen. Folgende Variablen sind vorhanden:
+
+| Variablenname | Einheit | Bedeutung |
+|----|----|----|
+| SGI-ID |  | Kennnummer im Schweizerischen Gletscherinventar |
+| Name |  | Name des Gletschers |
+| source_start |  | Datenquelle am Start der Periode |
+| source_end |  | Datenquelle am Ende der Periode |
+| date_start | Datum, yyyymmdd | Startdatum mit teilweise unbekannten Anteilen (99). |
+| date_end | Datum, yyyymmdd | Enddatum mit teilweise unbekannten Anteilen (99) |
+| A_start | km² | Gletscherfläche am Start der Periode |
+| outline_start | yyyy |  |
+| A_end | km² | Gletscherfläche am Ende der Periode. |
+| outline_end | yyyy |  |
+| dV | km³ | Volumenänderung des **Eises**. |
+| dh_mean | m | Mittlere Änderung der Eisdicke über die Gletscherfläche. |
+| Bgeod | m w.e. a⁻¹ | Mittlere jährliche **Massenbilanz** in Metern Wasseräquivalent pro Jahr. Pro Jahr fehlt eine Wasserschicht von XYm über der ganzen Gletscherfläche. |
+| sigma | Zahl | Unsicherheit der Massenbilanz (in der Datei als m w.e. angegeben). |
+| covered | Prozentzahl | Anteil der Gletscherfläche, für den Höhendaten vorlagen. Der Rest muss geschätzt werden. |
+| rho_dv | kg/m³ | Dichte, mit der Eisvolumen in Wassermasse umgerechnet wird. Der Wert ist überall gleich. |
+
+Für Auswertungen finde ich die und Vergleiche sind die Daten der Variablen SGI-ID, Gletscherfläche (Start/Ende), Volumenänderung,
+
+## Daten einlesen
+
+Die Datei enthält 6 Zeilen Metadaten, die Kopfzeile (Zeile 7) und eine Einheitenzeile (Zeile 8). Die Daten beginnen erst in Zeile 9.
 
 ```{r}
-#| label: setup
-#| message: false
-#| warning: false
-
-library(tidyverse)   # dplyr, ggplot2, readr, stringr, forcats, lubridate
+#| label: einlesen
 
 theme_set(theme_minimal(base_size = 12))
 
 pfad <- "volumechange.csv"   # ggf. anpassen, z. B. "daten/volumechange.csv"
-```
-
-## Daten einlesen
-
-Die Datei enthält 6 Zeilen Metadaten, die Kopfzeile (Zeile 7) und eine
-Einheitenzeile (Zeile 8). Die Daten beginnen erst in Zeile 9.
-
-```{r}
-#| label: einlesen
-#| message: false
 
 zeilen <- read_lines(pfad)
-kopf   <- strsplit(zeilen[7], ",")[[1]]
+kopf   <- str_trim(strsplit(zeilen[7], ",")[[1]])
 
 roh <- read_csv(
   I(paste(zeilen[-(1:8)], collapse = "\n")),
@@ -253,11 +289,11 @@ gl <- roh |>
     # Datum
     datum_exakt_start = !str_sub(date_start, 5, 6) %in% c("99", "00"),
     datum_exakt_end   = !str_sub(date_end,   5, 6) %in% c("99", "00"),
-    dt_start     = parse_datum(date_start),
-    dt_end       = parse_datum(date_end),
-    jahr_start   = year(dt_start),
-    jahr_end     = year(dt_end),
-    jahr_mitte   = (jahr_start + jahr_end) / 2,
+    dt_start      = parse_datum(date_start),
+    dt_end        = parse_datum(date_end),
+    jahr_start    = year(dt_start),
+    jahr_end      = year(dt_end),
+    jahr_mitte    = (jahr_start + jahr_end) / 2,
     periode_jahre = as.numeric(dt_end - dt_start) / 365.25,
     # Fläche 0 = nicht kartiert -> fehlender Wert
     area_start_km2 = na_if(area_start_km2, 0),
@@ -314,34 +350,48 @@ gl |>
 ```{r}
 #| label: kennzahlen
 
-tibble(
-  anzahl_zeilen          = nrow(gl),
-  anzahl_gletscher       = n_distinct(gl$sgi_id),
-  perioden_pro_gletscher = median(gl$n_perioden),
-  zeitraum_von           = min(gl$jahr_start),
-  zeitraum_bis           = max(gl$jahr_end),
-  median_bgeod           = median(gl_lang$bgeod_mwe_a),
-  anteil_negativ         = mean(gl_lang$bgeod_mwe_a < 0)
-)
+tribble(
+  ~Kennzahl,                                      ~Wert,
+  "Anzahl Messperioden (Zeilen)",                 format(nrow(gl), big.mark = "'"),
+  "Anzahl Gletscher",                             format(n_distinct(gl$sgi_id), big.mark = "'"),
+  "Messperioden pro Gletscher (Median)",          format(median(gl$n_perioden)),
+  "Zeitraum",                                     paste(min(gl$jahr_start), "bis", max(gl$jahr_end)),
+  "Massenbilanz [m w.e. a⁻¹] (Median)",           format(round(median(gl_lang$bgeod_mwe_a), 2)),
+  "Anteil Gletscher mit negativer Massenbilanz",  scales::percent(mean(gl_lang$bgeod_mwe_a < 0), accuracy = 0.1)
+) |>
+  knitr::kable()
+```
 
-summary(gl_lang |> select(area_start_km2, dv_km3, dh_mean_m, bgeod_mwe_a, sigma_mwe, periode_jahre))
+```{r}
+#| label: zusammenfassung
+
+gl_lang |>
+  select(area_start_km2, dv_km3, dh_mean_m, bgeod_mwe_a, sigma_mwe, periode_jahre) |>
+  summary()
 ```
 
 ## Deskriptive Statistik nach Gruppen
 
 ```{r}
-#| label: gruppen
+#| label: tbl-gebiet
+#| tbl-cap: "Massenbilanz nach Einzugsgebiet (längste Periode je Gletscher)"
 
 gl_lang |>
   group_by(einzugsgebiet) |>
   summarise(
-    n         = n(),
-    median    = median(bgeod_mwe_a),
-    mittel    = mean(bgeod_mwe_a),
-    sd        = sd(bgeod_mwe_a),
+    n            = n(),
+    median       = median(bgeod_mwe_a),
+    mittel       = mean(bgeod_mwe_a),
+    sd           = sd(bgeod_mwe_a),
     dv_summe_km3 = sum(dv_km3),
     .groups = "drop"
-  )
+  ) |>
+  knitr::kable(digits = 2)
+```
+
+```{r}
+#| label: tbl-groesse
+#| tbl-cap: "Massenbilanz nach Flächenklasse (längste Periode je Gletscher)"
 
 gl_lang |>
   filter(!is.na(groessenklasse)) |>
@@ -352,7 +402,8 @@ gl_lang |>
     mittel = mean(bgeod_mwe_a),
     sd     = sd(bgeod_mwe_a),
     .groups = "drop"
-  )
+  ) |>
+  knitr::kable(digits = 2)
 ```
 
 ## Visualisierungen
@@ -374,7 +425,6 @@ ggplot(gl_lang, aes(bgeod_mwe_a)) +
 ```{r}
 #| label: fig-scatter
 #| fig-cap: "Gletscherfläche (Start) und Massenbilanz"
-#| warning: false
 
 ggplot(gl_lang, aes(area_start_km2, bgeod_mwe_a, colour = einzugsgebiet)) +
   geom_point(alpha = 0.5) +

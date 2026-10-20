@@ -54,22 +54,11 @@ execute:
 #| label: setup
 
 library(tidyverse)
-library(readxl)   # einmalig installieren mit: install.packages("readxl")
-
-# Daten Teil 1: Excel-Datei mit den Spalten ID, steps, bmi, Gender ("m"/"f")
-daten <- read_excel("Daten.xlsx") |>
-  mutate(Gender = factor(Gender, levels = c("m", "f")))
-
-# Streudiagramm Schritte und BMI nach Geschlecht (Titelblatt der PDF-Version)
-p_streu <- ggplot(daten, aes(x = steps, y = bmi)) +
-  geom_point(alpha = 0.4) +
-  facet_wrap(~ Gender)
 ```
 
 <!-- ===================== TITELSEITE (nur PDF) ===================== -->
 
 ::: {.content-visible when-format="pdf"}
-
 ```{=latex}
 \thispagestyle{scrheadings}
 \vspace*{0.5cm}
@@ -85,11 +74,25 @@ p_streu <- ggplot(daten, aes(x = steps, y = bmi)) +
 
 ```{r}
 #| label: titelbild
+#| eval: !expr knitr::is_latex_output()
 #| fig-align: center
 #| fig-width: 8
 #| fig-height: 5
 #| out-width: "65%"
-p_streu
+
+# Nur für die PDF-Titelseite: Verteilung der Massenbilanz (vereinfacht eingelesen)
+kopf_titel <- names(read_csv("volumechange.csv", skip = 6, n_max = 0,
+                             show_col_types = FALSE))
+zeilen_titel <- read_lines("volumechange.csv")[-(1:8)]
+titel_daten <- read_csv(I(paste(zeilen_titel, collapse = "\n")),
+                        col_names = str_trim(kopf_titel), col_types = cols(.default = "c"))
+
+titel_daten |>
+  mutate(bgeod = as.numeric(Bgeod)) |>
+  ggplot(aes(bgeod)) +
+  geom_histogram(bins = 60, fill = "grey40") +
+  labs(x = "Geodätische Massenbilanz [m w.e. a⁻¹]", y = "Anzahl Messperioden") +
+  theme_minimal(base_size = 12)
 ```
 
 ```{=latex}
@@ -103,94 +106,21 @@ Ort, Datum: & Bern, 06.10.2026
 \end{tabular}
 \newpage
 ```
-
 :::
 
 <!-- ===================== KOPFANGABEN (nur HTML) ===================== -->
 
-::: {.content-visible when-format="html"}
-
+:::: {.content-visible when-format="html"}
 **Autor:** Elio Schmid, FH Graubünden, MSc Data Visualization\
 **Dozentin:** PD Dr. rer. nat. Helena Jambor\
 **Ort, Datum:** Bern, 06.10.2026
 
-::: {.callout-note}
+::: callout-note
 Dieses Dokument ist in Bearbeitung und wird laufend ergänzt. Das Datum der letzten Änderung steht im Titelblock oben.
 :::
-
-:::
+::::
 
 <!-- ===================== INHALT ===================== -->
-
-# Datensatz
-
-## Was beschreibt der Datensatz?
-
-Es werden zwei Datensätze untersucht. Darin werden die Anzahl Schritte pro Tag und der dazugehörige BMI einer Person aufgeführt. Einmal werden die Daten für Jungen dargestellt und einmal für Mädchen. Insgesamt handelt es sich um 1786 Beobachtungen. Davon entfallen 921 auf Jungen und 865 auf Mädchen. Bei der Anzahl Schritten bewegen sich die Beobachtungen zwischen 0/301 (Jungen/Mädchen) und 15'000 (Jungen & Mädchen). Der BMI bewegt sich zwischen 15/15.7 (Jungen/Mädchen) und 32 (Jungen & Mädchen).
-
-## Gibt es einen Unterschied zwischen den mittleren Schrittzahlen der Jungen und Mädchen?
-
-Der Mittelwert der Mädchen und Jungen unterscheidet sich absolut. Mädchen gehen im Mittel 8014 Schritte und Jungen 6891, was einem Unterschied von 1123 entspricht.
-
-| Gender |   n | Mittelwert | Standardabweichung | Median |
-|--------|----:|-----------:|-------------------:|-------:|
-| m      | 921 |       6891 |               3674 |   7130 |
-| f      | 865 |       8014 |               3255 |   7894 |
-
-: Kennzahlen nach Gender der Variable "Anzahl Schritte".
-
-Statistisch gesehen unterscheiden sich die Mittelwerte ebenso. Auf Basis der Annahme, dass die Daten einer Normalverteilung folgen, wurde ein Welch T-Test auf Mittelwertgleichheit durchgeführt. Die Hypothese wurde auf dem 5%-Signifikanzniveau verworfen.
-
-![Boxplot je Gender mit Mittelwert](R_Boxplot_.png)
-
-## Gibt es eine positive Korrelation zwischen der Schrittzahl und dem BMI bei Jungen?
-
-Eine positive Korrelation zwischen der Schrittzahl und dem BMI bei Jungen gibt es in dem Sinne nicht, als dass man sagen kann, dass bei höherer Schrittzahl der BMI zunimmt (statistisch würde dies einem positiven Zusammenhang entsprechen). Es ist eher das Gegenteil der Fall, dass die Daten negativ korrelieren, was in dem Sinne eine positive Aussage sein könnte. Nämlich je mehr Schritte desto niedriger der BMI. Wichtig zu erwähnen ist, dass diese Feststellung noch nicht einer Ursache-Wirkungs-Beziehung entspricht. Es wäre falsch zu behaupten, dass der BMI sinkt, je mehr Schritte ein Junge macht.
-
-Wenn wir die Daten in einem Streudiagramm darstellen, sehen wir dass dadurch eine Figur entsteht. Somit ist der rechnerisch belegte Zusammenhang doch äusserst fraglich. Dies ist sowohl bei den Jungen als auch bei den Mädchen der Fall.
-
-![Streudiagramm je Gender](original.png)
-
-In der folgenden Abbildung wurde dem Streudiagramm die dazugehörige Regressionsgerade hinzugefügt. Die Punkte folgen keiner einfachen linearen Beziehung.
-
-![Streudiagramm je Gender mit Regressionsgerade](images/clipboard-1767619340.png)
-
-## Welche weiteren Schlüsse können ihr bilden, oder Hypothesen aufstellen?
-
-- Gibt es einen Unterschied zwischen den mittleren BMI der Mädchen und Jungen?
-- Besteht auch bei den Mädchen einen negativen Zusammenhang zwischen Anzahl Schritte und BMI?
-- Weisen die Jungen bei den Anzahl Schritten eine höhere Streuung auf als die Mädchen?
-- Welche Personen Gruppe geht mehr pro Tag?
-
-# Iterationen
-
-## Beeswarm Chart
-
-![BMI je Gender. Die Kreisgrösse definiert die Anzahl Schritte pro Tag (Kodierung in der Fläche).](beeswarm.png)
-
-Dieser Chart ist insofern interessant, als dass sich relativ gut erkennen lässt, dass es auch Personen mit hohem BMI gibt, die täglich eine grosse Anzahl Schritte machen. Zeitgleich gibt es Personen, die eine niedrige Anzahl täglicher Schritte haben, die aber als Normalgewichtig eingestuft werden. Diese Visualisierung funktioniert meiner Meinung nach fast noch besser als interaktive Darstellung.
-
-## Violine Plot
-
-![Violinplot des BMI je Gender](violineplot.png)
-
-Bei diesem Chart hatte ich in der Erstellung Mühe. Die Visualisierung sagt aus, welche BMI's wie häufig vorkommen. Jedoch zieht es mir den Chart unter die X-Achse obschon keine Werte unter 14 bestehen. Somit stufe ich diesen Chart als wenig hilfreich ein.
-
-## Contour Plot
-
-![Contour Plot zu Schritten und BMI](Contourplot.png)
-
-Zusätzliche Darstellung zum Streudiagramm, wo mit der Farbgebung eine Art Heatmap erstellt wird. Je dunkler desto mehr Datenpunkte sind in einem Bereich vorhanden.
-
-## Line Chart
-
-![Durchschnittlicher BMI nach Anzahl Schritte, je Gender](linechart.png)
-
-In dieser Visualisierung wird der durchschnittliche BMI bei einer gewissen Anzahl Schritte als Linien Chart dargestellt. Die Daten der Jungen sind in Orange und die Daten der Mädchen in Blau dargestellt. Die Visualisierung liest sich wie folgt. Der durchschnittliche BMI der Jungen, die 0 tägliche Schritte absolvierten ist 15 (genau 1 Beobachtung). Aus dieser Grafik können wir lesen, dass der BMI je nach Anzahl Schritte von eher Tief zu eher Hoch schwankt.
-
-# Abschluss Teil 1
-
-Alles in Allem finde ich, dass für die Darstellung dieser Daten das Streudiagramm am aussagekräftigsten ist. Ich habe die Auswahl verschiedener Visualisierungen als anspruchsvoll wahrgenommen und habe gemerkt, dass ich mich mit diesen Tools noch stärker auseinandersetzen muss, damit ich gelungene Visualisierungen umsetzen kann.
 
 # Aufgabe 2 Teil 2
 
@@ -198,12 +128,44 @@ Alles in Allem finde ich, dass für die Darstellung dieser Daten das Streudiagra
 
 Anfang Oktober habe ich einen Artikel von SRF über den Gletscherschwund in der Schweiz gelesen. Der Artikel ist hier [verlinkt.](https://www.srf.ch/wissen/klimawandel/eisverlust-2026-massive-gletscherschmelze-so-viel-eis-verschwand-im-hitzesommer) Darin wird auf Daten von Glamos - Glacier Monitoring in Switzerland verwiesen. Das Thema interessiert mich insofern, als dass ich relativ viel in den Bergen unterwegs bin. Auf der Website von Glamos finden wir Daten zu Bestand, Längenänderung, Massenbilanz, Volumenänderung sowie Szenarien. Die Daten unterscheiden sich in Stichtagsmessungen und Zeitreihen. Es werden Flächen-, Ausdehnungs- und Geodaten erfasst. In meiner Analyse möchte ich mich auf die Volumenänderung konzentrieren. Ich kann mir aber vorstellen auch Bestandesdaten einfliessen zu lassen oder Längenänderungen. Dies werde ich im Zuge der Auswertung wohl feststellen. Der Datensatz, den ich analysieren möchte, lässt sich [hier](https://doi.glamos.ch/data/volumechange/volumechange_2025_r2025.html) einsehen.
 
+Nach der ersten Auseinandersetzung mit dem Datensatz, muss ich festhalten, dass es doch schwerer ist diesen auszuwerten als vorerst angenommen. Die Beobachtungen überschneiden sich und Aussagen zu Entwicklungen über eine Zeitdistanz sind anspruchsvoll. Sie können höchstens für einen gewissen Teil der Gletscher erfolgen.
+
 # Aufgabe 3
+
+## Datensatz
+
+Der Datensatz beinhaltet die Daten der Volumenänderung, mittlere Dickenänderungen und die jährliche geodätische Massenbilanz. Die Zahlen werden aus dem Vergleich von digitalen Höhenmodellen basierend auf Luftbildern ermittelt. Dies ermöglicht die Berechnung von Volumenänderungen der Gletscher über Jahre bis Jahrzehnte. Änderungen des Gletschervolumens wurden in geodätische Massenbilanzen umgerechnet, unter der Annahme einer Dichte von 850 kg/m³. Der Datensatz enthält alle verfügbaren Beobachtungen bis heute für die wichtigsten Schweizer Gletscher und wird als CSV-Datei geliefert.
+
+Quelle: GLAMOS (2025). Swiss Glacier Volume Change, release 2025, Glacier Monitoring Switzerland, doi:10.18750/volumechange.2025.r2025 (Lizenz CC BY 4.0).
+
+Der Datensatz enthält 16 Variablen und 19'017 Beobachtungen. Eine Beobachtung (Zeile) ist ein Gletscher in einem Zeitfenster zwischen zwei Messungen. Pro Gletscher liegen im Median 9 Messperioden vor (maximal 205) bei im Median 5 Messterminen, und die Zeitfenster überlappen sich. Folgende Variablen sind vorhanden:
+
+| Variablenname | Einheit | Bedeutung |
+|------------------------|------------------------|------------------------|
+| SGI-ID | – | Kennnummer im Schweizerischen Gletscherinventar |
+| Name | – | Name des Gletschers |
+| source_start | – | Datenquelle am Start der Periode (Kürzel wie `kp25`, `dhm25-l1`, `sa3d-2018`; eine Legende ist auf der Datensatzseite nicht beschrieben) |
+| source_end | – | Datenquelle am Ende der Periode |
+| date_start | yyyymmdd | Startdatum, teilweise mit unbekannten Anteilen (99 = Monat bzw. Tag unbekannt) |
+| date_end | yyyymmdd | Enddatum, teilweise mit unbekannten Anteilen (99) |
+| A_start | km² | Gletscherfläche am Start der Periode |
+| outline_start | yyyy | Jahr des Gletscherumrisses, auf dem die Startfläche beruht |
+| A_end | km² | Gletscherfläche am Ende der Periode |
+| outline_end | yyyy | Jahr des Gletscherumrisses, auf dem die Endfläche beruht |
+| dV | km³ | Volumenänderung des **Eises** über die Periode (negativ = Verlust) |
+| dh_mean | m | Mittlere Änderung der Eisdicke über die Gletscherfläche |
+| Bgeod | m w.e. a⁻¹ | Mittlere jährliche **Massenbilanz** in Metern Wasseräquivalent pro Jahr (negativ = Verlust). Bei −0.65 fehlt pro Jahr eine Wasserschicht von rund 65 cm über der ganzen Gletscherfläche. |
+| sigma | m w.e. | Unsicherheit der Massenbilanz (Einheit wie in der Datei angegeben) |
+| covered | \% | Anteil der Gletscherfläche, für den Höhendaten vorlagen. Der Rest muss geschätzt werden. |
+| rho_dv | kg/m³ | Dichte, mit der Eisvolumen in Wassermasse umgerechnet wird. Der Wert ist überall 850. |
+
+: Variablen des Datensatzes mit Einheit und Bedeutung.
+
+Für die Auswertung sind vor allem die Gletscher-ID (`SGI-ID`), die Gletscherfläche (Start/Ende), die Volumenänderung (`dV`), die Massenbilanz (`Bgeod`) und die Messzeitpunkte (`date_start`, `date_end`) interessant. Die Massenbilanz ist auf die Gletscherfläche bezogen und lässt sich deshalb zwischen kleinen und grossen Gletschern direkt vergleichen. Die Volumenänderung hängt dagegen stark von der Gletschergrösse ab.
 
 ## Daten einlesen
 
-Die Datei enthält 6 Zeilen Metadaten, die Kopfzeile (Zeile 7) und eine
-Einheitenzeile (Zeile 8). Die Daten beginnen erst in Zeile 9.
+Die Datei enthält 6 Zeilen Metadaten, die Kopfzeile (Zeile 7) und eine Einheitenzeile (Zeile 8). Die Daten beginnen erst in Zeile 9.
 
 ```{r}
 #| label: einlesen
@@ -234,6 +196,14 @@ glimpse(roh)
 ```
 
 ## Bereinigung
+
+Folgende Anpassungen wurden vorgenommen:
+
+- **Datum:** Bei vielen Messungen sind Monat und Tag unbekannt (Code 99 oder 00). Das Jahr bleibt gültig, der Monat wird auf August geschätzt, und `datum_exakt_start` bzw. `datum_exakt_end` markieren die Schätzungen. Daraus entstehen die Dauer der Periode und das mittlere Jahr.
+- **Fläche:** Der Wert 0 steht für «nicht kartiert» und wird zu einem fehlenden Wert (`NA`).
+- **Gruppierungen:** `sgi_gruppe` (erster Buchstabe der SGI-ID) und `groessenklasse` (Fläche am Start) erleichtern Vergleiche. Was die Buchstaben der SGI-ID genau bedeuten, habe ich nicht geprüft.
+- **Entfernt:** `rho_dv` (überall 850).
+- **Mehrfachzählung:** Weil sich die Zeitfenster eines Gletschers überlappen, enthält `gl_lang` pro Gletscher nur die längste Messperiode.
 
 ```{r}
 #| label: bereinigung
@@ -275,7 +245,7 @@ gl <- roh |>
     area_start_km2 = na_if(area_start_km2, 0),
     area_end_km2   = na_if(area_end_km2, 0),
     # Gruppierungen
-    einzugsgebiet  = str_sub(sgi_id, 1, 1),
+    sgi_gruppe  = str_sub(sgi_id, 1, 1),
     groessenklasse = cut(
       area_start_km2,
       breaks = c(0, 0.1, 0.5, 2, 10, Inf),
@@ -321,6 +291,8 @@ gl |>
   filter(n > 1)
 ```
 
+Fehlende Werte gibt es nur bei der Gletscherfläche: 73 Zeilen haben keine Startfläche und 11 keine Endfläche (im Original mit 0 angegeben). Beim Datum ist das Jahr immer bekannt, aber bei 64.9 % der Startdaten und 16.7 % der Enddaten fehlen Monat und Tag, sie sind deshalb auf August geschätzt. Bei kurzen Perioden wirkt sich das stärker auf die Dauer aus als bei Perioden von mehreren Jahrzehnten. 15 Gletschernamen kommen bei mehr als einer SGI-ID vor (Sattelhorn sogar bei dreien). Als Schlüssel verwende ich deshalb die SGI-ID und nicht den Namen.
+
 ## Basiskennzahlen
 
 ```{r}
@@ -330,7 +302,7 @@ tribble(
   ~Kennzahl,                                      ~Wert,
   "Anzahl Messperioden (Zeilen)",                 format(nrow(gl), big.mark = "'"),
   "Anzahl Gletscher",                             format(n_distinct(gl$sgi_id), big.mark = "'"),
-  "Messperioden pro Gletscher (Median)",          format(median(gl$n_perioden)),
+  "Messperioden pro Gletscher (Median)",          format(median(gl_lang$n_perioden)),
   "Zeitraum",                                     paste(min(gl$jahr_start), "bis", max(gl$jahr_end)),
   "Massenbilanz [m w.e. a⁻¹] (Median)",           format(round(median(gl_lang$bgeod_mwe_a), 2)),
   "Anteil Gletscher mit negativer Massenbilanz",  scales::percent(mean(gl_lang$bgeod_mwe_a < 0), accuracy = 0.1)
@@ -350,10 +322,10 @@ gl_lang |>
 
 ```{r}
 #| label: tbl-gebiet
-#| tbl-cap: "Massenbilanz nach Einzugsgebiet (längste Periode je Gletscher)"
+#| tbl-cap: "Massenbilanz nach SGI-Hauptgruppe (längste Periode je Gletscher)"
 
 gl_lang |>
-  group_by(einzugsgebiet) |>
+  group_by(sgi_gruppe) |>
   summarise(
     n            = n(),
     median       = median(bgeod_mwe_a),
@@ -382,7 +354,9 @@ gl_lang |>
   knitr::kable(digits = 2)
 ```
 
-## Visualisierungen
+## Erste Übersicht
+
+Erste einfache Grafiken zur Orientierung. Sie nutzen jeweils die längste Messperiode pro Gletscher (`gl_lang`).
 
 ### Verteilung der Massenbilanz
 
@@ -402,11 +376,11 @@ ggplot(gl_lang, aes(bgeod_mwe_a)) +
 #| label: fig-scatter
 #| fig-cap: "Gletscherfläche (Start) und Massenbilanz"
 
-ggplot(gl_lang, aes(area_start_km2, bgeod_mwe_a, colour = einzugsgebiet)) +
+ggplot(gl_lang, aes(area_start_km2, bgeod_mwe_a, colour = sgi_gruppe)) +
   geom_point(alpha = 0.5) +
   scale_x_log10() +
   labs(x = "Fläche Start [km², log]", y = "Massenbilanz [m w.e. a⁻¹]",
-       colour = "Einzugsgebiet")
+       colour = "SGI-Hauptgruppe")
 ```
 
 ### Massenbilanz nach Gruppen
@@ -420,32 +394,6 @@ gl_lang |>
   ggplot(aes(groessenklasse, bgeod_mwe_a)) +
   geom_boxplot(fill = "#9ecae1") +
   labs(x = "Flächenklasse [km²]", y = "Massenbilanz [m w.e. a⁻¹]")
-```
-
-### Zeitverlauf
-
-Nur Perioden von 4 bis 15 Jahren, damit die Werte vergleichbar sind.
-
-```{r}
-#| label: fig-zeit
-#| fig-cap: "Massenbilanz im Zeitverlauf (Median und Quartile, 5-Jahres-Klassen)"
-
-gl |>
-  filter(periode_jahre >= 4, periode_jahre <= 15) |>
-  mutate(klasse = floor(jahr_mitte / 5) * 5) |>
-  group_by(klasse) |>
-  summarise(
-    median = median(bgeod_mwe_a),
-    q1     = quantile(bgeod_mwe_a, 0.25),
-    q3     = quantile(bgeod_mwe_a, 0.75),
-    n      = n(),
-    .groups = "drop"
-  ) |>
-  ggplot(aes(klasse, median)) +
-  geom_ribbon(aes(ymin = q1, ymax = q3), alpha = 0.25, fill = "#2a7ab0") +
-  geom_line(colour = "#2a7ab0") +
-  geom_point(colour = "#2a7ab0") +
-  labs(x = "Mittleres Jahr der Periode", y = "Massenbilanz [m w.e. a⁻¹]")
 ```
 
 ### Grösste Volumenverluste
@@ -471,6 +419,205 @@ gl_lang |>
 cor.test(gl_lang$area_start_km2, gl_lang$bgeod_mwe_a,
          method = "spearman", exact = FALSE)
 
-# Unterscheiden sich die Einzugsgebiete?
-kruskal.test(bgeod_mwe_a ~ einzugsgebiet, data = gl_lang)
+# Unterscheiden sich die SGI-Gruppen?
+kruskal.test(bgeod_mwe_a ~ sgi_gruppe, data = gl_lang)
 ```
+
+## Visualisierungsansätze
+
+Nach der ersten Übersicht habe ich vier Fragen an die Daten formuliert und für jede einen Ansatz entwickelt. Jeder Ansatz ist nach demselben Raster dokumentiert: Frage, analytische Aufgabe, Diagrammtyp mit Marks und Channels, was funktioniert hat und was ich verworfen habe. Die Grafiken sind bewusst einfach und in Graustufen bzw. mit einer einzelnen Akzentfarbe gehalten, weil sie ein explorativer Zwischenschritt sind.
+
+```{r}
+#| label: ansaetze-vorbereitung
+
+n_total <- n_distinct(gl$sgi_id)
+
+# Grösste je erfasste Fläche pro Gletscher, damit die Klasse über alle Perioden gleich bleibt
+klassen <- gl |>
+  group_by(sgi_id) |>
+  summarise(flaeche_max = max(c(area_start_km2, area_end_km2), na.rm = TRUE), .groups = "drop") |>
+  mutate(klasse = cut(
+    flaeche_max,
+    breaks = c(0, 0.1, 0.5, 2, Inf),
+    labels = c("< 0.1 km²", "0.1 – 0.5 km²", "0.5 – 2 km²", "> 2 km²")
+  ))
+```
+
+### Ansatz 1: Zeitverlauf der Massenbilanz nach Grössenklasse
+
+**Frage:** Wie hat sich die Massenbilanz über die Zeit entwickelt, und verhalten sich kleine und grosse Gletscher unterschiedlich?
+
+**Analytische Aufgabe:** Trend über die Zeit und Vergleich zwischen Gruppen.
+
+**Marks und Channels:** Linie (Mark) mit Band für die mittleren 50 % der Gletscher. Die Zeit liegt auf der x-Position, die Massenbilanz auf der y-Position, beide auf einer gemeinsamen Skala. Die vier Grössenklassen sind in einer Grafikreihe (Small Multiples) nebeneinander gestellt, sodass die y-Achse gleich bleibt und die Klassen direkt vergleichbar sind.
+
+Weil sich die Messperioden überlappen, wird pro Gletscher und Jahr die kürzeste Periode verwendet, die dieses Jahr enthält. Ihre mittlere Massenbilanz gilt für jedes Jahr der Periode. Dargestellt werden nur Jahre, in denen für mindestens 80 % der Gletscher ein Wert vorliegt.
+
+```{r}
+#| label: fig-ansatz1
+#| fig-cap: "Ansatz 1: Massenbilanz im Zeitverlauf je Grössenklasse (Median und mittlere 50 % der Gletscher)"
+#| fig-width: 10
+#| fig-height: 4
+
+# Jede Periode auf ihre Jahre verteilen, pro Gletscher und Jahr die kürzeste behalten
+gl_jahre <- gl |>
+  filter(!is.na(bgeod_mwe_a), jahr_end > jahr_start) |>
+  select(sgi_id, jahr_start, jahr_end, periode_jahre, bgeod_mwe_a) |>
+  mutate(jahr = map2(jahr_start, jahr_end - 1, seq)) |>
+  unnest(jahr) |>
+  group_by(sgi_id, jahr) |>
+  slice_min(periode_jahre, n = 1, with_ties = FALSE) |>
+  ungroup() |>
+  left_join(klassen, by = "sgi_id")
+
+# Jahre mit genügend Abdeckung
+jahre_ok <- gl_jahre |>
+  group_by(jahr) |>
+  summarise(anteil = n_distinct(sgi_id) / n_total, .groups = "drop") |>
+  filter(anteil >= 0.8) |>
+  pull(jahr)
+
+reihe_klasse <- gl_jahre |>
+  filter(jahr %in% jahre_ok, !is.na(klasse)) |>
+  group_by(klasse, jahr) |>
+  summarise(
+    n      = n(),
+    median = median(bgeod_mwe_a),
+    q25    = quantile(bgeod_mwe_a, 0.25),
+    q75    = quantile(bgeod_mwe_a, 0.75),
+    .groups = "drop"
+  )
+
+ggplot(reihe_klasse, aes(jahr, median)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_ribbon(aes(ymin = q25, ymax = q75), fill = "grey80") +
+  geom_line(colour = "grey20", linewidth = 0.8) +
+  facet_wrap(~ klasse, nrow = 1) +
+  labs(x = "Jahr", y = "Massenbilanz [m w.e. a⁻¹]",
+       caption = "Vor ca. 2010 beruhen die Werte meist auf Perioden von 30 bis 40 Jahren, der Verlauf ist dort geglättet.")
+```
+
+**Was funktioniert hat:** Die Massenbilanz liegt in allen vier Klassen in jedem Jahr im negativen Bereich. Bis etwa 2010 sind die Linien praktisch flach, weil für die meisten Gletscher nur eine Periode von mehreren Jahrzehnten vorliegt (siehe Ansatz 3). Erst mit den kürzeren Perioden danach entsteht ein Verlauf. Der Median sinkt in der kleinsten Klasse von −0.31 (1990) auf −0.59 (2021) und in der grössten Klasse von −0.61 auf −1.22 m w.e. pro Jahr. Grössere Gletscher liegen insgesamt tiefer als kleine. Die Small Multiples mit gemeinsamer y-Achse machen beides direkt lesbar.
+
+**Verworfen:** Die einfache Version aus der ersten Übersicht mit einer einzigen Linie für alle Gletscher verbarg die Unterschiede zwischen den Klassen. Ein Balkendiagramm mit einem Balken pro Jahr habe ich nicht umgesetzt, weil die Werte Periodenmittel sind und Balken Jahreswerte vortäuschen würden.
+
+**Einschränkung:** Der Verlauf vor 2010 ist geglättet und sagt nichts über einzelne Jahre.
+
+### Ansatz 2: Gletschergrösse und Massenbilanz als Dichtekarte
+
+**Frage:** Hängt die Massenbilanz mit der Gletschergrösse zusammen?
+
+**Analytische Aufgabe:** Zusammenhang zwischen zwei numerischen Variablen.
+
+**Marks und Channels:** Sechseckige Flächen (Hexbin) als Mark. Die Position zeigt Fläche (logarithmisch) und Massenbilanz, die Helligkeit der Sechsecke zeigt die Anzahl Gletscher. Die orange Linie ist eine geglättete Trendlinie.
+
+Das einfache Streudiagramm aus der ersten Übersicht hat rund 1'400 Punkte, die sich im Bereich kleiner Gletscher stark überdecken. Die Dichtekarte macht sichtbar, wo die meisten Gletscher liegen.
+
+```{r}
+#| label: fig-ansatz2
+#| fig-cap: "Ansatz 2: Gletscherfläche (Start, logarithmisch) und Massenbilanz als Dichtekarte"
+
+gl_lang |>
+  filter(!is.na(area_start_km2)) |>
+  ggplot(aes(area_start_km2, bgeod_mwe_a)) +
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_hex(bins = 30) +
+  geom_smooth(method = "loess", formula = y ~ x, se = FALSE,
+              colour = "#e08a2c", linewidth = 1) +
+  scale_x_log10() +
+  scale_fill_gradient(low = "grey90", high = "grey20") +
+  labs(x = "Fläche am Start [km², logarithmisch]",
+       y = "Massenbilanz [m w.e. a⁻¹]",
+       fill = "Anzahl\nGletscher")
+```
+
+**Was funktioniert hat:** Die Dichtekarte zeigt, dass sich die meisten Gletscher bei einer Fläche von etwa 0.05 bis 1 km² und einer Massenbilanz zwischen −0.2 und −0.9 häufen. Das lässt sich im einfachen Streudiagramm kaum ablesen. Die Trendlinie fällt von den kleinsten Gletschern (etwa −0.35) bis rund 2 km² (etwa −0.7) und steigt danach wieder an. Die Rangkorrelation nach Spearman beträgt −0.43: Grössere Gletscher haben tendenziell eine negativere Massenbilanz. Bei den grössten Gletschern liegen nur wenige Beobachtungen vor, dort ist die Trendlinie unsicher.
+
+**Vorsicht bei der Deutung:** Jeder Gletscher ist mit seiner längsten Messperiode dargestellt. Diese Perioden sind unterschiedlich lang und liegen zu unterschiedlichen Zeiten, ein Teil der Unterschiede kann deshalb von der Periode statt von der Grösse kommen.
+
+**Verworfen:** Das Streudiagramm aus der ersten Übersicht, weil sich die rund 1'400 Punkte im Bereich der kleinen Gletscher überdecken.
+
+### Ansatz 3: Messtermine aller Gletscher
+
+**Frage:** Wann wurde welcher Gletscher gemessen, und wie dicht sind die Daten über die Zeit?
+
+**Analytische Aufgabe:** Datenstruktur verstehen und Lücken erkennen.
+
+**Marks und Channels:** Punkte (Messtermine) und Linien (erster bis letzter Termin). Die x-Position zeigt die Zeit, die y-Position ordnet jeden Gletscher in einer eigenen Zeile an, sortiert nach dem ersten Messtermin. Weil es 1'438 Gletscher sind, trägt die y-Achse keine Namen.
+
+```{r}
+#| label: fig-ansatz3
+#| fig-cap: "Ansatz 3: Messtermine aller Gletscher, sortiert nach erstem Termin (Datum teilweise geschätzt)"
+#| fig-height: 6
+
+termine <- bind_rows(
+  gl |> select(sgi_id, datum = dt_start),
+  gl |> select(sgi_id, datum = dt_end)
+) |>
+  distinct()
+
+reihenfolge <- termine |>
+  group_by(sgi_id) |>
+  summarise(erster = min(datum), letzter = max(datum), .groups = "drop") |>
+  arrange(erster, letzter) |>
+  mutate(rang = row_number())
+
+termine |>
+  left_join(reihenfolge, by = "sgi_id") |>
+  ggplot(aes(datum, rang)) +
+  geom_segment(data = reihenfolge,
+               aes(x = erster, xend = letzter, y = rang, yend = rang),
+               colour = "grey80", linewidth = 0.2, inherit.aes = FALSE) +
+  geom_point(size = 0.4, colour = "grey20") +
+  scale_y_reverse() +
+  labs(x = "Jahr", y = "Gletscher (sortiert nach erstem Messtermin)") +
+  theme(axis.text.y = element_blank(), panel.grid.major.y = element_blank())
+```
+
+**Was funktioniert hat:** Die Grafik macht die Datenstruktur sofort sichtbar. Rund 1'150 der 1'438 Gletscher (etwa 80 %) wurden erstmals zwischen 1960 und 1989 gemessen, das ergibt die Treppe in der Mitte. Nur 47 Gletscher haben einen ersten Termin bis 1960. Ab etwa 2008 gibt es für fast alle Gletscher mehrere kurz aufeinanderfolgende Messungen. Dazwischen liegen nur wenige Termine. Das erklärt die flachen Linien in Ansatz 1 und zeigt, warum Aussagen zur Entwicklung vor 2010 nur grob möglich sind.
+
+**Grenzen:** Die grauen Linien verschmelzen bei 1'438 Zeilen zu einer Fläche und zeigen deshalb nur den Zeitraum zwischen erstem und letztem Termin. Die eigentliche Information tragen die Punkte. Eine Darstellung für eine Stichprobe wäre lesbarer, würde aber das Gesamtbild verlieren.
+
+### Ansatz 4: Massenbilanz mit Unsicherheit für die grössten Gletscher
+
+**Frage:** Wie verlässlich ist die Massenbilanz, und verlieren auch die grossen Gletscher sicher an Masse?
+
+**Analytische Aufgabe:** Einzelne Werte vergleichen und ihre Unsicherheit beurteilen.
+
+**Marks und Channels:** Punkte mit Fehlerbalken (± `sigma`). Die x-Position zeigt die Massenbilanz, die Gletscher stehen sortiert auf der y-Achse, die Punktgrösse zeigt die Dauer der Messperiode. Das Beispiel beschränkt sich auf die 15 grössten Gletscher, weil bei allen 1'438 die Fehlerbalken nicht mehr lesbar wären.
+
+```{r}
+#| label: fig-ansatz4
+#| fig-cap: "Ansatz 4: Massenbilanz mit Unsicherheit (± sigma) für die 15 grössten Gletscher (längste Periode)"
+#| fig-height: 5
+
+gl_lang |>
+  slice_max(area_start_km2, n = 15, with_ties = FALSE) |>
+  mutate(name = fct_reorder(name, bgeod_mwe_a)) |>
+  ggplot(aes(bgeod_mwe_a, name)) +
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "grey60") +
+  geom_linerange(aes(xmin = bgeod_mwe_a - sigma_mwe, xmax = bgeod_mwe_a + sigma_mwe),
+                 orientation = "y", colour = "grey40") +
+  geom_point(aes(size = periode_jahre), colour = "grey20") +
+  labs(x = "Massenbilanz [m w.e. a⁻¹]", y = NULL, size = "Periode [Jahre]")
+```
+
+**Was funktioniert hat:** Bei allen 15 grössten Gletschern liegt der gesamte Unsicherheitsbereich im negativen Bereich, sie verlieren also sicher an Masse. Die Werte reichen von −0.30 (Glacier de Corbassière) bis −0.98 (Oberaletschgletscher). Die Unsicherheit ist sehr unterschiedlich: Der Unteraargletscher hat mit ±0.47 den breitesten Balken, Feegletscher und Rhonegletscher mit ±0.07 und ±0.08 die schmalsten. Die Punktgrösse zeigt, dass die Perioden zwischen 54 und 172 Jahren lang sind. Die fünf Gletscher mit Perioden über 145 Jahren haben alle eher moderate Werte (−0.30 bis −0.47).
+
+**Vorsicht bei der Deutung:** Wegen der unterschiedlich langen Perioden sind die Gletscher nicht ganz vergleichbar. Der Balken zeigt ± `sigma`. Ob das einer Standardabweichung oder einem Konfidenzintervall entspricht, ist im Datensatz nicht beschrieben.
+
+**Verworfen:** Fehlerbalken für alle 1'438 Gletscher, weil sie nicht mehr lesbar wären.
+
+## Zwischenfazit
+
+Für die Frage nach der Entwicklung finde ich Ansatz 1 am aussagekräftigsten. Er zeigt den Trend und den Unterschied zwischen den Grössenklassen in einer einzigen Grafik. Ansatz 3 gehört als Begleitgrafik dazu, weil er erklärt, wie belastbar der Verlauf vor 2010 ist. Ansatz 2 ersetzt das einfache Streudiagramm. Ansatz 4 eignet sich als Ergänzung, wenn die Unsicherheit einzelner bekannter Gletscher thematisiert werden soll.
+
+**Weiterverfolgen:** Ansatz 1 und Ansatz 3. **Verworfen:** Balken pro Jahr, das einfache Streudiagramm und Fehlerbalken für alle Gletscher.
+
+**Offene Punkte:** Die Bedeutung der Buchstaben in der SGI-ID und die Legende der Quellkürzel sind zu klären. Zudem möchte ich prüfen, ob sich die Gletscher über die relative Flächenänderung (Prozent pro Jahr) besser vergleichen lassen.
+
+## Peer-Feedback und nächste Iteration
+
+::: callout-note
+Wird nach der Vorlesung mit dem Feedback der anderen Studierenden ergänzt.
+:::
