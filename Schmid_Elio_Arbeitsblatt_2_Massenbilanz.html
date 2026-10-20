@@ -2799,8 +2799,7 @@ Abbildung 4: Ansatz 1: Jahresbilanz seit 1990, einzelne Gletscher (grau) und Mi
 <section id="ansatz-3-winter--und-sommerbilanz-getrennt" class="level3" data-number="2.8.3">
 <h3 data-number="2.8.3" class="anchored" data-anchor-id="ansatz-3-winter--und-sommerbilanz-getrennt"><span class="header-section-number">2.8.3</span> Ansatz 3: Winter- und Sommerbilanz getrennt</h3>
 <p><strong>Frage:</strong> Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?</p>
-<p><strong>Aufbau der Visualisierung</strong> Zerlegung einer Grösse in ihre Komponenten und Vergleich über die Zeit.</p>
-<p><strong>Marks und Channels:</strong> Balken (Mark) vom Nullpunkt aus. Die Winterbilanz (Zugewinn) zeigt nach oben, die Sommerbilanz (Verlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 1.</p>
+<p><strong>Aufbau der Visualisierung</strong> Balken vom Nullpunkt aus. Die Winterbilanz (Akkumulation) zeigt nach oben, die Sommerbilanz (Massenverlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 2. Die Werte sind so direkt Verlgeichbar.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code anzeigen</summary>
@@ -3744,48 +3743,46 @@ Hinweis
 <span id="cb32-444"><a href="#cb32-444" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-445"><a href="#cb32-445" aria-hidden="true" tabindex="-1"></a>**Frage:** Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?</span>
 <span id="cb32-446"><a href="#cb32-446" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-447"><a href="#cb32-447" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung** Zerlegung einer Grösse in ihre Komponenten und Vergleich über die Zeit.</span>
+<span id="cb32-447"><a href="#cb32-447" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung** Balken vom Nullpunkt aus. Die Winterbilanz (Akkumulation) zeigt nach oben, die Sommerbilanz (Massenverlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 2. Die Werte sind so direkt Verlgeichbar.</span>
 <span id="cb32-448"><a href="#cb32-448" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-449"><a href="#cb32-449" aria-hidden="true" tabindex="-1"></a>**Marks und Channels:** Balken (Mark) vom Nullpunkt aus. Die Winterbilanz (Zugewinn) zeigt nach oben, die Sommerbilanz (Verlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 1.</span>
-<span id="cb32-450"><a href="#cb32-450" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-453"><a href="#cb32-453" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-454"><a href="#cb32-454" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz3</span></span>
-<span id="cb32-455"><a href="#cb32-455" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 3: Winterbilanz (oben), Sommerbilanz (unten) und Jahresbilanz (Linie), Mittel des konstanten Samples&quot;</span></span>
-<span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb32-457"><a href="#cb32-457" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4.5</span></span>
-<span id="cb32-458"><a href="#cb32-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-459"><a href="#cb32-459" aria-hidden="true" tabindex="-1"></a>reihe_konstant <span class="sc">|&gt;</span></span>
-<span id="cb32-460"><a href="#cb32-460" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Bw, Bs), <span class="at">names_to =</span> <span class="st">&quot;saison&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;wert&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-461"><a href="#cb32-461" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saison =</span> <span class="fu">recode</span>(saison, <span class="at">Bw =</span> <span class="st">&quot;Winterbilanz&quot;</span>, <span class="at">Bs =</span> <span class="st">&quot;Sommerbilanz&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb32-462"><a href="#cb32-462" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, wert)) <span class="sc">+</span></span>
-<span id="cb32-463"><a href="#cb32-463" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-464"><a href="#cb32-464" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">fill =</span> saison), <span class="at">width =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb32-465"><a href="#cb32-465" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> reihe_konstant, <span class="fu">aes</span>(<span class="at">y =</span> Ba), <span class="at">colour =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb32-466"><a href="#cb32-466" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">Winterbilanz =</span> <span class="st">&quot;#9ecae1&quot;</span>, <span class="at">Sommerbilanz =</span> <span class="st">&quot;#e08a2c&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb32-467"><a href="#cb32-467" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Bilanz [m w.e.]&quot;</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb32-468"><a href="#cb32-468" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
-<span id="cb32-469"><a href="#cb32-469" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-451"><a href="#cb32-451" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-452"><a href="#cb32-452" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz3</span></span>
+<span id="cb32-453"><a href="#cb32-453" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 3: Winterbilanz (oben), Sommerbilanz (unten) und Jahresbilanz (Linie), Mittel des konstanten Samples&quot;</span></span>
+<span id="cb32-454"><a href="#cb32-454" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb32-455"><a href="#cb32-455" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4.5</span></span>
+<span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-457"><a href="#cb32-457" aria-hidden="true" tabindex="-1"></a>reihe_konstant <span class="sc">|&gt;</span></span>
+<span id="cb32-458"><a href="#cb32-458" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Bw, Bs), <span class="at">names_to =</span> <span class="st">&quot;saison&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;wert&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-459"><a href="#cb32-459" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saison =</span> <span class="fu">recode</span>(saison, <span class="at">Bw =</span> <span class="st">&quot;Winterbilanz&quot;</span>, <span class="at">Bs =</span> <span class="st">&quot;Sommerbilanz&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-460"><a href="#cb32-460" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, wert)) <span class="sc">+</span></span>
+<span id="cb32-461"><a href="#cb32-461" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-462"><a href="#cb32-462" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">fill =</span> saison), <span class="at">width =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb32-463"><a href="#cb32-463" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> reihe_konstant, <span class="fu">aes</span>(<span class="at">y =</span> Ba), <span class="at">colour =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb32-464"><a href="#cb32-464" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">Winterbilanz =</span> <span class="st">&quot;#9ecae1&quot;</span>, <span class="at">Sommerbilanz =</span> <span class="st">&quot;#e08a2c&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb32-465"><a href="#cb32-465" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Bilanz [m w.e.]&quot;</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb32-466"><a href="#cb32-466" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb32-467"><a href="#cb32-467" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-468"><a href="#cb32-468" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-469"><a href="#cb32-469" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** Die Aufteilung zeigt, dass die Winterbilanz im Mittel stabil blieb, während die Sommerbilanz negativer wird. Die Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation 0.92, mit der Winterbilanz nur 0.35). Auch das Jahr 2022 erklärt sich so: Die Schneemenge im Winter war mit 0.86 m w.e. unterdurchschnittlich, vor allem aber war die Sommerschmelze mit −4.0 m w.e. die höchste im Sample.</span>
 <span id="cb32-470"><a href="#cb32-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-471"><a href="#cb32-471" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** Die Aufteilung zeigt, dass die Winterbilanz im Mittel stabil blieb, während die Sommerbilanz negativer wird. Die Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation 0.92, mit der Winterbilanz nur 0.35). Auch das Jahr 2022 erklärt sich so: Die Schneemenge im Winter war mit 0.86 m w.e. unterdurchschnittlich, vor allem aber war die Sommerschmelze mit −4.0 m w.e. die höchste im Sample.</span>
+<span id="cb32-471"><a href="#cb32-471" aria-hidden="true" tabindex="-1"></a><span class="fu">## Zwischenfazit</span></span>
 <span id="cb32-472"><a href="#cb32-472" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-473"><a href="#cb32-473" aria-hidden="true" tabindex="-1"></a><span class="fu">## Zwischenfazit</span></span>
+<span id="cb32-473"><a href="#cb32-473" aria-hidden="true" tabindex="-1"></a>**Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nicht möglich.</span>
 <span id="cb32-474"><a href="#cb32-474" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-475"><a href="#cb32-475" aria-hidden="true" tabindex="-1"></a>**Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nicht möglich.</span>
+<span id="cb32-475"><a href="#cb32-475" aria-hidden="true" tabindex="-1"></a>**Offene Punkte:**</span>
 <span id="cb32-476"><a href="#cb32-476" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-477"><a href="#cb32-477" aria-hidden="true" tabindex="-1"></a>**Offene Punkte:**</span>
-<span id="cb32-478"><a href="#cb32-478" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-479"><a href="#cb32-479" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ein kumulativer Verlauf (Summe der Jahresbilanzen ab 1990) könnte die Entwicklung noch anschaulicher machen.</span>
-<span id="cb32-480"><a href="#cb32-480" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ansatz 5 könnte für weitere Gletscher oder als Animation über die Jahre getestet werden.</span>
-<span id="cb32-481"><a href="#cb32-481" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die Farbwahl der Heatmap (Rot–Blau) sollte ich noch auf Farbsehschwäche prüfen.</span>
-<span id="cb32-482"><a href="#cb32-482" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die beiden Datensätze (Volumenänderung und Massenbilanz) liessen sich verknüpfen, um die geodätischen mit den glaziologischen Werten zu vergleichen.</span>
-<span id="cb32-483"><a href="#cb32-483" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Einzelne Gletscher mit dem absoluten Massenverlust zeigen. Allenfalls die drei Gletscher für welche Messdaten seit 1915 bestehen.</span>
-<span id="cb32-484"><a href="#cb32-484" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Karte mit einzelnen Angaben zu Gletschern darstellen.</span>
+<span id="cb32-477"><a href="#cb32-477" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ein kumulativer Verlauf (Summe der Jahresbilanzen ab 1990) könnte die Entwicklung noch anschaulicher machen.</span>
+<span id="cb32-478"><a href="#cb32-478" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ansatz 5 könnte für weitere Gletscher oder als Animation über die Jahre getestet werden.</span>
+<span id="cb32-479"><a href="#cb32-479" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die Farbwahl der Heatmap (Rot–Blau) sollte ich noch auf Farbsehschwäche prüfen.</span>
+<span id="cb32-480"><a href="#cb32-480" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die beiden Datensätze (Volumenänderung und Massenbilanz) liessen sich verknüpfen, um die geodätischen mit den glaziologischen Werten zu vergleichen.</span>
+<span id="cb32-481"><a href="#cb32-481" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Einzelne Gletscher mit dem absoluten Massenverlust zeigen. Allenfalls die drei Gletscher für welche Messdaten seit 1915 bestehen.</span>
+<span id="cb32-482"><a href="#cb32-482" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Karte mit einzelnen Angaben zu Gletschern darstellen.</span>
+<span id="cb32-483"><a href="#cb32-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-484"><a href="#cb32-484" aria-hidden="true" tabindex="-1"></a><span class="fu">## Peer-Feedback und nächste Iteration</span></span>
 <span id="cb32-485"><a href="#cb32-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-486"><a href="#cb32-486" aria-hidden="true" tabindex="-1"></a><span class="fu">## Peer-Feedback und nächste Iteration</span></span>
-<span id="cb32-487"><a href="#cb32-487" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-488"><a href="#cb32-488" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb32-489"><a href="#cb32-489" aria-hidden="true" tabindex="-1"></a>Wird nach der Vorlesung mit dem Feedback der anderen Studierenden ergänzt.</span>
-<span id="cb32-490"><a href="#cb32-490" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-486"><a href="#cb32-486" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb32-487"><a href="#cb32-487" aria-hidden="true" tabindex="-1"></a>Wird nach der Vorlesung mit dem Feedback der anderen Studierenden ergänzt.</span>
+<span id="cb32-488"><a href="#cb32-488" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
