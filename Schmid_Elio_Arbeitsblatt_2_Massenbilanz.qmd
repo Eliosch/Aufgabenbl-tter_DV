@@ -121,7 +121,7 @@ Dieses Dokument ist in Bearbeitung und wird laufend ergänzt. Das Datum der letz
 
 <!-- ===================== INHALT ===================== -->
 
-## Erster Datensatz: Volumenänderung
+# Erster Datensatz: Volumenänderung
 
 Anfang Oktober habe ich einen Artikel von SRF über den Gletscherschwund in der Schweiz gelesen. Der Artikel ist hier [verlinkt.](https://www.srf.ch/wissen/klimawandel/eisverlust-2026-massive-gletscherschmelze-so-viel-eis-verschwand-im-hitzesommer) Darin wird auf Daten von Glamos - Glacier Monitoring in Switzerland verwiesen. Das Thema interessiert mich insofern, als dass ich relativ viel in den Bergen unterwegs bin. Auf der Website von Glamos finden wir Daten zu Bestand, Längenänderung, Massenbilanz, Volumenänderung sowie Szenarien. Die Daten unterscheiden sich in Stichtagsmessungen und Zeitreihen. Es werden Flächen-, Ausdehnungs- und Geodaten erfasst. In meiner Analyse möchte ich mich auf die Volumenänderung konzentrieren. Ich kann mir aber vorstellen auch Bestandesdaten einfliessen zu lassen oder Längenänderungen. Dies werde ich im Zuge der Auswertung wohl feststellen. Der Datensatz, den ich analysieren möchte, lässt sich [hier](https://doi.glamos.ch/data/volumechange/volumechange_2025_r2025.html) einsehen.
 
@@ -163,6 +163,11 @@ tibble(
 
 ## Daten einlesen
 
+```{=html}
+<details>
+<summary>Abschnitt anzeigen</summary>
+```
+
 Die Datei hat 9 Kopfzeilen (Lizenz, Titel, ausführliche Namen, Kurznamen, Einheiten), die Daten beginnen in Zeile 10. Die Spalte `observer` enthält teils Kommas (z. B. «GLAMOS (2025), Huss 2015 (…)»). Deshalb lese ich jede Zeile als Text ein und trenne nur nach den ersten 13 Kommas, den Rest behalte ich als Quelle.
 
 ```{r}
@@ -182,7 +187,16 @@ roh <- tibble(zeile = zeilen) |>
 glimpse(roh)
 ```
 
+```{=html}
+</details>
+```
+
 ## Bereinigung
+
+```{=html}
+<details>
+<summary>Abschnitt anzeigen</summary>
+```
 
 Die Daten sind bereits sauber: keine fehlenden Werte, ISO-Datum, keine Platzhalter. Es sind nur noch wenige Schritte nötig: Typen setzen, das Jahr (Jahr des Periodenendes) und die Dauer berechnen und die Bilanzen in m w.e. umrechnen, damit sie sich besser lesen lassen.
 
@@ -206,7 +220,16 @@ gl <- roh |>
   select(-Bw, -Bs, -Ba)
 ```
 
+```{=html}
+</details>
+```
+
 ## Datenqualität
+
+```{=html}
+<details>
+<summary>Abschnitt anzeigen</summary>
+```
 
 ```{r}
 #| label: qualitaet
@@ -239,7 +262,16 @@ Die Beobachtungen dazu:
 - ELA und AAR sind nicht immer gemessene Werte. Bei 117 Gletscherjahren ist die AAR 0 (kein Nährgebiet), bei insgesamt 163 liegt die ELA über dem höchsten Punkt des Gletschers oder die AAR ist 0. Diese ELA-Werte sind extrapoliert und werden in den Grafiken getrennt markiert. 2022 betrifft das 22 von 28 Gletschern.
 - Die Spalte `observer` ist hier die Datenquelle. Bei 956 von 1'239 Zeilen wird Huss et al. 2015 genannt (in zwei Schreibweisen), eine Studie, die für viele Gletscher die Reihen rekonstruiert hat. Die Werte sind also nicht alle direkte Messungen, und die Quelle ist ein Hinweis auf unterschiedliche Datenqualität.
 
+```{=html}
+</details>
+```
+
 ## Basiskennzahlen
+
+```{=html}
+<details>
+<summary>Abschnitt anzeigen</summary>
+```
 
 ```{r}
 #| label: kennzahlen
@@ -267,7 +299,16 @@ gl |> count(jahr) |>
   filter(jahr %in% c(1920, 1940, 1960, 1980, 2000, 2010, 2020, 2025))
 ```
 
+```{=html}
+</details>
+```
+
 ## Erste Übersicht
+
+```{=html}
+<details>
+<summary>Abschnitt anzeigen</summary>
+```
 
 ```{r}
 #| label: fig-hist
@@ -290,6 +331,10 @@ ggplot(gl, aes(jahr, Ba_m)) +
 ```
 
 Die Punktwolke zeigt schon auf den ersten Blick einen Trend zu negativeren Werten, aber auch, dass die Anzahl Punkte pro Jahr stark schwankt. Ein einfacher Mittelwert pro Jahr würde deshalb Veränderungen der Gletscherauswahl mit echten Veränderungen vermischen. Das greife ich in Ansatz 1 auf.
+
+```{=html}
+</details>
+```
 
 ## Welche Fragestellungen möchte ich mit diesem Datensatz beantworten?
 Bereits bei meinem ersten Versuch wollte ich eine Entwicklung über die Zeit darstellen.Das möchte ich nun auch mit diesem Datensatz versuchen. Zudem können wir einzelne Gletscher aus unterschiedlichen Regionen der Schweiz vergleichen. Wenn möglich, möchte ich Zusammenhänge von z.B. der Höhe und der Entwicklung der Massenbilanz darstellen. 

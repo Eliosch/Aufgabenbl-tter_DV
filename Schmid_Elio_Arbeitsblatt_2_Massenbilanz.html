@@ -2426,6 +2426,8 @@ Hinweis
 </section>
 <section id="daten-einlesen" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="daten-einlesen"><span class="header-section-number">1.2</span> Daten einlesen</h2>
+<details>
+<summary>Abschnitt anzeigen</summary>
 <p>Die Datei hat 9 Kopfzeilen (Lizenz, Titel, ausführliche Namen, Kurznamen, Einheiten), die Daten beginnen in Zeile 10. Die Spalte <code>observer</code> enthält teils Kommas (z. B. «GLAMOS (2025), Huss 2015 (…)»). Deshalb lese ich jede Zeile als Text ein und trenne nur nach den ersten 13 Kommas, den Rest behalte ich als Quelle.</p>
 <div class="cell">
 <details class="code-fold">
@@ -2462,9 +2464,12 @@ $ h_max           &lt;chr&gt; &quot;3185&quot;, &quot;3091&quot;, &quot;3091&quo
 $ observer        &lt;chr&gt; &quot;GLAMOS (2025), Huss 2015 (https://doi.org/10.3189/201…</code></pre>
 </div>
 </div>
+</details>
 </section>
 <section id="bereinigung" class="level2" data-number="1.3">
 <h2 data-number="1.3" class="anchored" data-anchor-id="bereinigung"><span class="header-section-number">1.3</span> Bereinigung</h2>
+<details>
+<summary>Abschnitt anzeigen</summary>
 <p>Die Daten sind bereits sauber: keine fehlenden Werte, ISO-Datum, keine Platzhalter. Es sind nur noch wenige Schritte nötig: Typen setzen, das Jahr (Jahr des Periodenendes) und die Dauer berechnen und die Bilanzen in m w.e. umrechnen, damit sie sich besser lesen lassen.</p>
 <div class="cell">
 <details class="code-fold">
@@ -2486,9 +2491,12 @@ $ observer        &lt;chr&gt; &quot;GLAMOS (2025), Huss 2015 (https://doi.org/10
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Bw, <span class="sc">-</span>Bs, <span class="sc">-</span>Ba)</span></code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
+</details>
 </section>
 <section id="datenqualität" class="level2" data-number="1.4">
 <h2 data-number="1.4" class="anchored" data-anchor-id="datenqualität"><span class="header-section-number">1.4</span> Datenqualität</h2>
+<details>
+<summary>Abschnitt anzeigen</summary>
 <div class="cell">
 <details class="code-fold">
 <summary>Code anzeigen</summary>
@@ -2562,6 +2570,7 @@ $ observer        &lt;chr&gt; &quot;GLAMOS (2025), Huss 2015 (https://doi.org/10
 <li>ELA und AAR sind nicht immer gemessene Werte. Bei 117 Gletscherjahren ist die AAR 0 (kein Nährgebiet), bei insgesamt 163 liegt die ELA über dem höchsten Punkt des Gletschers oder die AAR ist 0. Diese ELA-Werte sind extrapoliert und werden in den Grafiken getrennt markiert. 2022 betrifft das 22 von 28 Gletschern.</li>
 <li>Die Spalte <code>observer</code> ist hier die Datenquelle. Bei 956 von 1’239 Zeilen wird Huss et al. 2015 genannt (in zwei Schreibweisen), eine Studie, die für viele Gletscher die Reihen rekonstruiert hat. Die Werte sind also nicht alle direkte Messungen, und die Quelle ist ein Hinweis auf unterschiedliche Datenqualität.</li>
 </ul>
+</details>
 </section>
 <section id="basiskennzahlen" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="basiskennzahlen"><span class="header-section-number">1.5</span> Basiskennzahlen</h2>
@@ -3472,260 +3481,287 @@ Hinweis
 <span id="cb32-169"><a href="#cb32-169" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb32-170"><a href="#cb32-170" aria-hidden="true" tabindex="-1"></a><span class="fu">## Daten einlesen</span></span>
 <span id="cb32-171"><a href="#cb32-171" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-172"><a href="#cb32-172" aria-hidden="true" tabindex="-1"></a>Die Datei hat 9 Kopfzeilen (Lizenz, Titel, ausführliche Namen, Kurznamen, Einheiten), die Daten beginnen in Zeile 10. Die Spalte <span class="in">`observer`</span> enthält teils Kommas (z. B. «GLAMOS (2025), Huss 2015 (…)»). Deshalb lese ich jede Zeile als Text ein und trenne nur nach den ersten 13 Kommas, den Rest behalte ich als Quelle.</span>
-<span id="cb32-173"><a href="#cb32-173" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: einlesen</span></span>
+<span id="cb32-172"><a href="#cb32-172" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb32-173"><a href="#cb32-173" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;details&gt;</span></span>
+<span id="cb32-174"><a href="#cb32-174" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;summary&gt;Abschnitt anzeigen&lt;/summary&gt;</span></span>
+<span id="cb32-175"><a href="#cb32-175" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-176"><a href="#cb32-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-177"><a href="#cb32-177" aria-hidden="true" tabindex="-1"></a>Die Datei hat 9 Kopfzeilen (Lizenz, Titel, ausführliche Namen, Kurznamen, Einheiten), die Daten beginnen in Zeile 10. Die Spalte <span class="in">`observer`</span> enthält teils Kommas (z. B. «GLAMOS (2025), Huss 2015 (…)»). Deshalb lese ich jede Zeile als Text ein und trenne nur nach den ersten 13 Kommas, den Rest behalte ich als Quelle.</span>
 <span id="cb32-178"><a href="#cb32-178" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-179"><a href="#cb32-179" aria-hidden="true" tabindex="-1"></a>zeilen <span class="ot">&lt;-</span> <span class="fu">read_lines</span>(pfad)[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)]</span>
-<span id="cb32-180"><a href="#cb32-180" aria-hidden="true" tabindex="-1"></a>zeilen <span class="ot">&lt;-</span> zeilen[zeilen <span class="sc">!=</span> <span class="st">&quot;&quot;</span>]</span>
-<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a>spalten <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;glacier_name&quot;</span>, <span class="st">&quot;glacier_id&quot;</span>, <span class="st">&quot;date_start&quot;</span>, <span class="st">&quot;date_end_winter&quot;</span>,</span>
-<span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;date_end&quot;</span>, <span class="st">&quot;Bw&quot;</span>, <span class="st">&quot;Bs&quot;</span>, <span class="st">&quot;Ba&quot;</span>, <span class="st">&quot;ELA&quot;</span>, <span class="st">&quot;AAR&quot;</span>, <span class="st">&quot;area_km2&quot;</span>,</span>
-<span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;h_min&quot;</span>, <span class="st">&quot;h_max&quot;</span>, <span class="st">&quot;observer&quot;</span>)</span>
-<span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-186"><a href="#cb32-186" aria-hidden="true" tabindex="-1"></a>roh <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">zeile =</span> zeilen) <span class="sc">|&gt;</span></span>
-<span id="cb32-187"><a href="#cb32-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(zeile, <span class="at">into =</span> spalten, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="at">extra =</span> <span class="st">&quot;merge&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), str_trim))</span>
-<span id="cb32-189"><a href="#cb32-189" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(roh)</span>
-<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bereinigung</span></span>
+<span id="cb32-181"><a href="#cb32-181" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-182"><a href="#cb32-182" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: einlesen</span></span>
+<span id="cb32-183"><a href="#cb32-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-184"><a href="#cb32-184" aria-hidden="true" tabindex="-1"></a>zeilen <span class="ot">&lt;-</span> <span class="fu">read_lines</span>(pfad)[<span class="sc">-</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>)]</span>
+<span id="cb32-185"><a href="#cb32-185" aria-hidden="true" tabindex="-1"></a>zeilen <span class="ot">&lt;-</span> zeilen[zeilen <span class="sc">!=</span> <span class="st">&quot;&quot;</span>]</span>
+<span id="cb32-186"><a href="#cb32-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-187"><a href="#cb32-187" aria-hidden="true" tabindex="-1"></a>spalten <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;glacier_name&quot;</span>, <span class="st">&quot;glacier_id&quot;</span>, <span class="st">&quot;date_start&quot;</span>, <span class="st">&quot;date_end_winter&quot;</span>,</span>
+<span id="cb32-188"><a href="#cb32-188" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;date_end&quot;</span>, <span class="st">&quot;Bw&quot;</span>, <span class="st">&quot;Bs&quot;</span>, <span class="st">&quot;Ba&quot;</span>, <span class="st">&quot;ELA&quot;</span>, <span class="st">&quot;AAR&quot;</span>, <span class="st">&quot;area_km2&quot;</span>,</span>
+<span id="cb32-189"><a href="#cb32-189" aria-hidden="true" tabindex="-1"></a>             <span class="st">&quot;h_min&quot;</span>, <span class="st">&quot;h_max&quot;</span>, <span class="st">&quot;observer&quot;</span>)</span>
+<span id="cb32-190"><a href="#cb32-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-191"><a href="#cb32-191" aria-hidden="true" tabindex="-1"></a>roh <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">zeile =</span> zeilen) <span class="sc">|&gt;</span></span>
+<span id="cb32-192"><a href="#cb32-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate</span>(zeile, <span class="at">into =</span> spalten, <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="at">extra =</span> <span class="st">&quot;merge&quot;</span>, <span class="at">fill =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-193"><a href="#cb32-193" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), str_trim))</span>
 <span id="cb32-194"><a href="#cb32-194" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a>Die Daten sind bereits sauber: keine fehlenden Werte, ISO-Datum, keine Platzhalter. Es sind nur noch wenige Schritte nötig: Typen setzen, das Jahr (Jahr des Periodenendes) und die Dauer berechnen und die Bilanzen in m w.e. umrechnen, damit sie sich besser lesen lassen.</span>
-<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: bereinigung</span></span>
+<span id="cb32-195"><a href="#cb32-195" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(roh)</span>
+<span id="cb32-196"><a href="#cb32-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-197"><a href="#cb32-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-198"><a href="#cb32-198" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb32-199"><a href="#cb32-199" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/details&gt;</span></span>
+<span id="cb32-200"><a href="#cb32-200" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-201"><a href="#cb32-201" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> roh <span class="sc">|&gt;</span></span>
-<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(Bw, Bs, Ba, ELA, AAR, area_km2, h_min, h_max), as.numeric),</span>
-<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(date_start, date_end_winter, date_end), as.Date),</span>
-<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a>    <span class="at">jahr       =</span> <span class="fu">year</span>(date_end),</span>
-<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a>    <span class="at">dauer_tage =</span> <span class="fu">as.numeric</span>(date_end <span class="sc">-</span> date_start),</span>
-<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Bilanzen in m w.e. (anschaulicher als mm)</span></span>
-<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bw_m =</span> Bw <span class="sc">/</span> <span class="dv">1000</span>,</span>
-<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bs_m =</span> Bs <span class="sc">/</span> <span class="dv">1000</span>,</span>
-<span id="cb32-211"><a href="#cb32-211" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ba_m =</span> Ba <span class="sc">/</span> <span class="dv">1000</span>,</span>
-<span id="cb32-212"><a href="#cb32-212" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ELA nicht beobachtbar, wenn der Gletscher gar kein Nährgebiet hat</span></span>
-<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a>    <span class="co"># oder die Linie über dem höchsten Punkt liegt: extrapolierter Wert</span></span>
-<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a>    <span class="at">ela_extrapoliert =</span> AAR <span class="sc">==</span> <span class="dv">0</span> <span class="sc">|</span> ELA <span class="sc">&gt;</span> h_max</span>
-<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Bw, <span class="sc">-</span>Bs, <span class="sc">-</span>Ba)</span>
-<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datenqualität</span></span>
-<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: qualitaet</span></span>
-<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a><span class="co"># Fehlende Werte</span></span>
-<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.x)))) <span class="sc">|&gt;</span></span>
-<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_na&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_na <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
-<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a><span class="co"># Mehrere Zeilen pro Gletscher und Jahr?</span></span>
-<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">count</span>(glacier_id, jahr) <span class="sc">|&gt;</span> <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
-<span id="cb32-233"><a href="#cb32-233" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-234"><a href="#cb32-234" aria-hidden="true" tabindex="-1"></a><span class="co"># Länge der Hydrojahre</span></span>
-<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gl<span class="sc">$</span>dauer_tage)</span>
+<span id="cb32-202"><a href="#cb32-202" aria-hidden="true" tabindex="-1"></a><span class="fu">## Bereinigung</span></span>
+<span id="cb32-203"><a href="#cb32-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-204"><a href="#cb32-204" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb32-205"><a href="#cb32-205" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;details&gt;</span></span>
+<span id="cb32-206"><a href="#cb32-206" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;summary&gt;Abschnitt anzeigen&lt;/summary&gt;</span></span>
+<span id="cb32-207"><a href="#cb32-207" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-208"><a href="#cb32-208" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-209"><a href="#cb32-209" aria-hidden="true" tabindex="-1"></a>Die Daten sind bereits sauber: keine fehlenden Werte, ISO-Datum, keine Platzhalter. Es sind nur noch wenige Schritte nötig: Typen setzen, das Jahr (Jahr des Periodenendes) und die Dauer berechnen und die Bilanzen in m w.e. umrechnen, damit sie sich besser lesen lassen.</span>
+<span id="cb32-210"><a href="#cb32-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-213"><a href="#cb32-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-214"><a href="#cb32-214" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: bereinigung</span></span>
+<span id="cb32-215"><a href="#cb32-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-216"><a href="#cb32-216" aria-hidden="true" tabindex="-1"></a>gl <span class="ot">&lt;-</span> roh <span class="sc">|&gt;</span></span>
+<span id="cb32-217"><a href="#cb32-217" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb32-218"><a href="#cb32-218" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(Bw, Bs, Ba, ELA, AAR, area_km2, h_min, h_max), as.numeric),</span>
+<span id="cb32-219"><a href="#cb32-219" aria-hidden="true" tabindex="-1"></a>    <span class="fu">across</span>(<span class="fu">c</span>(date_start, date_end_winter, date_end), as.Date),</span>
+<span id="cb32-220"><a href="#cb32-220" aria-hidden="true" tabindex="-1"></a>    <span class="at">jahr       =</span> <span class="fu">year</span>(date_end),</span>
+<span id="cb32-221"><a href="#cb32-221" aria-hidden="true" tabindex="-1"></a>    <span class="at">dauer_tage =</span> <span class="fu">as.numeric</span>(date_end <span class="sc">-</span> date_start),</span>
+<span id="cb32-222"><a href="#cb32-222" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Bilanzen in m w.e. (anschaulicher als mm)</span></span>
+<span id="cb32-223"><a href="#cb32-223" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bw_m =</span> Bw <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb32-224"><a href="#cb32-224" aria-hidden="true" tabindex="-1"></a>    <span class="at">Bs_m =</span> Bs <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb32-225"><a href="#cb32-225" aria-hidden="true" tabindex="-1"></a>    <span class="at">Ba_m =</span> Ba <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb32-226"><a href="#cb32-226" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ELA nicht beobachtbar, wenn der Gletscher gar kein Nährgebiet hat</span></span>
+<span id="cb32-227"><a href="#cb32-227" aria-hidden="true" tabindex="-1"></a>    <span class="co"># oder die Linie über dem höchsten Punkt liegt: extrapolierter Wert</span></span>
+<span id="cb32-228"><a href="#cb32-228" aria-hidden="true" tabindex="-1"></a>    <span class="at">ela_extrapoliert =</span> AAR <span class="sc">==</span> <span class="dv">0</span> <span class="sc">|</span> ELA <span class="sc">&gt;</span> h_max</span>
+<span id="cb32-229"><a href="#cb32-229" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb32-230"><a href="#cb32-230" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Bw, <span class="sc">-</span>Bs, <span class="sc">-</span>Ba)</span>
+<span id="cb32-231"><a href="#cb32-231" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-232"><a href="#cb32-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-233"><a href="#cb32-233" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb32-234"><a href="#cb32-234" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/details&gt;</span></span>
+<span id="cb32-235"><a href="#cb32-235" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-236"><a href="#cb32-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a><span class="co"># Bilanz = Winter + Sommer?</span></span>
-<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(gl<span class="sc">$</span>Ba_m <span class="sc">-</span> (gl<span class="sc">$</span>Bw_m <span class="sc">+</span> gl<span class="sc">$</span>Bs_m)) <span class="sc">&gt;</span> <span class="fl">0.001</span>)</span>
-<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a><span class="co"># ELA als extrapolierter Wert</span></span>
-<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">aar_null =</span> <span class="fu">sum</span>(AAR <span class="sc">==</span> <span class="dv">0</span>), <span class="at">ela_ueber_gipfel =</span> <span class="fu">sum</span>(ELA <span class="sc">&gt;</span> h_max),</span>
-<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a>                <span class="at">extrapoliert =</span> <span class="fu">sum</span>(ela_extrapoliert))</span>
+<span id="cb32-237"><a href="#cb32-237" aria-hidden="true" tabindex="-1"></a><span class="fu">## Datenqualität</span></span>
+<span id="cb32-238"><a href="#cb32-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-239"><a href="#cb32-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb32-240"><a href="#cb32-240" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;details&gt;</span></span>
+<span id="cb32-241"><a href="#cb32-241" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;summary&gt;Abschnitt anzeigen&lt;/summary&gt;</span></span>
+<span id="cb32-242"><a href="#cb32-242" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb32-243"><a href="#cb32-243" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-244"><a href="#cb32-244" aria-hidden="true" tabindex="-1"></a><span class="co"># Herkunft der Daten</span></span>
-<span id="cb32-245"><a href="#cb32-245" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">count</span>(observer, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">6</span>)</span>
-<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a>Die Beobachtungen dazu:</span>
-<span id="cb32-249"><a href="#cb32-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-250"><a href="#cb32-250" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Es gibt keine fehlenden Werte und pro Gletscher und Jahr genau eine Zeile. Alle Hydrojahre dauern 364 oder 365 Tage. Die fünf auffälligen Gletscherjahre aus der Höhenstufen-Version (5 Tage, −14 Tage, 732 Tage, 291 und 297 Tage) kommen hier nicht vor. Der einzige Unterschied bei den Gletscherjahren ist eine zusätzliche Zeile (Ofentalgletscher 1965).</span>
-<span id="cb32-251"><a href="#cb32-251" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>ELA und AAR sind nicht immer gemessene Werte. Bei 117 Gletscherjahren ist die AAR 0 (kein Nährgebiet), bei insgesamt 163 liegt die ELA über dem höchsten Punkt des Gletschers oder die AAR ist 0. Diese ELA-Werte sind extrapoliert und werden in den Grafiken getrennt markiert. 2022 betrifft das 22 von 28 Gletschern.</span>
-<span id="cb32-252"><a href="#cb32-252" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die Spalte <span class="in">`observer`</span> ist hier die Datenquelle. Bei 956 von 1&#39;239 Zeilen wird Huss et al. 2015 genannt (in zwei Schreibweisen), eine Studie, die für viele Gletscher die Reihen rekonstruiert hat. Die Werte sind also nicht alle direkte Messungen, und die Quelle ist ein Hinweis auf unterschiedliche Datenqualität.</span>
+<span id="cb32-246"><a href="#cb32-246" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-247"><a href="#cb32-247" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: qualitaet</span></span>
+<span id="cb32-248"><a href="#cb32-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-249"><a href="#cb32-249" aria-hidden="true" tabindex="-1"></a><span class="co"># Fehlende Werte</span></span>
+<span id="cb32-250"><a href="#cb32-250" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), <span class="sc">~</span> <span class="fu">sum</span>(<span class="fu">is.na</span>(.x)))) <span class="sc">|&gt;</span></span>
+<span id="cb32-251"><a href="#cb32-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">everything</span>(), <span class="at">names_to =</span> <span class="st">&quot;variable&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;n_na&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-252"><a href="#cb32-252" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_na <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
 <span id="cb32-253"><a href="#cb32-253" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a><span class="fu">## Basiskennzahlen</span></span>
-<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-259"><a href="#cb32-259" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: kennzahlen</span></span>
-<span id="cb32-260"><a href="#cb32-260" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-261"><a href="#cb32-261" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
-<span id="cb32-262"><a href="#cb32-262" aria-hidden="true" tabindex="-1"></a>  <span class="at">anzahl_zeilen    =</span> <span class="fu">nrow</span>(gl),</span>
-<span id="cb32-263"><a href="#cb32-263" aria-hidden="true" tabindex="-1"></a>  <span class="at">anzahl_gletscher =</span> <span class="fu">n_distinct</span>(gl<span class="sc">$</span>glacier_id),</span>
-<span id="cb32-264"><a href="#cb32-264" aria-hidden="true" tabindex="-1"></a>  <span class="at">jahr_von         =</span> <span class="fu">min</span>(gl<span class="sc">$</span>jahr),</span>
-<span id="cb32-265"><a href="#cb32-265" aria-hidden="true" tabindex="-1"></a>  <span class="at">jahr_bis         =</span> <span class="fu">max</span>(gl<span class="sc">$</span>jahr),</span>
-<span id="cb32-266"><a href="#cb32-266" aria-hidden="true" tabindex="-1"></a>  <span class="at">median_Ba_m      =</span> <span class="fu">median</span>(gl<span class="sc">$</span>Ba_m),</span>
-<span id="cb32-267"><a href="#cb32-267" aria-hidden="true" tabindex="-1"></a>  <span class="at">anteil_negativ   =</span> <span class="fu">mean</span>(gl<span class="sc">$</span>Ba_m <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
-<span id="cb32-268"><a href="#cb32-268" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb32-269"><a href="#cb32-269" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-270"><a href="#cb32-270" aria-hidden="true" tabindex="-1"></a><span class="co"># Zeitliche Abdeckung pro Gletscher</span></span>
-<span id="cb32-271"><a href="#cb32-271" aria-hidden="true" tabindex="-1"></a>abdeckung <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
-<span id="cb32-272"><a href="#cb32-272" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(glacier_name) <span class="sc">|&gt;</span></span>
-<span id="cb32-273"><a href="#cb32-273" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">von =</span> <span class="fu">min</span>(jahr), <span class="at">bis =</span> <span class="fu">max</span>(jahr), <span class="at">n_jahre =</span> <span class="fu">n</span>(),</span>
-<span id="cb32-274"><a href="#cb32-274" aria-hidden="true" tabindex="-1"></a>            <span class="at">groesste_luecke =</span> <span class="fu">max</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">diff</span>(<span class="fu">sort</span>(jahr)))), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-275"><a href="#cb32-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n_jahre))</span>
+<span id="cb32-254"><a href="#cb32-254" aria-hidden="true" tabindex="-1"></a><span class="co"># Mehrere Zeilen pro Gletscher und Jahr?</span></span>
+<span id="cb32-255"><a href="#cb32-255" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">count</span>(glacier_id, jahr) <span class="sc">|&gt;</span> <span class="fu">filter</span>(n <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb32-256"><a href="#cb32-256" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-257"><a href="#cb32-257" aria-hidden="true" tabindex="-1"></a><span class="co"># Länge der Hydrojahre</span></span>
+<span id="cb32-258"><a href="#cb32-258" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(gl<span class="sc">$</span>dauer_tage)</span>
+<span id="cb32-259"><a href="#cb32-259" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-260"><a href="#cb32-260" aria-hidden="true" tabindex="-1"></a><span class="co"># Bilanz = Winter + Sommer?</span></span>
+<span id="cb32-261"><a href="#cb32-261" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">abs</span>(gl<span class="sc">$</span>Ba_m <span class="sc">-</span> (gl<span class="sc">$</span>Bw_m <span class="sc">+</span> gl<span class="sc">$</span>Bs_m)) <span class="sc">&gt;</span> <span class="fl">0.001</span>)</span>
+<span id="cb32-262"><a href="#cb32-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-263"><a href="#cb32-263" aria-hidden="true" tabindex="-1"></a><span class="co"># ELA als extrapolierter Wert</span></span>
+<span id="cb32-264"><a href="#cb32-264" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">aar_null =</span> <span class="fu">sum</span>(AAR <span class="sc">==</span> <span class="dv">0</span>), <span class="at">ela_ueber_gipfel =</span> <span class="fu">sum</span>(ELA <span class="sc">&gt;</span> h_max),</span>
+<span id="cb32-265"><a href="#cb32-265" aria-hidden="true" tabindex="-1"></a>                <span class="at">extrapoliert =</span> <span class="fu">sum</span>(ela_extrapoliert))</span>
+<span id="cb32-266"><a href="#cb32-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-267"><a href="#cb32-267" aria-hidden="true" tabindex="-1"></a><span class="co"># Herkunft der Daten</span></span>
+<span id="cb32-268"><a href="#cb32-268" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">count</span>(observer, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>(<span class="dv">6</span>)</span>
+<span id="cb32-269"><a href="#cb32-269" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-270"><a href="#cb32-270" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-271"><a href="#cb32-271" aria-hidden="true" tabindex="-1"></a>Die Beobachtungen dazu:</span>
+<span id="cb32-272"><a href="#cb32-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-273"><a href="#cb32-273" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Es gibt keine fehlenden Werte und pro Gletscher und Jahr genau eine Zeile. Alle Hydrojahre dauern 364 oder 365 Tage. Die fünf auffälligen Gletscherjahre aus der Höhenstufen-Version (5 Tage, −14 Tage, 732 Tage, 291 und 297 Tage) kommen hier nicht vor. Der einzige Unterschied bei den Gletscherjahren ist eine zusätzliche Zeile (Ofentalgletscher 1965).</span>
+<span id="cb32-274"><a href="#cb32-274" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>ELA und AAR sind nicht immer gemessene Werte. Bei 117 Gletscherjahren ist die AAR 0 (kein Nährgebiet), bei insgesamt 163 liegt die ELA über dem höchsten Punkt des Gletschers oder die AAR ist 0. Diese ELA-Werte sind extrapoliert und werden in den Grafiken getrennt markiert. 2022 betrifft das 22 von 28 Gletschern.</span>
+<span id="cb32-275"><a href="#cb32-275" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die Spalte <span class="in">`observer`</span> ist hier die Datenquelle. Bei 956 von 1&#39;239 Zeilen wird Huss et al. 2015 genannt (in zwei Schreibweisen), eine Studie, die für viele Gletscher die Reihen rekonstruiert hat. Die Werte sind also nicht alle direkte Messungen, und die Quelle ist ein Hinweis auf unterschiedliche Datenqualität.</span>
 <span id="cb32-276"><a href="#cb32-276" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-277"><a href="#cb32-277" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(abdeckung, <span class="dv">12</span>)</span>
-<span id="cb32-278"><a href="#cb32-278" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-279"><a href="#cb32-279" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl Gletscher mit Messwert pro Jahr</span></span>
-<span id="cb32-280"><a href="#cb32-280" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">count</span>(jahr) <span class="sc">|&gt;</span></span>
-<span id="cb32-281"><a href="#cb32-281" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(jahr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1920</span>, <span class="dv">1940</span>, <span class="dv">1960</span>, <span class="dv">1980</span>, <span class="dv">2000</span>, <span class="dv">2010</span>, <span class="dv">2020</span>, <span class="dv">2025</span>))</span>
-<span id="cb32-282"><a href="#cb32-282" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-283"><a href="#cb32-283" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-284"><a href="#cb32-284" aria-hidden="true" tabindex="-1"></a><span class="fu">## Erste Übersicht</span></span>
-<span id="cb32-285"><a href="#cb32-285" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-288"><a href="#cb32-288" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-289"><a href="#cb32-289" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-hist</span></span>
-<span id="cb32-290"><a href="#cb32-290" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Verteilung der Jahresbilanz pro Gletscher und Jahr&quot;</span></span>
-<span id="cb32-291"><a href="#cb32-291" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-292"><a href="#cb32-292" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gl, <span class="fu">aes</span>(Ba_m)) <span class="sc">+</span></span>
-<span id="cb32-293"><a href="#cb32-293" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">fill =</span> <span class="st">&quot;grey40&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-294"><a href="#cb32-294" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-295"><a href="#cb32-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahresbilanz [m w.e.]&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Anzahl Gletscherjahre&quot;</span>)</span>
-<span id="cb32-296"><a href="#cb32-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-297"><a href="#cb32-297" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-300"><a href="#cb32-300" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-301"><a href="#cb32-301" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-erste-zeit</span></span>
-<span id="cb32-302"><a href="#cb32-302" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Erste Übersicht: Jahresbilanz aller Gletscherjahre über die Zeit&quot;</span></span>
+<span id="cb32-277"><a href="#cb32-277" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb32-278"><a href="#cb32-278" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/details&gt;</span></span>
+<span id="cb32-279"><a href="#cb32-279" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-280"><a href="#cb32-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-281"><a href="#cb32-281" aria-hidden="true" tabindex="-1"></a><span class="fu">## Basiskennzahlen</span></span>
+<span id="cb32-282"><a href="#cb32-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-285"><a href="#cb32-285" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-286"><a href="#cb32-286" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: kennzahlen</span></span>
+<span id="cb32-287"><a href="#cb32-287" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-288"><a href="#cb32-288" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb32-289"><a href="#cb32-289" aria-hidden="true" tabindex="-1"></a>  <span class="at">anzahl_zeilen    =</span> <span class="fu">nrow</span>(gl),</span>
+<span id="cb32-290"><a href="#cb32-290" aria-hidden="true" tabindex="-1"></a>  <span class="at">anzahl_gletscher =</span> <span class="fu">n_distinct</span>(gl<span class="sc">$</span>glacier_id),</span>
+<span id="cb32-291"><a href="#cb32-291" aria-hidden="true" tabindex="-1"></a>  <span class="at">jahr_von         =</span> <span class="fu">min</span>(gl<span class="sc">$</span>jahr),</span>
+<span id="cb32-292"><a href="#cb32-292" aria-hidden="true" tabindex="-1"></a>  <span class="at">jahr_bis         =</span> <span class="fu">max</span>(gl<span class="sc">$</span>jahr),</span>
+<span id="cb32-293"><a href="#cb32-293" aria-hidden="true" tabindex="-1"></a>  <span class="at">median_Ba_m      =</span> <span class="fu">median</span>(gl<span class="sc">$</span>Ba_m),</span>
+<span id="cb32-294"><a href="#cb32-294" aria-hidden="true" tabindex="-1"></a>  <span class="at">anteil_negativ   =</span> <span class="fu">mean</span>(gl<span class="sc">$</span>Ba_m <span class="sc">&lt;</span> <span class="dv">0</span>)</span>
+<span id="cb32-295"><a href="#cb32-295" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-296"><a href="#cb32-296" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-297"><a href="#cb32-297" aria-hidden="true" tabindex="-1"></a><span class="co"># Zeitliche Abdeckung pro Gletscher</span></span>
+<span id="cb32-298"><a href="#cb32-298" aria-hidden="true" tabindex="-1"></a>abdeckung <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
+<span id="cb32-299"><a href="#cb32-299" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(glacier_name) <span class="sc">|&gt;</span></span>
+<span id="cb32-300"><a href="#cb32-300" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">von =</span> <span class="fu">min</span>(jahr), <span class="at">bis =</span> <span class="fu">max</span>(jahr), <span class="at">n_jahre =</span> <span class="fu">n</span>(),</span>
+<span id="cb32-301"><a href="#cb32-301" aria-hidden="true" tabindex="-1"></a>            <span class="at">groesste_luecke =</span> <span class="fu">max</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="fu">diff</span>(<span class="fu">sort</span>(jahr)))), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-302"><a href="#cb32-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n_jahre))</span>
 <span id="cb32-303"><a href="#cb32-303" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-304"><a href="#cb32-304" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gl, <span class="fu">aes</span>(jahr, Ba_m)) <span class="sc">+</span></span>
-<span id="cb32-305"><a href="#cb32-305" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-306"><a href="#cb32-306" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">&quot;grey30&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-307"><a href="#cb32-307" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Jahresbilanz [m w.e.]&quot;</span>)</span>
-<span id="cb32-308"><a href="#cb32-308" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-309"><a href="#cb32-309" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-310"><a href="#cb32-310" aria-hidden="true" tabindex="-1"></a>Die Punktwolke zeigt schon auf den ersten Blick einen Trend zu negativeren Werten, aber auch, dass die Anzahl Punkte pro Jahr stark schwankt. Ein einfacher Mittelwert pro Jahr würde deshalb Veränderungen der Gletscherauswahl mit echten Veränderungen vermischen. Das greife ich in Ansatz 1 auf.</span>
-<span id="cb32-311"><a href="#cb32-311" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-312"><a href="#cb32-312" aria-hidden="true" tabindex="-1"></a><span class="fu">## Welche Fragestellungen möchte ich mit diesem Datensatz beantworten?</span></span>
-<span id="cb32-313"><a href="#cb32-313" aria-hidden="true" tabindex="-1"></a>Bereits bei meinem ersten Versuch wollte ich eine Entwicklung über die Zeit darstellen.Das möchte ich nun auch mit diesem Datensatz versuchen. Zudem können wir einzelne Gletscher aus unterschiedlichen Regionen der Schweiz vergleichen. Wenn möglich, möchte ich Zusammenhänge von z.B. der Höhe und der Entwicklung der Massenbilanz darstellen. </span>
-<span id="cb32-314"><a href="#cb32-314" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-315"><a href="#cb32-315" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualisierungsansätze</span></span>
-<span id="cb32-316"><a href="#cb32-316" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-317"><a href="#cb32-317" aria-hidden="true" tabindex="-1"></a>Nachfolgend erste Visualisierungsansätze. Der Datensatz beinhaltet insgesamt 9 Gletscher, die eine fast lückenlose Messreihe ab 1990 aufweisen. Diese werden für eine Aussage über die Zeit verwendet.Bei den nachfolgenden Visualisierungen handelt es sich um erste Würfe. Farbliche Ausgestaltung und ergänzende Texte werden noch vertiefter bearbeitet</span>
+<span id="cb32-304"><a href="#cb32-304" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(abdeckung, <span class="dv">12</span>)</span>
+<span id="cb32-305"><a href="#cb32-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-306"><a href="#cb32-306" aria-hidden="true" tabindex="-1"></a><span class="co"># Anzahl Gletscher mit Messwert pro Jahr</span></span>
+<span id="cb32-307"><a href="#cb32-307" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span> <span class="fu">count</span>(jahr) <span class="sc">|&gt;</span></span>
+<span id="cb32-308"><a href="#cb32-308" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(jahr <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1920</span>, <span class="dv">1940</span>, <span class="dv">1960</span>, <span class="dv">1980</span>, <span class="dv">2000</span>, <span class="dv">2010</span>, <span class="dv">2020</span>, <span class="dv">2025</span>))</span>
+<span id="cb32-309"><a href="#cb32-309" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-310"><a href="#cb32-310" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-311"><a href="#cb32-311" aria-hidden="true" tabindex="-1"></a><span class="fu">## Erste Übersicht</span></span>
+<span id="cb32-312"><a href="#cb32-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-315"><a href="#cb32-315" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-316"><a href="#cb32-316" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-hist</span></span>
+<span id="cb32-317"><a href="#cb32-317" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Verteilung der Jahresbilanz pro Gletscher und Jahr&quot;</span></span>
 <span id="cb32-318"><a href="#cb32-318" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-321"><a href="#cb32-321" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-322"><a href="#cb32-322" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: ansaetze-vorbereitung</span></span>
-<span id="cb32-323"><a href="#cb32-323" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-324"><a href="#cb32-324" aria-hidden="true" tabindex="-1"></a><span class="co"># Gletscher mit (fast) lückenloser Reihe ab 1990: konstantes Sample für Zeitvergleiche</span></span>
-<span id="cb32-325"><a href="#cb32-325" aria-hidden="true" tabindex="-1"></a>konstant <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
-<span id="cb32-326"><a href="#cb32-326" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(jahr <span class="sc">&gt;=</span> <span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-327"><a href="#cb32-327" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(glacier_id, glacier_name) <span class="sc">|&gt;</span></span>
-<span id="cb32-328"><a href="#cb32-328" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">34</span>)</span>
-<span id="cb32-329"><a href="#cb32-329" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-330"><a href="#cb32-330" aria-hidden="true" tabindex="-1"></a>konstant<span class="sc">$</span>glacier_name</span>
-<span id="cb32-331"><a href="#cb32-331" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-332"><a href="#cb32-332" aria-hidden="true" tabindex="-1"></a>reihe_konstant <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
-<span id="cb32-333"><a href="#cb32-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(glacier_id <span class="sc">%in%</span> konstant<span class="sc">$</span>glacier_id, jahr <span class="sc">&gt;=</span> <span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-334"><a href="#cb32-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(jahr) <span class="sc">|&gt;</span></span>
-<span id="cb32-335"><a href="#cb32-335" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">Bw =</span> <span class="fu">mean</span>(Bw_m), <span class="at">Bs =</span> <span class="fu">mean</span>(Bs_m), <span class="at">Ba =</span> <span class="fu">mean</span>(Ba_m),</span>
-<span id="cb32-336"><a href="#cb32-336" aria-hidden="true" tabindex="-1"></a>            <span class="at">ELA =</span> <span class="fu">mean</span>(ELA), <span class="at">AAR =</span> <span class="fu">mean</span>(AAR), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
-<span id="cb32-337"><a href="#cb32-337" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-319"><a href="#cb32-319" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gl, <span class="fu">aes</span>(Ba_m)) <span class="sc">+</span></span>
+<span id="cb32-320"><a href="#cb32-320" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>, <span class="at">fill =</span> <span class="st">&quot;grey40&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-321"><a href="#cb32-321" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-322"><a href="#cb32-322" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahresbilanz [m w.e.]&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Anzahl Gletscherjahre&quot;</span>)</span>
+<span id="cb32-323"><a href="#cb32-323" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-324"><a href="#cb32-324" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-327"><a href="#cb32-327" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-328"><a href="#cb32-328" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-erste-zeit</span></span>
+<span id="cb32-329"><a href="#cb32-329" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Erste Übersicht: Jahresbilanz aller Gletscherjahre über die Zeit&quot;</span></span>
+<span id="cb32-330"><a href="#cb32-330" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-331"><a href="#cb32-331" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(gl, <span class="fu">aes</span>(jahr, Ba_m)) <span class="sc">+</span></span>
+<span id="cb32-332"><a href="#cb32-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-333"><a href="#cb32-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.4</span>, <span class="at">colour =</span> <span class="st">&quot;grey30&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-334"><a href="#cb32-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Jahresbilanz [m w.e.]&quot;</span>)</span>
+<span id="cb32-335"><a href="#cb32-335" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-336"><a href="#cb32-336" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-337"><a href="#cb32-337" aria-hidden="true" tabindex="-1"></a>Die Punktwolke zeigt schon auf den ersten Blick einen Trend zu negativeren Werten, aber auch, dass die Anzahl Punkte pro Jahr stark schwankt. Ein einfacher Mittelwert pro Jahr würde deshalb Veränderungen der Gletscherauswahl mit echten Veränderungen vermischen. Das greife ich in Ansatz 1 auf.</span>
 <span id="cb32-338"><a href="#cb32-338" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-339"><a href="#cb32-339" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ansatz 1: Heatmap aller Gletscher über die Zeit</span></span>
-<span id="cb32-340"><a href="#cb32-340" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-341"><a href="#cb32-341" aria-hidden="true" tabindex="-1"></a>**Frage:** Welche Gletscher wurden wann gemessen, und welche Jahre waren für alle Gletscher gleichzeitig extrem?</span>
-<span id="cb32-342"><a href="#cb32-342" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-343"><a href="#cb32-343" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung:** Muster über Gletscher und Zeit erkennen, Datenlücken sichtbar machen. Rechtecke in einem Raster. Die x-Achse zeigt das Jahr, die y-Achse den Gletscher (sortiert nach dem ersten Messjahr), die Farbe die Jahresbilanz auf einer divergierenden Skala mit Mitte bei null. Weisse Felder bedeuten, dass kein Wert vorliegt. So sehen wir Datenlücken und Werte in derselben Grafik.</span>
-<span id="cb32-344"><a href="#cb32-344" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-347"><a href="#cb32-347" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-348"><a href="#cb32-348" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz2</span></span>
-<span id="cb32-349"><a href="#cb32-349" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 2: Jahresbilanz pro Gletscher und Jahr (Farbe: Rot = Verlust, Blau = Zuwachs)&quot;</span></span>
-<span id="cb32-350"><a href="#cb32-350" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb32-351"><a href="#cb32-351" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7</span></span>
-<span id="cb32-352"><a href="#cb32-352" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-353"><a href="#cb32-353" aria-hidden="true" tabindex="-1"></a>reihenfolge <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
-<span id="cb32-354"><a href="#cb32-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(glacier_name) <span class="sc">|&gt;</span></span>
-<span id="cb32-355"><a href="#cb32-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">erster =</span> <span class="fu">min</span>(jahr), <span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-356"><a href="#cb32-356" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(erster), <span class="fu">desc</span>(n))</span>
-<span id="cb32-357"><a href="#cb32-357" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-358"><a href="#cb32-358" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span></span>
-<span id="cb32-359"><a href="#cb32-359" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">glacier_name =</span> <span class="fu">factor</span>(glacier_name, <span class="at">levels =</span> reihenfolge<span class="sc">$</span>glacier_name)) <span class="sc">|&gt;</span></span>
-<span id="cb32-360"><a href="#cb32-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, glacier_name, <span class="at">fill =</span> Ba_m)) <span class="sc">+</span></span>
-<span id="cb32-361"><a href="#cb32-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
-<span id="cb32-362"><a href="#cb32-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;#b2182b&quot;</span>, <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;#2166ac&quot;</span>,</span>
-<span id="cb32-363"><a href="#cb32-363" aria-hidden="true" tabindex="-1"></a>                       <span class="at">midpoint =</span> <span class="dv">0</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">oob =</span> scales<span class="sc">::</span>squish) <span class="sc">+</span></span>
-<span id="cb32-364"><a href="#cb32-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="st">&quot;Ba</span><span class="sc">\n</span><span class="st">[m w.e.]&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-365"><a href="#cb32-365" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>))</span>
-<span id="cb32-366"><a href="#cb32-366" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-339"><a href="#cb32-339" aria-hidden="true" tabindex="-1"></a><span class="fu">## Welche Fragestellungen möchte ich mit diesem Datensatz beantworten?</span></span>
+<span id="cb32-340"><a href="#cb32-340" aria-hidden="true" tabindex="-1"></a>Bereits bei meinem ersten Versuch wollte ich eine Entwicklung über die Zeit darstellen.Das möchte ich nun auch mit diesem Datensatz versuchen. Zudem können wir einzelne Gletscher aus unterschiedlichen Regionen der Schweiz vergleichen. Wenn möglich, möchte ich Zusammenhänge von z.B. der Höhe und der Entwicklung der Massenbilanz darstellen. </span>
+<span id="cb32-341"><a href="#cb32-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-342"><a href="#cb32-342" aria-hidden="true" tabindex="-1"></a><span class="fu">## Visualisierungsansätze</span></span>
+<span id="cb32-343"><a href="#cb32-343" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-344"><a href="#cb32-344" aria-hidden="true" tabindex="-1"></a>Nachfolgend erste Visualisierungsansätze. Der Datensatz beinhaltet insgesamt 9 Gletscher, die eine fast lückenlose Messreihe ab 1990 aufweisen. Diese werden für eine Aussage über die Zeit verwendet.Bei den nachfolgenden Visualisierungen handelt es sich um erste Würfe. Farbliche Ausgestaltung und ergänzende Texte werden noch vertiefter bearbeitet</span>
+<span id="cb32-345"><a href="#cb32-345" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-348"><a href="#cb32-348" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-349"><a href="#cb32-349" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: ansaetze-vorbereitung</span></span>
+<span id="cb32-350"><a href="#cb32-350" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-351"><a href="#cb32-351" aria-hidden="true" tabindex="-1"></a><span class="co"># Gletscher mit (fast) lückenloser Reihe ab 1990: konstantes Sample für Zeitvergleiche</span></span>
+<span id="cb32-352"><a href="#cb32-352" aria-hidden="true" tabindex="-1"></a>konstant <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
+<span id="cb32-353"><a href="#cb32-353" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(jahr <span class="sc">&gt;=</span> <span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-354"><a href="#cb32-354" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(glacier_id, glacier_name) <span class="sc">|&gt;</span></span>
+<span id="cb32-355"><a href="#cb32-355" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n <span class="sc">&gt;=</span> <span class="dv">34</span>)</span>
+<span id="cb32-356"><a href="#cb32-356" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-357"><a href="#cb32-357" aria-hidden="true" tabindex="-1"></a>konstant<span class="sc">$</span>glacier_name</span>
+<span id="cb32-358"><a href="#cb32-358" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-359"><a href="#cb32-359" aria-hidden="true" tabindex="-1"></a>reihe_konstant <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
+<span id="cb32-360"><a href="#cb32-360" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(glacier_id <span class="sc">%in%</span> konstant<span class="sc">$</span>glacier_id, jahr <span class="sc">&gt;=</span> <span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-361"><a href="#cb32-361" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(jahr) <span class="sc">|&gt;</span></span>
+<span id="cb32-362"><a href="#cb32-362" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(), <span class="at">Bw =</span> <span class="fu">mean</span>(Bw_m), <span class="at">Bs =</span> <span class="fu">mean</span>(Bs_m), <span class="at">Ba =</span> <span class="fu">mean</span>(Ba_m),</span>
+<span id="cb32-363"><a href="#cb32-363" aria-hidden="true" tabindex="-1"></a>            <span class="at">ELA =</span> <span class="fu">mean</span>(ELA), <span class="at">AAR =</span> <span class="fu">mean</span>(AAR), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb32-364"><a href="#cb32-364" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-365"><a href="#cb32-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-366"><a href="#cb32-366" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ansatz 1: Heatmap aller Gletscher über die Zeit</span></span>
 <span id="cb32-367"><a href="#cb32-367" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-368"><a href="#cb32-368" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** Aus der Heatmap können mehrere Informationen gleichzeitig ausgelesen werden. Erstens zeigt sie die Datenlage: Drei Gletscher (Silvretta, Aletsch, Claridenfirn) wurden seit 1915 gemessen, eine grössere Gruppe ab Mitte der 1950er-Jahre, die meisten anderen erst seit etwa 2010. Der Rhonegletscher hat zwei getrennte Blöcke (1885 bis 1909 und ab 2007). Zweitens sieht man, dass einzelne Jahre bei fast allen Gletschern gleichzeitig dunkelrot sind (2022, 2003), während die Blautöne der 1960er- und 1970er-Jahre in den letzten Jahrzehnten fast verschwunden sind.In dieser Version müssen die fehlenden Werte farblich noch überarbeitet werden. Die Unterscheidung zwischen einer neutralen Massenbilanz (0 Wert) und einem fehlenden Wert ist schwer zu machen.Überprüft wird zudem ob die Skala passend ist.</span>
+<span id="cb32-368"><a href="#cb32-368" aria-hidden="true" tabindex="-1"></a>**Frage:** Welche Gletscher wurden wann gemessen, und welche Jahre waren für alle Gletscher gleichzeitig extrem?</span>
 <span id="cb32-369"><a href="#cb32-369" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-370"><a href="#cb32-370" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ansatz 2: Jahresbilanz im Zeitverlauf mit konstantem Sample</span></span>
+<span id="cb32-370"><a href="#cb32-370" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung:** Muster über Gletscher und Zeit erkennen, Datenlücken sichtbar machen. Rechtecke in einem Raster. Die x-Achse zeigt das Jahr, die y-Achse den Gletscher (sortiert nach dem ersten Messjahr), die Farbe die Jahresbilanz auf einer divergierenden Skala mit Mitte bei null. Weisse Felder bedeuten, dass kein Wert vorliegt. So sehen wir Datenlücken und Werte in derselben Grafik.</span>
 <span id="cb32-371"><a href="#cb32-371" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-372"><a href="#cb32-372" aria-hidden="true" tabindex="-1"></a>**Frage:** Wie hat sich die Jahresbilanz verschiedener Schweizer Gletscher seit 1990 entwickelt?</span>
-<span id="cb32-373"><a href="#cb32-373" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-374"><a href="#cb32-374" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung:** Für den Vergleich über die Zeit ist ein Liniendiagramm sinnvoll. Die Zeit liegt auf der x-Achse, die Jahresbilanz auf der y-Achse Die dünnen grauen Linien sind die einzelnen Gletscher, die dicke schwarze Linie ist der Mittelwert über die 9 zuvor genannten Gletscher, die in praktisch allen Jahren seit 1990 gemessen wurden. Die Linien bilden dadurch die echte Veränderung ab und nicht eine Veränderung die ensteht wegen der Veränderung der Anzahl gemessenen Gletscher.</span>
-<span id="cb32-375"><a href="#cb32-375" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-378"><a href="#cb32-378" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-379"><a href="#cb32-379" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz1</span></span>
-<span id="cb32-380"><a href="#cb32-380" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 1: Jahresbilanz seit 1990, einzelne Gletscher (grau) und Mittel des konstanten Samples (schwarz)&quot;</span></span>
-<span id="cb32-381"><a href="#cb32-381" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb32-382"><a href="#cb32-382" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4.5</span></span>
-<span id="cb32-383"><a href="#cb32-383" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-384"><a href="#cb32-384" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span></span>
-<span id="cb32-385"><a href="#cb32-385" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(jahr <span class="sc">&gt;=</span> <span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-386"><a href="#cb32-386" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, Ba_m)) <span class="sc">+</span></span>
-<span id="cb32-387"><a href="#cb32-387" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-388"><a href="#cb32-388" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> glacier_id), <span class="at">colour =</span> <span class="st">&quot;grey75&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
-<span id="cb32-389"><a href="#cb32-389" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> reihe_konstant, <span class="fu">aes</span>(<span class="at">y =</span> Ba), <span class="at">colour =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
-<span id="cb32-390"><a href="#cb32-390" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">2022</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">4.5</span>, <span class="at">label =</span> <span class="st">&quot;2022&quot;</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
-<span id="cb32-391"><a href="#cb32-391" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Jahresbilanz [m w.e.]&quot;</span>,</span>
-<span id="cb32-392"><a href="#cb32-392" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="fu">paste0</span>(<span class="st">&quot;Schwarz: Mittel von &quot;</span>, <span class="fu">nrow</span>(konstant),</span>
-<span id="cb32-393"><a href="#cb32-393" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot; Gletschern mit fast lückenloser Reihe.&quot;</span>))</span>
-<span id="cb32-394"><a href="#cb32-394" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-395"><a href="#cb32-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-396"><a href="#cb32-396" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** In den 36 Jahren seit 1990 ist das Mittel nur in drei Jahren (darunter 1993 und 2001) knapp positiv.Besonders auffällig ist das Jahr 2022, welches ein sehr negatives Resultat aufweist.</span>
-<span id="cb32-397"><a href="#cb32-397" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-398"><a href="#cb32-398" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ansatz 3: Winter- und Sommerbilanz getrennt</span></span>
-<span id="cb32-399"><a href="#cb32-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-400"><a href="#cb32-400" aria-hidden="true" tabindex="-1"></a>**Frage:** Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?</span>
-<span id="cb32-401"><a href="#cb32-401" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-402"><a href="#cb32-402" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung** Zerlegung einer Grösse in ihre Komponenten und Vergleich über die Zeit.</span>
-<span id="cb32-403"><a href="#cb32-403" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-404"><a href="#cb32-404" aria-hidden="true" tabindex="-1"></a>**Marks und Channels:** Balken (Mark) vom Nullpunkt aus. Die Winterbilanz (Zugewinn) zeigt nach oben, die Sommerbilanz (Verlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 1.</span>
-<span id="cb32-405"><a href="#cb32-405" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-408"><a href="#cb32-408" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb32-409"><a href="#cb32-409" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz3</span></span>
-<span id="cb32-410"><a href="#cb32-410" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 3: Winterbilanz (oben), Sommerbilanz (unten) und Jahresbilanz (Linie), Mittel des konstanten Samples&quot;</span></span>
-<span id="cb32-411"><a href="#cb32-411" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
-<span id="cb32-412"><a href="#cb32-412" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4.5</span></span>
-<span id="cb32-413"><a href="#cb32-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-414"><a href="#cb32-414" aria-hidden="true" tabindex="-1"></a>reihe_konstant <span class="sc">|&gt;</span></span>
-<span id="cb32-415"><a href="#cb32-415" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Bw, Bs), <span class="at">names_to =</span> <span class="st">&quot;saison&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;wert&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-416"><a href="#cb32-416" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saison =</span> <span class="fu">recode</span>(saison, <span class="at">Bw =</span> <span class="st">&quot;Winterbilanz&quot;</span>, <span class="at">Bs =</span> <span class="st">&quot;Sommerbilanz&quot;</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb32-417"><a href="#cb32-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, wert)) <span class="sc">+</span></span>
-<span id="cb32-418"><a href="#cb32-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-419"><a href="#cb32-419" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">fill =</span> saison), <span class="at">width =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb32-420"><a href="#cb32-420" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> reihe_konstant, <span class="fu">aes</span>(<span class="at">y =</span> Ba), <span class="at">colour =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb32-421"><a href="#cb32-421" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">Winterbilanz =</span> <span class="st">&quot;#9ecae1&quot;</span>, <span class="at">Sommerbilanz =</span> <span class="st">&quot;#e08a2c&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb32-422"><a href="#cb32-422" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Bilanz [m w.e.]&quot;</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
-<span id="cb32-423"><a href="#cb32-423" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
-<span id="cb32-424"><a href="#cb32-424" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb32-425"><a href="#cb32-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-426"><a href="#cb32-426" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** Die Aufteilung zeigt, dass die Winterbilanz im Mittel stabil blieb, während die Sommerbilanz negativer wird. Die Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation 0.92, mit der Winterbilanz nur 0.35). Auch das Jahr 2022 erklärt sich so: Die Schneemenge im Winter war mit 0.86 m w.e. unterdurchschnittlich, vor allem aber war die Sommerschmelze mit −4.0 m w.e. die höchste im Sample.</span>
-<span id="cb32-427"><a href="#cb32-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-428"><a href="#cb32-428" aria-hidden="true" tabindex="-1"></a><span class="fu">## Zwischenfazit</span></span>
-<span id="cb32-429"><a href="#cb32-429" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-430"><a href="#cb32-430" aria-hidden="true" tabindex="-1"></a>**Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nicht möglich.</span>
-<span id="cb32-431"><a href="#cb32-431" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-432"><a href="#cb32-432" aria-hidden="true" tabindex="-1"></a>**Offene Punkte:**</span>
-<span id="cb32-433"><a href="#cb32-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-434"><a href="#cb32-434" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ein kumulativer Verlauf (Summe der Jahresbilanzen ab 1990) könnte die Entwicklung noch anschaulicher machen.</span>
-<span id="cb32-435"><a href="#cb32-435" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ansatz 5 könnte für weitere Gletscher oder als Animation über die Jahre getestet werden.</span>
-<span id="cb32-436"><a href="#cb32-436" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die Farbwahl der Heatmap (Rot–Blau) sollte ich noch auf Farbsehschwäche prüfen.</span>
-<span id="cb32-437"><a href="#cb32-437" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die beiden Datensätze (Volumenänderung und Massenbilanz) liessen sich verknüpfen, um die geodätischen mit den glaziologischen Werten zu vergleichen.</span>
-<span id="cb32-438"><a href="#cb32-438" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Einzelne Gletscher mit dem absoluten Massenverlust zeigen. Allenfalls die drei Gletscher für welche Messdaten seit 1915 bestehen.</span>
-<span id="cb32-439"><a href="#cb32-439" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Karte mit einzelnen Angaben zu Gletschern darstellen.</span>
+<span id="cb32-374"><a href="#cb32-374" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-375"><a href="#cb32-375" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz2</span></span>
+<span id="cb32-376"><a href="#cb32-376" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 2: Jahresbilanz pro Gletscher und Jahr (Farbe: Rot = Verlust, Blau = Zuwachs)&quot;</span></span>
+<span id="cb32-377"><a href="#cb32-377" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb32-378"><a href="#cb32-378" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 7</span></span>
+<span id="cb32-379"><a href="#cb32-379" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-380"><a href="#cb32-380" aria-hidden="true" tabindex="-1"></a>reihenfolge <span class="ot">&lt;-</span> gl <span class="sc">|&gt;</span></span>
+<span id="cb32-381"><a href="#cb32-381" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(glacier_name) <span class="sc">|&gt;</span></span>
+<span id="cb32-382"><a href="#cb32-382" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">erster =</span> <span class="fu">min</span>(jahr), <span class="at">n =</span> <span class="fu">n</span>(), <span class="at">.groups =</span> <span class="st">&quot;drop&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-383"><a href="#cb32-383" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(erster), <span class="fu">desc</span>(n))</span>
+<span id="cb32-384"><a href="#cb32-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-385"><a href="#cb32-385" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span></span>
+<span id="cb32-386"><a href="#cb32-386" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">glacier_name =</span> <span class="fu">factor</span>(glacier_name, <span class="at">levels =</span> reihenfolge<span class="sc">$</span>glacier_name)) <span class="sc">|&gt;</span></span>
+<span id="cb32-387"><a href="#cb32-387" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, glacier_name, <span class="at">fill =</span> Ba_m)) <span class="sc">+</span></span>
+<span id="cb32-388"><a href="#cb32-388" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb32-389"><a href="#cb32-389" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;#b2182b&quot;</span>, <span class="at">mid =</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;#2166ac&quot;</span>,</span>
+<span id="cb32-390"><a href="#cb32-390" aria-hidden="true" tabindex="-1"></a>                       <span class="at">midpoint =</span> <span class="dv">0</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>), <span class="at">oob =</span> scales<span class="sc">::</span>squish) <span class="sc">+</span></span>
+<span id="cb32-391"><a href="#cb32-391" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="cn">NULL</span>, <span class="at">fill =</span> <span class="st">&quot;Ba</span><span class="sc">\n</span><span class="st">[m w.e.]&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-392"><a href="#cb32-392" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>))</span>
+<span id="cb32-393"><a href="#cb32-393" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-394"><a href="#cb32-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-395"><a href="#cb32-395" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** Aus der Heatmap können mehrere Informationen gleichzeitig ausgelesen werden. Erstens zeigt sie die Datenlage: Drei Gletscher (Silvretta, Aletsch, Claridenfirn) wurden seit 1915 gemessen, eine grössere Gruppe ab Mitte der 1950er-Jahre, die meisten anderen erst seit etwa 2010. Der Rhonegletscher hat zwei getrennte Blöcke (1885 bis 1909 und ab 2007). Zweitens sieht man, dass einzelne Jahre bei fast allen Gletschern gleichzeitig dunkelrot sind (2022, 2003), während die Blautöne der 1960er- und 1970er-Jahre in den letzten Jahrzehnten fast verschwunden sind.In dieser Version müssen die fehlenden Werte farblich noch überarbeitet werden. Die Unterscheidung zwischen einer neutralen Massenbilanz (0 Wert) und einem fehlenden Wert ist schwer zu machen.Überprüft wird zudem ob die Skala passend ist.</span>
+<span id="cb32-396"><a href="#cb32-396" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-397"><a href="#cb32-397" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ansatz 2: Jahresbilanz im Zeitverlauf mit konstantem Sample</span></span>
+<span id="cb32-398"><a href="#cb32-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-399"><a href="#cb32-399" aria-hidden="true" tabindex="-1"></a>**Frage:** Wie hat sich die Jahresbilanz verschiedener Schweizer Gletscher seit 1990 entwickelt?</span>
+<span id="cb32-400"><a href="#cb32-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-401"><a href="#cb32-401" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung:** Für den Vergleich über die Zeit ist ein Liniendiagramm sinnvoll. Die Zeit liegt auf der x-Achse, die Jahresbilanz auf der y-Achse Die dünnen grauen Linien sind die einzelnen Gletscher, die dicke schwarze Linie ist der Mittelwert über die 9 zuvor genannten Gletscher, die in praktisch allen Jahren seit 1990 gemessen wurden. Die Linien bilden dadurch die echte Veränderung ab und nicht eine Veränderung die ensteht wegen der Veränderung der Anzahl gemessenen Gletscher.</span>
+<span id="cb32-402"><a href="#cb32-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-405"><a href="#cb32-405" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-406"><a href="#cb32-406" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz1</span></span>
+<span id="cb32-407"><a href="#cb32-407" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 1: Jahresbilanz seit 1990, einzelne Gletscher (grau) und Mittel des konstanten Samples (schwarz)&quot;</span></span>
+<span id="cb32-408"><a href="#cb32-408" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb32-409"><a href="#cb32-409" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4.5</span></span>
+<span id="cb32-410"><a href="#cb32-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-411"><a href="#cb32-411" aria-hidden="true" tabindex="-1"></a>gl <span class="sc">|&gt;</span></span>
+<span id="cb32-412"><a href="#cb32-412" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(jahr <span class="sc">&gt;=</span> <span class="dv">1990</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-413"><a href="#cb32-413" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, Ba_m)) <span class="sc">+</span></span>
+<span id="cb32-414"><a href="#cb32-414" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">colour =</span> <span class="st">&quot;grey60&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-415"><a href="#cb32-415" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> glacier_id), <span class="at">colour =</span> <span class="st">&quot;grey75&quot;</span>, <span class="at">linewidth =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb32-416"><a href="#cb32-416" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> reihe_konstant, <span class="fu">aes</span>(<span class="at">y =</span> Ba), <span class="at">colour =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb32-417"><a href="#cb32-417" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="dv">2022</span>, <span class="at">y =</span> <span class="sc">-</span><span class="fl">4.5</span>, <span class="at">label =</span> <span class="st">&quot;2022&quot;</span>, <span class="at">size =</span> <span class="fl">3.5</span>) <span class="sc">+</span></span>
+<span id="cb32-418"><a href="#cb32-418" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Jahresbilanz [m w.e.]&quot;</span>,</span>
+<span id="cb32-419"><a href="#cb32-419" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="fu">paste0</span>(<span class="st">&quot;Schwarz: Mittel von &quot;</span>, <span class="fu">nrow</span>(konstant),</span>
+<span id="cb32-420"><a href="#cb32-420" aria-hidden="true" tabindex="-1"></a>                        <span class="st">&quot; Gletschern mit fast lückenloser Reihe.&quot;</span>))</span>
+<span id="cb32-421"><a href="#cb32-421" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-422"><a href="#cb32-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-423"><a href="#cb32-423" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** In den 36 Jahren seit 1990 ist das Mittel nur in drei Jahren (darunter 1993 und 2001) knapp positiv.Besonders auffällig ist das Jahr 2022, welches ein sehr negatives Resultat aufweist.</span>
+<span id="cb32-424"><a href="#cb32-424" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-425"><a href="#cb32-425" aria-hidden="true" tabindex="-1"></a><span class="fu">### Ansatz 3: Winter- und Sommerbilanz getrennt</span></span>
+<span id="cb32-426"><a href="#cb32-426" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-427"><a href="#cb32-427" aria-hidden="true" tabindex="-1"></a>**Frage:** Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?</span>
+<span id="cb32-428"><a href="#cb32-428" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-429"><a href="#cb32-429" aria-hidden="true" tabindex="-1"></a>**Aufbau der Visualisierung** Zerlegung einer Grösse in ihre Komponenten und Vergleich über die Zeit.</span>
+<span id="cb32-430"><a href="#cb32-430" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-431"><a href="#cb32-431" aria-hidden="true" tabindex="-1"></a>**Marks und Channels:** Balken (Mark) vom Nullpunkt aus. Die Winterbilanz (Zugewinn) zeigt nach oben, die Sommerbilanz (Verlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 1.</span>
+<span id="cb32-432"><a href="#cb32-432" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-435"><a href="#cb32-435" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb32-436"><a href="#cb32-436" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-ansatz3</span></span>
+<span id="cb32-437"><a href="#cb32-437" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: &quot;Ansatz 3: Winterbilanz (oben), Sommerbilanz (unten) und Jahresbilanz (Linie), Mittel des konstanten Samples&quot;</span></span>
+<span id="cb32-438"><a href="#cb32-438" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 9</span></span>
+<span id="cb32-439"><a href="#cb32-439" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 4.5</span></span>
 <span id="cb32-440"><a href="#cb32-440" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-441"><a href="#cb32-441" aria-hidden="true" tabindex="-1"></a><span class="fu">## Peer-Feedback und nächste Iteration</span></span>
-<span id="cb32-442"><a href="#cb32-442" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-443"><a href="#cb32-443" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
-<span id="cb32-444"><a href="#cb32-444" aria-hidden="true" tabindex="-1"></a>Wird nach der Vorlesung mit dem Feedback der anderen Studierenden ergänzt.</span>
-<span id="cb32-445"><a href="#cb32-445" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb32-441"><a href="#cb32-441" aria-hidden="true" tabindex="-1"></a>reihe_konstant <span class="sc">|&gt;</span></span>
+<span id="cb32-442"><a href="#cb32-442" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(Bw, Bs), <span class="at">names_to =</span> <span class="st">&quot;saison&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;wert&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb32-443"><a href="#cb32-443" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">saison =</span> <span class="fu">recode</span>(saison, <span class="at">Bw =</span> <span class="st">&quot;Winterbilanz&quot;</span>, <span class="at">Bs =</span> <span class="st">&quot;Sommerbilanz&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb32-444"><a href="#cb32-444" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(jahr, wert)) <span class="sc">+</span></span>
+<span id="cb32-445"><a href="#cb32-445" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">&quot;grey50&quot;</span>) <span class="sc">+</span></span>
+<span id="cb32-446"><a href="#cb32-446" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="fu">aes</span>(<span class="at">fill =</span> saison), <span class="at">width =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb32-447"><a href="#cb32-447" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> reihe_konstant, <span class="fu">aes</span>(<span class="at">y =</span> Ba), <span class="at">colour =</span> <span class="st">&quot;grey10&quot;</span>, <span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb32-448"><a href="#cb32-448" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">Winterbilanz =</span> <span class="st">&quot;#9ecae1&quot;</span>, <span class="at">Sommerbilanz =</span> <span class="st">&quot;#e08a2c&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb32-449"><a href="#cb32-449" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Jahr&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Bilanz [m w.e.]&quot;</span>, <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb32-450"><a href="#cb32-450" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb32-451"><a href="#cb32-451" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb32-452"><a href="#cb32-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-453"><a href="#cb32-453" aria-hidden="true" tabindex="-1"></a>**Erkenntnis:** Die Aufteilung zeigt, dass die Winterbilanz im Mittel stabil blieb, während die Sommerbilanz negativer wird. Die Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation 0.92, mit der Winterbilanz nur 0.35). Auch das Jahr 2022 erklärt sich so: Die Schneemenge im Winter war mit 0.86 m w.e. unterdurchschnittlich, vor allem aber war die Sommerschmelze mit −4.0 m w.e. die höchste im Sample.</span>
+<span id="cb32-454"><a href="#cb32-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-455"><a href="#cb32-455" aria-hidden="true" tabindex="-1"></a><span class="fu">## Zwischenfazit</span></span>
+<span id="cb32-456"><a href="#cb32-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-457"><a href="#cb32-457" aria-hidden="true" tabindex="-1"></a>**Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nicht möglich.</span>
+<span id="cb32-458"><a href="#cb32-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-459"><a href="#cb32-459" aria-hidden="true" tabindex="-1"></a>**Offene Punkte:**</span>
+<span id="cb32-460"><a href="#cb32-460" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-461"><a href="#cb32-461" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ein kumulativer Verlauf (Summe der Jahresbilanzen ab 1990) könnte die Entwicklung noch anschaulicher machen.</span>
+<span id="cb32-462"><a href="#cb32-462" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Ansatz 5 könnte für weitere Gletscher oder als Animation über die Jahre getestet werden.</span>
+<span id="cb32-463"><a href="#cb32-463" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die Farbwahl der Heatmap (Rot–Blau) sollte ich noch auf Farbsehschwäche prüfen.</span>
+<span id="cb32-464"><a href="#cb32-464" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Die beiden Datensätze (Volumenänderung und Massenbilanz) liessen sich verknüpfen, um die geodätischen mit den glaziologischen Werten zu vergleichen.</span>
+<span id="cb32-465"><a href="#cb32-465" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Einzelne Gletscher mit dem absoluten Massenverlust zeigen. Allenfalls die drei Gletscher für welche Messdaten seit 1915 bestehen.</span>
+<span id="cb32-466"><a href="#cb32-466" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Karte mit einzelnen Angaben zu Gletschern darstellen.</span>
+<span id="cb32-467"><a href="#cb32-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-468"><a href="#cb32-468" aria-hidden="true" tabindex="-1"></a><span class="fu">## Peer-Feedback und nächste Iteration</span></span>
+<span id="cb32-469"><a href="#cb32-469" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-470"><a href="#cb32-470" aria-hidden="true" tabindex="-1"></a>::: callout-note</span>
+<span id="cb32-471"><a href="#cb32-471" aria-hidden="true" tabindex="-1"></a>Wird nach der Vorlesung mit dem Feedback der anderen Studierenden ergänzt.</span>
+<span id="cb32-472"><a href="#cb32-472" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="In die Zwischenablage kopieren" class="code-copy-button" data-in-quarto-modal><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
