@@ -420,9 +420,7 @@ gl |>
 
 **Frage:** Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?
 
-**Aufbau der Visualisierung** Zerlegung einer Grösse in ihre Komponenten und Vergleich über die Zeit.
-
-**Marks und Channels:** Balken (Mark) vom Nullpunkt aus. Die Winterbilanz (Zugewinn) zeigt nach oben, die Sommerbilanz (Verlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 1.
+**Aufbau der Visualisierung** Balken vom Nullpunkt aus. Die Winterbilanz (Akkumulation) zeigt nach oben, die Sommerbilanz (Massenverlust) nach unten, jeweils auf derselben y-Skala. Die schwarze Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte stammen vom konstanten Sample aus Ansatz 2. Die Werte sind so direkt Verlgeichbar.
 
 ```{r}
 #| label: fig-ansatz3
