@@ -369,7 +369,7 @@ reihe_konstant <- gl |>
 
 ```{r}
 #| label: fig-ansatz2
-#| fig-cap: "Ansatz 2: Jahresbilanz pro Gletscher und Jahr (Farbe: Rot = Verlust, Blau = Zuwachs)"
+#| fig-cap: "Ansatz 1: Jahresbilanz pro Gletscher und Jahr (Farbe: Rot = Verlust, Blau = Zuwachs)"
 #| fig-width: 9
 #| fig-height: 7
 
@@ -389,6 +389,90 @@ gl |>
 ```
 
 **Erkenntnis:** Aus der Heatmap können mehrere Informationen gleichzeitig ausgelesen werden. Erstens zeigt sie die Datenlage: Drei Gletscher (Silvretta, Aletsch, Claridenfirn) wurden seit 1915 gemessen, eine grössere Gruppe ab Mitte der 1950er-Jahre, die meisten anderen erst seit etwa 2010. Der Rhonegletscher hat zwei getrennte Blöcke (1885 bis 1909 und ab 2007). Zweitens sieht man, dass einzelne Jahre bei fast allen Gletschern gleichzeitig dunkelrot sind (2022, 2003), während die Blautöne der 1960er- und 1970er-Jahre in den letzten Jahrzehnten fast verschwunden sind.In dieser Version müssen die fehlenden Werte farblich noch überarbeitet werden. Die Unterscheidung zwischen einer neutralen Massenbilanz (0 Wert) und einem fehlenden Wert ist schwer zu machen.Überprüft wird zudem ob die Skala passend ist.
+
+#### Iteration 2: Heatmap ab 2000 und ab 1990
+
+**Anpassungen:** Die erste Version enthielt viele leere Felder, weil einzelne Gletscher erst spät oder mit Lücken gemessen wurden. In dieser Iteration zeige ich nur Gletscher mit einer fast lückenlosen Reihe: für die Grafik ab 2000 alle Gletscher mit mindestens 20 von 26 Jahren, für die Grafik ab 1990 die neun Gletscher des konstanten Samples. Fehlende Werte sind neu **grau** dargestellt, eine ausgeglichene Bilanz (0) bleibt **weiss**. Zusätzlich sind die Gletscher nach der mittleren Bilanz sortiert (stärkster Verlust oben), damit Muster sichtbar werden.
+
+```{r}
+#| label: fig-iter2-heatmap-2000
+#| fig-cap: "Iteration 2: Jährliche Massenbilanz ausgewählter Schweizer Gletscher seit 2000 (grau = kein Messwert, weiss = ausgeglichene Bilanz)"
+#| fig-width: 9
+#| fig-height: 5
+
+heatmap_iter2 <- function(daten, von, titel, sortierung = c("bilanz", "messjahr")) {
+  sortierung <- match.arg(sortierung)
+  raster <- daten |>
+    filter(jahr >= von) |>
+    complete(glacier_name, jahr = von:max(gl$jahr))
+
+  if (sortierung == "bilanz") {
+    # stärkster Verlust (tiefste mittlere Bilanz) oben
+    raster <- raster |>
+      mutate(glacier_name = fct_reorder(glacier_name, Ba_m, mean, na.rm = TRUE, .desc = TRUE))
+  } else {
+    # Gletscher mit dem frühesten Messbeginn oben, bei gleichem Beginn der mit mehr Jahren
+    reihenfolge <- raster |>
+      filter(!is.na(Ba_m)) |>
+      group_by(glacier_name) |>
+      summarise(erster = min(jahr), n = n(), .groups = "drop") |>
+      arrange(desc(erster), n)
+    raster <- raster |>
+      mutate(glacier_name = factor(glacier_name, levels = reihenfolge$glacier_name))
+  }
+
+  ggplot(raster, aes(jahr, glacier_name, fill = Ba_m)) +
+    geom_tile(colour = "white", linewidth = 0.3) +
+    scale_fill_gradient2(low = "#b2182b", mid = "white", high = "#2166ac",
+                         midpoint = 0, limits = c(-3, 3), oob = scales::squish,
+                         na.value = "grey70") +
+    scale_x_continuous(breaks = seq(von, 2025, 5), expand = c(0, 0)) +
+    labs(title = titel, x = "Jahr", y = NULL, fill = "Jahresbilanz\n[m w.e.]",
+         caption = "Grau: kein Messwert. Weiss: ausgeglichene Bilanz (0). Farbskala bei ±3 m w.e. begrenzt.") +
+    theme(panel.grid = element_blank(), plot.title.position = "plot")
+}
+
+auswahl_2000 <- gl |>
+  filter(jahr >= 2000) |>
+  count(glacier_name) |>
+  filter(n >= 20)
+
+gl |>
+  filter(glacier_name %in% auswahl_2000$glacier_name) |>
+  heatmap_iter2(2000, "Jährliche Massenbilanz ausgewählter Schweizer Gletscher seit 2000")
+```
+
+```{r}
+#| label: fig-iter2-heatmap-1990
+#| fig-cap: "Iteration 2: Jährliche Massenbilanz der neun Gletscher des konstanten Samples seit 1990 (grau = kein Messwert, weiss = ausgeglichene Bilanz)"
+#| fig-width: 9
+#| fig-height: 4
+
+gl |>
+  filter(glacier_id %in% konstant$glacier_id) |>
+  heatmap_iter2(1990, "Jährliche Massenbilanz ausgewählter Schweizer Gletscher seit 1990")
+```
+
+**Erkenntnis:** Mit den ausgewählten Gletschern und der Sortierung nach mittlerer Bilanz sind die Muster deutlich besser lesbar. Seit 2000 sind von 305 Gletscherjahren nur 27 (9 %) positiv, und nur vier liegen über +0.5 m w.e. (2001 und 2007). Die Jahre 2003 und 2022 sind bei allen Gletschern dunkelrot, 2023 ist ebenfalls bei fast allen stark negativ. In der Grafik ab 1990 sieht man mehr blaue Felder (42 von 320 Gletscherjahren, 13 %), vor allem Anfang der 1990er-Jahre und um 2001. Seit 2011 sind nur noch 4 % der Gletscherjahre positiv, zwischen 1990 und 2010 waren es rund 20 %. In 20 der 36 Jahre sind alle neun Gletscher negativ. Die grauen Felder (fehlende Werte) sind nun klar von den weissen (ausgeglichene Bilanz) unterscheidbar: Es sind sieben Felder bei der Grafik ab 2000 und vier bei der Grafik ab 1990. Die Skala bei ±3 m w.e. reicht für die Grafik ab 1990 fast überall aus, nur einzelne Werte im Jahr 2022 (bis −3.9) werden abgeschnitten. Auf der positiven Seite wird die Skala nur bis +1.3 m w.e. genutzt, deshalb sind die Blautöne blass.
+
+#### Iteration 3: Heatmap aller Gletscher seit 1990
+
+**Anpassungen:** Nun alle Gletscher, die seit 1990 gemessen wurden, nicht nur eine Auswahl. Das Farbkonzept (Rot = Verlust, Blau = Zuwachs, Weiss = ausgeglichen, Grau = kein Messwert) bleibt gleich. Die Gletscher sind neu nach dem ersten Messjahr sortiert (früheste Messreihe oben), weil die Sortierung nach mittlerer Bilanz bei unterschiedlichen Messzeiträumen nicht vergleichbar ist. Die Grafik ist höher, damit alle Gletschernamen lesbar sind.
+
+```{r}
+#| label: fig-iter3-heatmap-alle-1990
+#| fig-cap: "Iteration 3: Jährliche Massenbilanz aller Schweizer Gletscher seit 1990, sortiert nach erstem Messjahr (grau = kein Messwert, weiss = ausgeglichene Bilanz)"
+#| fig-width: 9
+#| fig-height: 9
+
+gl |>
+  filter(jahr >= 1990) |>
+  heatmap_iter2(1990, "Jährliche Massenbilanz aller Schweizer Gletscher seit 1990",
+                sortierung = "messjahr") +
+  theme(axis.text.y = element_text(size = 8))
+```
+
+**Erkenntnis:** Die Sortierung nach erstem Messjahr macht den Ausbau des Messnetzes sichtbar: Seit 1990 wurden 38 Gletscher gemessen, aber nur 10 davon schon in den frühen 1990er-Jahren. Die Zahl der Gletscher mit Messwert steigt von 12 (2005) auf 19 (2010) und 29 (2015). Gut die Hälfte der 1'368 möglichen Felder ist deshalb grau (701), vor allem links unten. Die Grafik eignet sich darum weniger für den Vergleich einzelner Gletscher als für das Gesamtbild: Von 667 Gletscherjahren sind nur 61 (9 %) positiv, und nur zwei liegen über +1 m w.e. Bis 2010 waren es 17 % positive Gletscherjahre, seit 2011 knapp 5 %, seit 2015 weniger als 1 %. In den Jahren 2003, 2022 und 2023 sind alle gemessenen Gletscher negativ (2022: alle 28, bis −4.1 m w.e.). Die senkrechten dunkelroten Streifen bei 2003 und 2022 zeigen, dass es sich um Jahreseffekte handelt, die alle Gletscher gleichzeitig treffen, unabhängig von der Länge der Messreihe. Die oberen neun Gletscher mit der längsten Reihe zeigen zusätzlich den Wechsel von helleren Jahren (1990er) zu fast durchgehend roten Jahren seit 2010.
 
 ### Ansatz 2: Jahresbilanz im Zeitverlauf mit konstantem Sample
 
@@ -416,6 +500,65 @@ gl |>
 
 **Erkenntnis:** In den 36 Jahren seit 1990 ist das Mittel nur in drei Jahren (darunter 1993 und 2001) knapp positiv.Besonders auffällig ist das Jahr 2022, welches ein sehr negatives Resultat aufweist.
 
+
+
+#### Iteration 2: Zeitverlauf mit beschrifteten Gletschern
+
+**Anpassungen:** Die Grafik zeigt nur noch die neun Gletscher des konstanten Samples, damit die Linien genau dem Mittelwert entsprechen und alle direkt beschriftet werden können (bei allen rund 30 Gletschern seit 1990 wären die Beschriftungen am Linienende nicht mehr lesbar). Die Nulllinie ist neu durchgezogen und dunkler, der Mittelwert ist farbig und in der Legende benannt, die zwei auffälligen Jahre sind beschriftet. Die Namen der Gletscher stehen am Ende der Linien in Grau und kursiv.
+
+```{r}
+#| label: fig-iter2-zeitverlauf
+#| fig-cap: "Iteration 2: Entwicklung der jährlichen Massenbilanz ausgewählter Schweizer Gletscher seit 1990"
+#| fig-width: 10
+#| fig-height: 6
+
+linien <- gl |>
+  filter(glacier_id %in% konstant$glacier_id, jahr >= 1990)
+
+# Beschriftungen am Linienende: Positionen vertikal etwas auseinanderziehen
+auseinander <- function(y, abstand) {
+  o <- order(y)
+  ys <- y[o]
+  for (i in seq_along(ys)[-1]) {
+    if (ys[i] - ys[i - 1] < abstand) ys[i] <- ys[i - 1] + abstand
+  }
+  ys <- ys - (mean(ys) - mean(y))
+  y[o] <- ys
+  y
+}
+
+enden <- linien |>
+  group_by(glacier_name) |>
+  filter(jahr == max(jahr)) |>
+  ungroup() |>
+  mutate(y_label = auseinander(Ba_m, 0.2))
+
+# Position der Jahresbeschriftungen: unter der tiefsten Linie des Jahres
+extrem <- linien |>
+  filter(jahr %in% c(2003, 2022)) |>
+  group_by(jahr) |>
+  summarise(y = min(Ba_m) - 0.15, .groups = "drop") |>
+  mutate(text = c(`2003` = "Hitzesommer 2003", `2022` = "Rekordjahr 2022")[as.character(jahr)])
+
+ggplot(linien, aes(jahr, Ba_m)) +
+  geom_hline(yintercept = 0, colour = "grey35", linewidth = 0.7) +
+  geom_line(aes(group = glacier_id), colour = "grey70", linewidth = 0.4) +
+  geom_line(data = reihe_konstant, aes(y = Ba, colour = "Mittel der neun Gletscher"),
+            linewidth = 1.3) +
+  geom_text(data = enden, aes(x = jahr + 0.4, y = y_label, label = glacier_name),
+            hjust = 0, size = 3, colour = "grey45", fontface = "italic") +
+  geom_text(data = extrem, aes(x = jahr, y = y, label = text),
+            vjust = 1, size = 3.5, fontface = "bold", colour = "grey20") +
+  scale_colour_manual(values = c("Mittel der neun Gletscher" = "grey10")) +
+  scale_x_continuous(limits = c(1990, 2036), breaks = seq(1990, 2025, 5)) +
+  scale_y_continuous(limits = c(-4.4, 1.5)) +
+  labs(title = "Entwicklung der jährlichen Massenbilanz ausgewählter Schweizer Gletscher seit 1990",
+       x = "Jahr", y = "Jahresbilanz [m w.e.]", colour = NULL) +
+  theme(legend.position = "bottom", plot.title.position = "plot")
+```
+
+**Erkenntnis:** Der farbige Mittelwert hebt sich nun klar von den grauen Gletscherlinien ab, und die durchgezogene Nulllinie macht sichtbar, dass das Mittel nur in drei Jahren über null liegt (1993, 1995 und 2001). Die beiden Extremjahre sind beschriftet: 2003 (Hitzesommer, Mittel −2.1 m w.e., alle neun Gletscher zwischen −2.7 und −1.2) und 2022 (Rekordjahr, Mittel −3.1 m w.e., zwischen −3.9 und −2.4). Seit 2023 hat sich die Bilanz etwas erholt (−2.4, −1.1, −1.5 m w.e. in den Jahren 2023 bis 2025), bleibt aber klar negativ. Alle neun Gletscher lassen sich am Linienende direkt beschriften. Bei allen rund 30 Gletschern seit 1990 wäre das nicht mehr lesbar. Die Gletscher verlaufen weitgehend parallel, der Unterschied zwischen ihnen ist im Vergleich zu den Schwankungen zwischen den Jahren klein. Am stärksten ist der Verlust im Mittel beim Griesgletscher (−1.4 m w.e. pro Jahr seit 1990), am schwächsten beim Allalingletscher (−0.6).
+
 ### Ansatz 3: Winter- und Sommerbilanz getrennt
 
 **Frage:** Entsteht der Massenverlust durch weniger Schnee im Winter oder durch mehr Schmelze im Sommer?
@@ -442,6 +585,38 @@ reihe_konstant |>
 
 **Erkenntnis:** Die Aufteilung zeigt, dass die Winterbilanz im Mittel stabil blieb, während die Sommerbilanz negativer wird. Die Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation 0.92, mit der Winterbilanz nur 0.35). Auch das Jahr 2022 erklärt sich so: Die Schneemenge im Winter war mit 0.86 m w.e. unterdurchschnittlich, vor allem aber war die Sommerschmelze mit −4.0 m w.e. die höchste im Sample.
 
+#### Iteration 2: Winter- und Sommerbilanz mit beschriftetem Mittelwert
+
+**Anpassungen:** Die Jahresbilanz (Mittel der neun Gletscher) ist neu farbig, in der Legende benannt und zusätzlich direkt am Linienende beschriftet. Ein Titel nennt Inhalt und Zeitraum.
+
+```{r}
+#| label: fig-iter2-saisons
+#| fig-cap: "Iteration 2: Winter-, Sommer- und Jahresbilanz (Mittel der neun Gletscher) seit 1990"
+#| fig-width: 9
+#| fig-height: 4.5
+
+letzte <- reihe_konstant |> filter(jahr == max(jahr))
+
+reihe_konstant |>
+  pivot_longer(c(Bw, Bs), names_to = "saison", values_to = "wert") |>
+  mutate(saison = recode(saison, Bw = "Winterbilanz", Bs = "Sommerbilanz")) |>
+  ggplot(aes(jahr, wert)) +
+  geom_hline(yintercept = 0, colour = "grey35", linewidth = 0.6) +
+  geom_col(aes(fill = saison), width = 0.8) +
+  geom_line(data = reihe_konstant,
+            aes(y = Ba, colour = "Jahresbilanz (Mittel der neun Gletscher)"), linewidth = 1.1) +
+  annotate("text", x = letzte$jahr + 0.6, y = letzte$Ba, label = "Jahresbilanz\n(Mittel)",
+           hjust = 0, size = 3.2, colour = "grey10", fontface = "bold", lineheight = 0.9) +
+  scale_fill_manual(values = c(Winterbilanz = "#9ecae1", Sommerbilanz = "#e08a2c")) +
+  scale_colour_manual(values = c("Jahresbilanz (Mittel der neun Gletscher)" = "grey10")) +
+  scale_x_continuous(limits = c(1989, 2031), breaks = seq(1990, 2025, 5)) +
+  labs(title = "Winter-, Sommer- und Jahresbilanz ausgewählter Schweizer Gletscher seit 1990",
+       x = "Jahr", y = "Bilanz [m w.e.]", fill = NULL, colour = NULL) +
+  theme(legend.position = "bottom", plot.title.position = "plot")
+```
+
+**Erkenntnis:** Der Mittelwert ist nun farbig, im Diagramm beschriftet und in der Legende erklärt. An der Aussage ändert sich nichts: Die Winterbilanz bleibt über den ganzen Zeitraum ungefähr gleich hoch, während die Sommerbilanz tiefer wird. Die zwei Extremjahre sind direkt in den Balken sichtbar: 2003 (Sommerbilanz −3.5 m w.e.) und 2022 (−4.0 m w.e., bei gleichzeitig unterdurchschnittlicher Winterbilanz von 0.9 m w.e.).
+
 ## Zwischenfazit
 
 **Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nicht möglich.
@@ -454,6 +629,9 @@ reihe_konstant |>
 - Die beiden Datensätze (Volumenänderung und Massenbilanz) liessen sich verknüpfen, um die geodätischen mit den glaziologischen Werten zu vergleichen.
 - Einzelne Gletscher mit dem absoluten Massenverlust zeigen. Allenfalls die drei Gletscher für welche Messdaten seit 1915 bestehen.
 - Karte mit einzelnen Angaben zu Gletschern darstellen.
+- Grafik wie bei Gun-Death-Florida für die Gesamtbilanz über die Jahre.
+- Bei Grafik 1 Gletscher der Stichprobe markieren.
+- Small Multiples verwenden
 
 ## Peer-Feedback und nächste Iteration
 

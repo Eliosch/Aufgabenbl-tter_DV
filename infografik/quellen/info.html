@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de-CH"><head><meta charset="utf-8">
+<title>Gletscher verlieren Masse – der Sommer ist der Grund</title>
+<style>
+@page { size: 297mm 580mm; margin: 0; }
+:root { --ink:#1f2933; --ink2:#52606d; --line:#d9dee3; --rot:#b2182b; --blau:#2166ac; --sommer:#e08a2c; --winter:#9ecae1; }
+* { box-sizing: border-box; }
+html, body { margin:0; padding:0; }
+body { font-family:'Inter',sans-serif; color:var(--ink); width:297mm; height:580mm; background:#fff; }
+.page { padding:16mm 18mm 12mm 18mm; height:580mm; display:flex; flex-direction:column; }
+.kicker { font-size:11pt; letter-spacing:.14em; text-transform:uppercase; color:var(--rot); font-weight:700; }
+h1 { font-size:35pt; line-height:1.1; margin:3mm 0 4mm; font-weight:800; letter-spacing:-.01em; }
+.lede { font-size:13pt; line-height:1.45; color:var(--ink2); max-width:215mm; margin:0 0 6mm; }
+.rule { border:0; border-top:1.6px solid var(--ink); margin:0 0 5mm; }
+section { margin-bottom:5.5mm; }
+h2 { font-size:17pt; margin:0 0 1.5mm; font-weight:700; }
+h2 .nr { color:var(--rot); margin-right:2.5mm; }
+.sub { font-size:11pt; color:var(--ink2); margin:0 0 2mm; line-height:1.4; max-width:230mm; }
+img { display:block; width:100%; height:auto; }
+.row { display:flex; gap:10mm; align-items:center; }
+.row .chart { flex:0 0 150mm; }
+.stats { flex:1; display:flex; flex-direction:column; gap:5mm; }
+.big { font-size:46pt; font-weight:800; color:var(--rot); line-height:1; letter-spacing:-.02em; }
+.big small { font-size:16pt; font-weight:700; margin-left:1.5mm; }
+.lbl { font-size:11pt; color:var(--ink2); line-height:1.4; margin-top:1.5mm; }
+.fact { border-left:4px solid var(--line); padding-left:4mm; font-size:11.5pt; line-height:1.4; }
+.fact b { font-weight:700; }
+.fact.r { border-color:var(--rot); }
+.cols { display:flex; gap:8mm; margin-top:3mm; }
+.card { flex:1; border:1px solid var(--line); border-radius:3mm; padding:4mm 5mm; font-size:11pt; line-height:1.45; }
+.card h3 { margin:0 0 1.5mm; font-size:11.5pt; font-weight:700; }
+.card .n { font-size:21pt; font-weight:800; line-height:1.1; }
+.sw { display:inline-block; width:3.2mm; height:3.2mm; border-radius:.6mm; margin-right:2mm; vertical-align:-.3mm; }
+footer { margin-top:auto; border-top:1px solid var(--line); padding-top:3.5mm; font-size:8.5pt; color:var(--ink2); line-height:1.45; }
+footer b { color:var(--ink); }
+</style></head>
+<body><div class="page">
+<div class="kicker">Schweizer Gletscher · 1990–2025</div>
+<h1>Die Gletscher verlieren Masse –<br>und der Sommer ist der Grund</h1>
+<p class="lede">Jährliche Massenbilanz von neun Schweizer Gletschern mit fast lückenloser Messreihe seit 1990. Negative Werte bedeuten Masseverlust, positive Massenzuwachs. Die Einheit «m w.e.» steht für Meter Wasseräquivalent: –1 bedeutet, dass ein Gletscher über seine ganze Fläche im Mittel eine Wasserschicht von 1 m verloren hat.</p>
+<hr class="rule">
+
+<section>
+<h2><span class="nr">1</span>Seit 2011 ist fast jedes Feld rot</h2>
+<p class="sub">Jede Zeile ist ein Gletscher, jede Spalte ein Jahr, sortiert nach dem mittleren Verlust (stärkster Verlust oben). Seit 2011 sind nur 4 % der Felder positiv (blau), zwischen 1990 und 2010 waren es rund 20 %.</p>
+<img src="heat.svg" alt="Heatmap der Jahresbilanz von neun Gletschern 1990 bis 2025">
+</section>
+
+<section>
+<h2><span class="nr">2</span>In Summe: rund 32 Meter Wasser weniger</h2>
+<div class="row">
+ <div class="chart"><img src="kum.svg" alt="Kumulierte Jahresbilanz 1990 bis 2025"></div>
+ <div class="stats">
+  <div><div class="big">–32.5<small>m w.e.</small></div>
+  <div class="lbl">Kumulierte Jahresbilanz 1990–2025, Mittel der neun Gletscher</div></div>
+  <div class="fact r">In nur <b>3 von 36 Jahren</b> (1993, 1995, 2001) war die mittlere Jahresbilanz positiv.</div>
+  <div class="fact r">Die zwei Extremjahre <b>2003 (–2.1)</b> und <b>2022 (–3.1)</b> machen zusammen rund ein Sechstel des gesamten Verlusts aus.</div>
+ </div>
+</div>
+</section>
+
+<section>
+<h2><span class="nr">3</span>Der Winter bleibt gleich, der Sommer setzt den Gletschern zu</h2>
+<p class="sub">Die Winterbilanz (Schneezuwachs) schwankt von Jahr zu Jahr, ihr Mittel bleibt aber stabil. Die Sommerbilanz (Schmelze) wird dagegen Jahrzehnt für Jahrzehnt negativer. Die schwarzen Striche zeigen den Mittelwert pro Jahrzehnt (2020er: 2020–2025).</p>
+<img src="saison.svg" alt="Winter- und Sommerbilanz 1990 bis 2025">
+<div class="cols">
+ <div class="card"><h3><span class="sw" style="background:var(--winter)"></span>Winter</h3><span class="n">+1.3 → +1.2</span><br>m w.e., 1990er bis 2020er. Praktisch kein Trend (Mittel +1.3, Schwankung ±0.3).</div>
+ <div class="card"><h3><span class="sw" style="background:var(--sommer)"></span>Sommer</h3><span class="n">–1.9 → –2.8</span><br>m w.e., 1990er bis 2020er. Rund 0.3 m w.e. mehr Verlust pro Jahrzehnt.</div>
+ <div class="card"><h3>Wer bestimmt die Jahresbilanz?</h3><span class="n">0.92 vs. 0.35</span><br>Korrelation der Jahresbilanz mit der Sommer- bzw. der Winterbilanz.</div>
+</div>
+<div class="cols">
+ <div class="card"><h3>2003 – Hitzesommer</h3>Normaler Winter (+1.4), extremer Sommer (–3.5). Mittlere Jahresbilanz –2.1, alle neun Gletscher zwischen –2.7 und –1.2.</div>
+ <div class="card"><h3>2022 – Rekordjahr</h3>Wenig Schnee (+0.9) und noch stärkere Schmelze (–4.0). Mittlere Jahresbilanz –3.1, alle neun Gletscher zwischen –3.9 und –2.4.</div>
+</div>
+</section>
+
+<footer>
+<b>Daten:</b> GLAMOS (2025), Swiss Glacier Mass Balance, release 2025, Glacier Monitoring Switzerland, doi:10.18750/massbalance.2025.r2025. Hydrologische Jahre (Oktober bis September), Jahresbilanz = Winter- + Sommerbilanz.
+<b>Auswahl:</b> Allalingletscher, Ghiacciaio del Basòdino, Claridenfirn, Glacier du Giétro, Griesgletscher, Grosser Aletschgletscher, Hohlaubgletscher, Schwarzberggletscher und Silvrettagletscher (Messreihe mit höchstens 2 fehlenden Jahren seit 1990; fehlend: Basòdino 1990–91, Claridenfirn 1994–95). Die Aussagen gelten für diese neun Gletscher und nicht für alle Schweizer Gletscher.
+<b>Berechnung:</b> Mittel über die neun Gletscher, jeder Gletscher gleich gewichtet; kumuliert = Summe der Jahresmittel. · <b>Autor:</b> Elio Schmid, MSc Data Visualization, FH Graubünden · Principles of Data Visualization, Herbstsemester 2026 · Dozentin: PD Dr. Helena Jambor
+</footer>
+</div></body></html>

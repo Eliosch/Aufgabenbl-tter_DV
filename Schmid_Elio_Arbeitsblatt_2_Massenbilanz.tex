@@ -1,0 +1,855 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  nswissgerman,
+  11pt,
+  a4paper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{setspace}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+
+\ifLuaTeX
+\usepackage[bidi=basic,shorthands=off]{babel}
+\else
+\usepackage[bidi=default,shorthands=off]{babel}
+\fi
+\ifLuaTeX
+  \usepackage{selnolig} % disable illegal ligatures
+\fi
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\KOMAoption{captions}{tableheading}
+\usepackage[T1]{fontenc}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+% Fusszeile: Titel links, Seitenzahl rechts (auch auf der Titelseite)
+\usepackage{scrlayer-scrpage}
+\clearpairofpagestyles
+\ifoot{Arbeitsblatt 2 (Massenbilanz) -- Principles of Data Visualization}
+\ofoot{\pagemark}
+\pagestyle{scrheadings}
+% Standard-Titelblock von Quarto unterdruecken (Titelseite wird unten selbst gebaut)
+\AtBeginDocument{\let\maketitle\relax}
+\makeatletter
+\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
+\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
+\definecolor{quarto-callout-color}{HTML}{909090}
+\definecolor{quarto-callout-note-color}{HTML}{0758E5}
+\definecolor{quarto-callout-important-color}{HTML}{CC1914}
+\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
+\definecolor{quarto-callout-tip-color}{HTML}{00A047}
+\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
+\definecolor{quarto-callout-color-frame}{HTML}{acacac}
+\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
+\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
+\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
+\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
+\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Inhaltsverzeichnis}
+\else
+  \newcommand\contentsname{Inhaltsverzeichnis}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{Abbildungsverzeichnis}
+\else
+  \newcommand\listfigurename{Abbildungsverzeichnis}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{Tabellenverzeichnis}
+\else
+  \newcommand\listtablename{Tabellenverzeichnis}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Abbildung}
+\else
+  \newcommand\figurename{Abbildung}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Tabelle}
+\else
+  \newcommand\tablename{Tabelle}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{Listingverzeichnis}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
+\hypersetup{
+  pdftitle={Jahresbilanz der Schweizer Gletscher},
+  pdfauthor={Elio Schmid},
+  pdflang={de-CH},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Jahresbilanz der Schweizer Gletscher}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{Arbeitsblatt 2, zweiter Datensatz -- Principles of Data
+Visualization, Herbstsemester 2026}
+\author{Elio Schmid}
+\date{19.10.2026}
+\begin{document}
+\maketitle
+
+
+\setstretch{1.3}
+\thispagestyle{scrheadings}
+\vspace*{0.5cm}
+\begin{center}
+{\bfseries\fontsize{24}{30}\selectfont Jahresbilanz der Schweizer Gletscher\par}
+\vspace{1cm}
+{\bfseries\fontsize{16}{20}\selectfont Arbeitsblatt 2, zweiter Datensatz\par}
+\vspace{0.3cm}
+{\bfseries\fontsize{16}{20}\selectfont Principles of Data Visualization -- Herbstsemester 2026\par}
+\vspace{0.8cm}
+\end{center}
+
+\begin{center}
+\includegraphics[width=0.65\linewidth,height=\textheight,keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/titelbild-1.pdf}
+\end{center}
+
+\vfill
+\noindent
+\begin{tabular}{@{}p{4cm}p{10cm}@{}}
+Autor: & Elio Schmid,\\
+       & FH Graubünden, MSc Data Visualization\\[1em]
+Dozentin: & PD Dr. rer. nat. Helena Jambor\\[1em]
+Ort, Datum: & Bern, 19.10.2026
+\end{tabular}
+\newpage
+
+\section{Erster Datensatz:
+Volumenänderung}\label{erster-datensatz-volumenuxe4nderung}
+
+Anfang Oktober habe ich einen Artikel von SRF über den Gletscherschwund
+in der Schweiz gelesen. Der Artikel ist hier
+\href{https://www.srf.ch/wissen/klimawandel/eisverlust-2026-massive-gletscherschmelze-so-viel-eis-verschwand-im-hitzesommer}{verlinkt.}
+Darin wird auf Daten von Glamos - Glacier Monitoring in Switzerland
+verwiesen. Das Thema interessiert mich insofern, als dass ich relativ
+viel in den Bergen unterwegs bin. Auf der Website von Glamos finden wir
+Daten zu Bestand, Längenänderung, Massenbilanz, Volumenänderung sowie
+Szenarien. Die Daten unterscheiden sich in Stichtagsmessungen und
+Zeitreihen. Es werden Flächen-, Ausdehnungs- und Geodaten erfasst. In
+meiner Analyse möchte ich mich auf die Volumenänderung konzentrieren.
+Ich kann mir aber vorstellen auch Bestandesdaten einfliessen zu lassen
+oder Längenänderungen. Dies werde ich im Zuge der Auswertung wohl
+feststellen. Der Datensatz, den ich analysieren möchte, lässt sich
+\href{https://doi.glamos.ch/data/volumechange/volumechange_2025_r2025.html}{hier}
+einsehen.
+
+Nach der ersten Auseinandersetzung mit dem Datensatz, muss ich
+festhalten, dass es doch schwerer ist diesen auszuwerten als vorerst
+angenommen. Die Beobachtungszeiträume überschneiden sich und Aussagen zu
+Entwicklungen über eine Zeitdistanz sind anspruchsvoll. Sie können
+höchstens für einen gewissen Teil der Gletscher erfolgen.Aus diesem
+Grund starte ich einen zweiten Versuch mit den Daten der
+Gletschermassenbilanz (hydrologisches Jahr). Ich erhoffe mir davon
+bessere Möglichkeiten für Auswertungen über die Zeit, weil die Messungen
+jährlich erfolgen und sich nicht überlappen.Auch der Upload in
+Datawrapper hat mir gleich gezeigt, dass Auswertungen über die Zeit mit
+diesem Datensatz ``einfacher'' zu realisieren sind.
+
+\section{Zweiter Datensatz: Massenbilanz pro
+Hydrojahr}\label{zweiter-datensatz-massenbilanz-pro-hydrojahr}
+
+\subsection{Datensatz}\label{datensatz}
+
+Auch dieser Datensatz ist bei GLAMOS verfügbar.Eine Zeile beschreibt
+\textbf{einen Gletscher in einem Hydrojahr} (jeweils von Oktober bis
+September). Die Winterbilanz (Bw) ist der Zugewinn durch Schnee bis Ende
+April, die Sommerbilanz (Bs) der Verlust danach, die Jahresbilanz (Ba)
+die Summe der beiden. Eine Bilanz von −1000 mm w.e. bedeutet, dass der
+Gletscher im Mittel über seine Fläche eine Wasserschicht von 1 m
+verloren hat. Zusätzlich gibt es die Gleichgewichtslinie (ELA), also die
+Höhe, oberhalb der im Jahr netto Masse zugewinnt, und den Anteil der
+Fläche oberhalb dieser Linie (AAR).
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2051}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.6538}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.1410}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Variable
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Bedeutung
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Einheit
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+glacier\_name & Name des Gletschers & -- \\
+glacier\_id & ID gemäss Swiss Glacier Inventory & -- \\
+date\_start & Beginn des Hydrojahres & yyyy-mm-dd \\
+date\_end\_winter & Ende der Winterbeobachtung & yyyy-mm-dd \\
+date\_end & Ende des Hydrojahres & yyyy-mm-dd \\
+Bw & Winterbilanz (Gletschermittel) & mm w.e. \\
+Bs & Sommerbilanz (Gletschermittel) & mm w.e. \\
+Ba & Jahresbilanz (Bw + Bs) & mm w.e. \\
+ELA & Höhe der Gleichgewichtslinie & m ü. M. \\
+AAR & Anteil der Fläche oberhalb der Gleichgewichtslinie & \% \\
+area\_km2 & Gletscherfläche im Jahr & km² \\
+h\_min & Tiefster Punkt des Gletschers & m ü. M. \\
+h\_max & Höchster Punkt des Gletschers & m ü. M. \\
+observer & Datenquelle bzw. Referenz & -- \\
+\end{longtable}
+}
+
+\subsection{Daten einlesen}\label{daten-einlesen}
+
+Die Datei hat 9 Kopfzeilen (Lizenz, Titel, ausführliche Namen,
+Kurznamen, Einheiten), die Daten beginnen in Zeile 10. Die Spalte
+\texttt{observer} enthält teils Kommas (z. B. «GLAMOS (2025), Huss 2015
+(\ldots)»). Deshalb lese ich jede Zeile als Text ein und trenne nur nach
+den ersten 13 Kommas, den Rest behalte ich als Quelle.
+
+\begin{verbatim}
+Rows: 1,239
+Columns: 14
+$ glacier_name    <chr> "Silvrettagletscher", "Silvrettagletscher", "Silvretta~
+$ glacier_id      <chr> "A10g-05", "A10g-05", "A10g-05", "A10g-05", "A10g-05",~
+$ date_start      <chr> "1914-10-01", "1915-10-01", "1916-10-01", "1917-10-01"~
+$ date_end_winter <chr> "1915-04-30", "1916-04-30", "1917-04-30", "1918-04-30"~
+$ date_end        <chr> "1915-09-30", "1916-09-30", "1917-09-30", "1918-09-30"~
+$ Bw              <chr> "1503", "1415", "1872", "1075", "1862", "2467", "815",~
+$ Bs              <chr> "-1918", "-1034", "-1900", "-1489", "-840", "-1884", "~
+$ Ba              <chr> "-415", "381", "-28", "-414", "1022", "583", "-2546", ~
+$ ELA             <chr> "2795", "2625", "2725", "2805", "2445", "2635", "3151"~
+$ AAR             <chr> "45", "75", "60", "42", "98", "77", "0", "78", "80", "~
+$ area_km2        <chr> "4.06687", "3.55563", "3.55563", "3.55563", "3.55563",~
+$ h_min           <chr> "2406", "2414", "2414", "2414", "2414", "2414", "2414"~
+$ h_max           <chr> "3185", "3091", "3091", "3091", "3091", "3091", "3091"~
+$ observer        <chr> "GLAMOS (2025), Huss 2015 (https://doi.org/10.3189/201~
+\end{verbatim}
+
+\subsection{Bereinigung}\label{bereinigung}
+
+Die Daten sind bereits sauber: keine fehlenden Werte, ISO-Datum, keine
+Platzhalter. Es sind nur noch wenige Schritte nötig: Typen setzen, das
+Jahr (Jahr des Periodenendes) und die Dauer berechnen und die Bilanzen
+in m w.e. umrechnen, damit sie sich besser lesen lassen.
+
+\subsection{Datenqualität}\label{datenqualituxe4t}
+
+\begin{verbatim}
+# A tibble: 0 x 2
+# i 2 variables: variable <chr>, n_na <int>
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 0 x 3
+# i 3 variables: glacier_id <chr>, jahr <dbl>, n <int>
+\end{verbatim}
+
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  364.0   364.0   364.0   364.3   365.0   365.0 
+\end{verbatim}
+
+\begin{verbatim}
+[1] 0
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 1 x 3
+  aar_null ela_ueber_gipfel extrapoliert
+     <int>            <int>        <int>
+1      117              153          163
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 6 x 2
+  observer                                                                  n
+  <chr>                                                                 <int>
+1 GLAMOS (2025), Huss 2015 (https://doi.org/10.3189/2015JoG15J015)        730
+2 VAW / ETH Zuerich, Huss et al. 2015, Journal.of Glaciology              226
+3 GLAMOS (2025)                                                            88
+4 GLAMOS (2025), Fischer 2016 (https://doi.org/10.5194/tc-10-1279-2016)    40
+5 VAW / ETH Zuerich, O  Langenegger, unpublished                           35
+6 GLAMOS (2025), Zekollari 2018 (https://doi.org/10.1017/jog.2018.18)      24
+\end{verbatim}
+
+Die Beobachtungen dazu:
+
+\begin{itemize}
+\tightlist
+\item
+  Es gibt keine fehlenden Werte und pro Gletscher und Jahr genau eine
+  Zeile. Alle Hydrojahre dauern 364 oder 365 Tage. Die fünf auffälligen
+  Gletscherjahre aus der Höhenstufen-Version (5 Tage, −14 Tage, 732
+  Tage, 291 und 297 Tage) kommen hier nicht vor. Der einzige Unterschied
+  bei den Gletscherjahren ist eine zusätzliche Zeile (Ofentalgletscher
+  1965).
+\item
+  ELA und AAR sind nicht immer gemessene Werte. Bei 117 Gletscherjahren
+  ist die AAR 0 (kein Nährgebiet), bei insgesamt 163 liegt die ELA über
+  dem höchsten Punkt des Gletschers oder die AAR ist 0. Diese ELA-Werte
+  sind extrapoliert und werden in den Grafiken getrennt markiert. 2022
+  betrifft das 22 von 28 Gletschern.
+\item
+  Die Spalte \texttt{observer} ist hier die Datenquelle. Bei 956 von
+  1'239 Zeilen wird Huss et al.~2015 genannt (in zwei Schreibweisen),
+  eine Studie, die für viele Gletscher die Reihen rekonstruiert hat. Die
+  Werte sind also nicht alle direkte Messungen, und die Quelle ist ein
+  Hinweis auf unterschiedliche Datenqualität.
+\end{itemize}
+
+\subsection{Basiskennzahlen}\label{basiskennzahlen}
+
+\begin{verbatim}
+# A tibble: 1 x 6
+  anzahl_zeilen anzahl_gletscher jahr_von jahr_bis median_Ba_m anteil_negativ
+          <int>            <int>    <dbl>    <dbl>       <dbl>          <dbl>
+1          1239               43     1885     2025      -0.559          0.748
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 12 x 5
+   glacier_name               von   bis n_jahre groesste_luecke
+   <chr>                    <dbl> <dbl>   <int>           <dbl>
+ 1 Grosser Aletschgletscher  1915  2025     111               1
+ 2 Silvrettagletscher        1915  2025     111               1
+ 3 Claridenfirn              1915  2025     109               3
+ 4 Allalingletscher          1956  2025      70               1
+ 5 Hohlaubgletscher          1956  2025      70               1
+ 6 Schwarzberggletscher      1956  2025      70               1
+ 7 Griesgletscher            1962  2025      64               1
+ 8 Glacier du Giétro         1967  2025      59               1
+ 9 Rhonegletscher            1885  2025      44              98
+10 Tällibodengletscher       1956  1996      41               1
+11 Chessjengletscher         1956  1995      40               1
+12 Limmerngletscher          1948  1985      38               1
+\end{verbatim}
+
+\begin{verbatim}
+# A tibble: 8 x 2
+   jahr     n
+  <dbl> <int>
+1  1920     3
+2  1940     3
+3  1960    13
+4  1980    12
+5  2000    10
+6  2010    19
+7  2020    30
+8  2025    27
+\end{verbatim}
+
+\subsection{Erste Übersicht}\label{erste-uxfcbersicht}
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-hist-1.pdf}}
+
+}
+
+\caption{\label{fig-hist}Verteilung der Jahresbilanz pro Gletscher und
+Jahr}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-erste-zeit-1.pdf}}
+
+}
+
+\caption{\label{fig-erste-zeit}Erste Übersicht: Jahresbilanz aller
+Gletscherjahre über die Zeit}
+
+\end{figure}%
+
+Die Punktwolke zeigt schon auf den ersten Blick einen Trend zu
+negativeren Werten, aber auch, dass die Anzahl Punkte pro Jahr stark
+schwankt. Ein einfacher Mittelwert pro Jahr würde deshalb Veränderungen
+der Gletscherauswahl mit echten Veränderungen vermischen. Das greife ich
+in Ansatz 1 auf.
+
+\subsection{Welche Fragestellungen möchte ich mit diesem Datensatz
+beantworten?}\label{welche-fragestellungen-muxf6chte-ich-mit-diesem-datensatz-beantworten}
+
+Bereits bei meinem ersten Versuch wollte ich eine Entwicklung über die
+Zeit darstellen.Das möchte ich nun auch mit diesem Datensatz versuchen.
+Zudem können wir einzelne Gletscher aus unterschiedlichen Regionen der
+Schweiz vergleichen. Wenn möglich, möchte ich Zusammenhänge von z.B. der
+Höhe und der Entwicklung der Massenbilanz darstellen.
+
+\subsection{Visualisierungsansätze}\label{visualisierungsansuxe4tze}
+
+Nachfolgend erste Visualisierungsansätze. Der Datensatz beinhaltet
+insgesamt 9 Gletscher, die eine fast lückenlose Messreihe ab 1990
+aufweisen. Diese werden für eine Aussage über die Zeit verwendet.Bei den
+nachfolgenden Visualisierungen handelt es sich um erste Würfe. Farbliche
+Ausgestaltung und ergänzende Texte werden noch vertiefter bearbeitet
+
+\begin{verbatim}
+[1] "Silvrettagletscher"       "Claridenfirn"            
+[3] "Grosser Aletschgletscher" "Griesgletscher"          
+[5] "Schwarzberggletscher"     "Allalingletscher"        
+[7] "Hohlaubgletscher"         "Glacier du Giétro"       
+[9] "Ghiacciaio del Basòdino" 
+\end{verbatim}
+
+\subsubsection{Ansatz 1: Heatmap aller Gletscher über die
+Zeit}\label{ansatz-1-heatmap-aller-gletscher-uxfcber-die-zeit}
+
+\textbf{Frage:} Welche Gletscher wurden wann gemessen, und welche Jahre
+waren für alle Gletscher gleichzeitig extrem?
+
+\textbf{Aufbau der Visualisierung:} Muster über Gletscher und Zeit
+erkennen, Datenlücken sichtbar machen. Rechtecke in einem Raster. Die
+x-Achse zeigt das Jahr, die y-Achse den Gletscher (sortiert nach dem
+ersten Messjahr), die Farbe die Jahresbilanz auf einer divergierenden
+Skala mit Mitte bei null. Weisse Felder bedeuten, dass kein Wert
+vorliegt. So sehen wir Datenlücken und Werte in derselben Grafik.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-ansatz2-1.pdf}}
+
+}
+
+\caption{\label{fig-ansatz2}Ansatz 1: Jahresbilanz pro Gletscher und
+Jahr (Farbe: Rot = Verlust, Blau = Zuwachs)}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} Aus der Heatmap können mehrere Informationen
+gleichzeitig ausgelesen werden. Erstens zeigt sie die Datenlage: Drei
+Gletscher (Silvretta, Aletsch, Claridenfirn) wurden seit 1915 gemessen,
+eine grössere Gruppe ab Mitte der 1950er-Jahre, die meisten anderen erst
+seit etwa 2010. Der Rhonegletscher hat zwei getrennte Blöcke (1885 bis
+1909 und ab 2007). Zweitens sieht man, dass einzelne Jahre bei fast
+allen Gletschern gleichzeitig dunkelrot sind (2022, 2003), während die
+Blautöne der 1960er- und 1970er-Jahre in den letzten Jahrzehnten fast
+verschwunden sind.In dieser Version müssen die fehlenden Werte farblich
+noch überarbeitet werden. Die Unterscheidung zwischen einer neutralen
+Massenbilanz (0 Wert) und einem fehlenden Wert ist schwer zu
+machen.Überprüft wird zudem ob die Skala passend ist.
+
+\paragraph{Iteration 2: Heatmap ab 2000 und ab
+1990}\label{iteration-2-heatmap-ab-2000-und-ab-1990}
+
+\textbf{Anpassungen:} Die erste Version enthielt viele leere Felder,
+weil einzelne Gletscher erst spät oder mit Lücken gemessen wurden. In
+dieser Iteration zeige ich nur Gletscher mit einer fast lückenlosen
+Reihe: für die Grafik ab 2000 alle Gletscher mit mindestens 20 von 26
+Jahren, für die Grafik ab 1990 die neun Gletscher des konstanten
+Samples. Fehlende Werte sind neu \textbf{grau} dargestellt, eine
+ausgeglichene Bilanz (0) bleibt \textbf{weiss}. Zusätzlich sind die
+Gletscher nach der mittleren Bilanz sortiert (stärkster Verlust oben),
+damit Muster sichtbar werden.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-iter2-heatmap-2000-1.pdf}}
+
+}
+
+\caption{\label{fig-iter2-heatmap-2000}Iteration 2: Jährliche
+Massenbilanz ausgewählter Schweizer Gletscher seit 2000 (grau = kein
+Messwert, weiss = ausgeglichene Bilanz)}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-iter2-heatmap-1990-1.pdf}}
+
+}
+
+\caption{\label{fig-iter2-heatmap-1990}Iteration 2: Jährliche
+Massenbilanz der neun Gletscher des konstanten Samples seit 1990 (grau =
+kein Messwert, weiss = ausgeglichene Bilanz)}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} Mit den ausgewählten Gletschern und der Sortierung
+nach mittlerer Bilanz sind die Muster deutlich besser lesbar. Seit 2000
+sind von 305 Gletscherjahren nur 27 (9 \%) positiv, und nur vier liegen
+über +0.5 m w.e. (2001 und 2007). Die Jahre 2003 und 2022 sind bei allen
+Gletschern dunkelrot, 2023 ist ebenfalls bei fast allen stark negativ.
+In der Grafik ab 1990 sieht man mehr blaue Felder (42 von 320
+Gletscherjahren, 13 \%), vor allem Anfang der 1990er-Jahre und um 2001.
+Seit 2011 sind nur noch 4 \% der Gletscherjahre positiv, zwischen 1990
+und 2010 waren es rund 20 \%. In 20 der 36 Jahre sind alle neun
+Gletscher negativ. Die grauen Felder (fehlende Werte) sind nun klar von
+den weissen (ausgeglichene Bilanz) unterscheidbar: Es sind sieben Felder
+bei der Grafik ab 2000 und vier bei der Grafik ab 1990. Die Skala bei ±3
+m w.e. reicht für die Grafik ab 1990 fast überall aus, nur einzelne
+Werte im Jahr 2022 (bis −3.9) werden abgeschnitten. Auf der positiven
+Seite wird die Skala nur bis +1.3 m w.e. genutzt, deshalb sind die
+Blautöne blass.
+
+\paragraph{Iteration 3: Heatmap aller Gletscher seit
+1990}\label{iteration-3-heatmap-aller-gletscher-seit-1990}
+
+\textbf{Anpassungen:} Nun alle Gletscher, die seit 1990 gemessen wurden,
+nicht nur eine Auswahl. Das Farbkonzept (Rot = Verlust, Blau = Zuwachs,
+Weiss = ausgeglichen, Grau = kein Messwert) bleibt gleich. Die Gletscher
+sind neu nach dem ersten Messjahr sortiert (früheste Messreihe oben),
+weil die Sortierung nach mittlerer Bilanz bei unterschiedlichen
+Messzeiträumen nicht vergleichbar ist. Die Grafik ist höher, damit alle
+Gletschernamen lesbar sind.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-iter3-heatmap-alle-1990-1.pdf}}
+
+}
+
+\caption{\label{fig-iter3-heatmap-alle-1990}Iteration 3: Jährliche
+Massenbilanz aller Schweizer Gletscher seit 1990, sortiert nach erstem
+Messjahr (grau = kein Messwert, weiss = ausgeglichene Bilanz)}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} Die Sortierung nach erstem Messjahr macht den
+Ausbau des Messnetzes sichtbar: Seit 1990 wurden 38 Gletscher gemessen,
+aber nur 10 davon schon in den frühen 1990er-Jahren. Die Zahl der
+Gletscher mit Messwert steigt von 12 (2005) auf 19 (2010) und 29 (2015).
+Gut die Hälfte der 1'368 möglichen Felder ist deshalb grau (701), vor
+allem links unten. Die Grafik eignet sich darum weniger für den
+Vergleich einzelner Gletscher als für das Gesamtbild: Von 667
+Gletscherjahren sind nur 61 (9 \%) positiv, und nur zwei liegen über +1
+m w.e. Bis 2010 waren es 17 \% positive Gletscherjahre, seit 2011 knapp
+5 \%, seit 2015 weniger als 1 \%. In den Jahren 2003, 2022 und 2023 sind
+alle gemessenen Gletscher negativ (2022: alle 28, bis −4.1 m w.e.). Die
+senkrechten dunkelroten Streifen bei 2003 und 2022 zeigen, dass es sich
+um Jahreseffekte handelt, die alle Gletscher gleichzeitig treffen,
+unabhängig von der Länge der Messreihe. Die oberen neun Gletscher mit
+der längsten Reihe zeigen zusätzlich den Wechsel von helleren Jahren
+(1990er) zu fast durchgehend roten Jahren seit 2010.
+
+\subsubsection{Ansatz 2: Jahresbilanz im Zeitverlauf mit konstantem
+Sample}\label{ansatz-2-jahresbilanz-im-zeitverlauf-mit-konstantem-sample}
+
+\textbf{Frage:} Wie hat sich die Jahresbilanz verschiedener Schweizer
+Gletscher seit 1990 entwickelt?
+
+\textbf{Aufbau der Visualisierung:} Für den Vergleich über die Zeit ist
+ein Liniendiagramm sinnvoll. Die Zeit liegt auf der x-Achse, die
+Jahresbilanz auf der y-Achse Die dünnen grauen Linien sind die einzelnen
+Gletscher, die dicke schwarze Linie ist der Mittelwert über die 9 zuvor
+genannten Gletscher, die in praktisch allen Jahren seit 1990 gemessen
+wurden. Die Linien bilden dadurch die echte Veränderung ab und nicht
+eine Veränderung die ensteht wegen der Veränderung der Anzahl gemessenen
+Gletscher.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-ansatz1-1.pdf}}
+
+}
+
+\caption{\label{fig-ansatz1}Ansatz 1: Jahresbilanz seit 1990, einzelne
+Gletscher (grau) und Mittel des konstanten Samples (schwarz)}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} In den 36 Jahren seit 1990 ist das Mittel nur in
+drei Jahren (darunter 1993 und 2001) knapp positiv.Besonders auffällig
+ist das Jahr 2022, welches ein sehr negatives Resultat aufweist.
+
+\paragraph{Iteration 2: Zeitverlauf mit beschrifteten
+Gletschern}\label{iteration-2-zeitverlauf-mit-beschrifteten-gletschern}
+
+\textbf{Anpassungen:} Die Grafik zeigt nur noch die neun Gletscher des
+konstanten Samples, damit die Linien genau dem Mittelwert entsprechen
+und alle direkt beschriftet werden können (bei allen rund 30 Gletschern
+seit 1990 wären die Beschriftungen am Linienende nicht mehr lesbar). Die
+Nulllinie ist neu durchgezogen und dunkler, der Mittelwert ist farbig
+und in der Legende benannt, die zwei auffälligen Jahre sind beschriftet.
+Die Namen der Gletscher stehen am Ende der Linien in Grau und kursiv.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-iter2-zeitverlauf-1.pdf}}
+
+}
+
+\caption{\label{fig-iter2-zeitverlauf}Iteration 2: Entwicklung der
+jährlichen Massenbilanz ausgewählter Schweizer Gletscher seit 1990}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} Der farbige Mittelwert hebt sich nun klar von den
+grauen Gletscherlinien ab, und die durchgezogene Nulllinie macht
+sichtbar, dass das Mittel nur in drei Jahren über null liegt (1993, 1995
+und 2001). Die beiden Extremjahre sind beschriftet: 2003 (Hitzesommer,
+Mittel −2.1 m w.e., alle neun Gletscher zwischen −2.7 und −1.2) und 2022
+(Rekordjahr, Mittel −3.1 m w.e., zwischen −3.9 und −2.4). Seit 2023 hat
+sich die Bilanz etwas erholt (−2.4, −1.1, −1.5 m w.e. in den Jahren 2023
+bis 2025), bleibt aber klar negativ. Alle neun Gletscher lassen sich am
+Linienende direkt beschriften. Bei allen rund 30 Gletschern seit 1990
+wäre das nicht mehr lesbar. Die Gletscher verlaufen weitgehend parallel,
+der Unterschied zwischen ihnen ist im Vergleich zu den Schwankungen
+zwischen den Jahren klein. Am stärksten ist der Verlust im Mittel beim
+Griesgletscher (−1.4 m w.e. pro Jahr seit 1990), am schwächsten beim
+Allalingletscher (−0.6).
+
+\subsubsection{Ansatz 3: Winter- und Sommerbilanz
+getrennt}\label{ansatz-3-winter--und-sommerbilanz-getrennt}
+
+\textbf{Frage:} Entsteht der Massenverlust durch weniger Schnee im
+Winter oder durch mehr Schmelze im Sommer?
+
+\textbf{Aufbau der Visualisierung} Balken vom Nullpunkt aus. Die
+Winterbilanz (Akkumulation) zeigt nach oben, die Sommerbilanz
+(Massenverlust) nach unten, jeweils auf derselben y-Skala. Die schwarze
+Linie ist die Jahresbilanz, die Summe der beiden. Alle drei Werte
+stammen vom konstanten Sample aus Ansatz 2. Die Werte sind so direkt
+Verlgeichbar.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-ansatz3-1.pdf}}
+
+}
+
+\caption{\label{fig-ansatz3}Ansatz 3: Winterbilanz (oben), Sommerbilanz
+(unten) und Jahresbilanz (Linie), Mittel des konstanten Samples}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} Die Aufteilung zeigt, dass die Winterbilanz im
+Mittel stabil blieb, während die Sommerbilanz negativer wird. Die
+Jahresbilanz folgt fast ausschliesslich der Sommerbilanz (Korrelation
+0.92, mit der Winterbilanz nur 0.35). Auch das Jahr 2022 erklärt sich
+so: Die Schneemenge im Winter war mit 0.86 m w.e. unterdurchschnittlich,
+vor allem aber war die Sommerschmelze mit −4.0 m w.e. die höchste im
+Sample.
+
+\paragraph{Iteration 2: Winter- und Sommerbilanz mit beschriftetem
+Mittelwert}\label{iteration-2-winter--und-sommerbilanz-mit-beschriftetem-mittelwert}
+
+\textbf{Anpassungen:} Die Jahresbilanz (Mittel der neun Gletscher) ist
+neu farbig, in der Legende benannt und zusätzlich direkt am Linienende
+beschriftet. Ein Titel nennt Inhalt und Zeitraum.
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{Schmid_Elio_Arbeitsblatt_2_Massenbilanz_files/figure-pdf/fig-iter2-saisons-1.pdf}}
+
+}
+
+\caption{\label{fig-iter2-saisons}Iteration 2: Winter-, Sommer- und
+Jahresbilanz (Mittel der neun Gletscher) seit 1990}
+
+\end{figure}%
+
+\textbf{Erkenntnis:} Der Mittelwert ist nun farbig, im Diagramm
+beschriftet und in der Legende erklärt. An der Aussage ändert sich
+nichts: Die Winterbilanz bleibt über den ganzen Zeitraum ungefähr gleich
+hoch, während die Sommerbilanz tiefer wird. Die zwei Extremjahre sind
+direkt in den Balken sichtbar: 2003 (Sommerbilanz −3.5 m w.e.) und 2022
+(−4.0 m w.e., bei gleichzeitig unterdurchschnittlicher Winterbilanz von
+0.9 m w.e.).
+
+\subsection{Zwischenfazit}\label{zwischenfazit}
+
+\textbf{Einschätzung des Datensatzes:} Für Zeitauswertungen eignet sich
+dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden
+sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist
+eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind
+enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr
+schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher»
+ist damit nicht möglich.
+
+\textbf{Offene Punkte:}
+
+\begin{itemize}
+\tightlist
+\item
+  Ein kumulativer Verlauf (Summe der Jahresbilanzen ab 1990) könnte die
+  Entwicklung noch anschaulicher machen.
+\item
+  Ansatz 5 könnte für weitere Gletscher oder als Animation über die
+  Jahre getestet werden.
+\item
+  Die Farbwahl der Heatmap (Rot--Blau) sollte ich noch auf
+  Farbsehschwäche prüfen.
+\item
+  Die beiden Datensätze (Volumenänderung und Massenbilanz) liessen sich
+  verknüpfen, um die geodätischen mit den glaziologischen Werten zu
+  vergleichen.
+\item
+  Einzelne Gletscher mit dem absoluten Massenverlust zeigen. Allenfalls
+  die drei Gletscher für welche Messdaten seit 1915 bestehen.
+\item
+  Karte mit einzelnen Angaben zu Gletschern darstellen.
+\item
+  Grafik wie bei Gun-Death-Florida für die Gesamtbilanz über die Jahre.
+\item
+  Bei Grafik 1 Gletscher der Stichprobe markieren.
+\item
+  Small Multiples verwenden
+\end{itemize}
+
+\subsection{Peer-Feedback und nächste
+Iteration}\label{peer-feedback-und-nuxe4chste-iteration}
+
+\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Hinweis}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
+
+Wird nach der Vorlesung mit dem Feedback der anderen Studierenden
+ergänzt.
+
+\end{tcolorbox}
+
+
+
+
+\end{document}
