@@ -617,6 +617,184 @@ reihe_konstant |>
 
 **Erkenntnis:** Der Mittelwert ist nun farbig, im Diagramm beschriftet und in der Legende erklärt. An der Aussage ändert sich nichts: Die Winterbilanz bleibt über den ganzen Zeitraum ungefähr gleich hoch, während die Sommerbilanz tiefer wird. Die zwei Extremjahre sind direkt in den Balken sichtbar: 2003 (Sommerbilanz −3.5 m w.e.) und 2022 (−4.0 m w.e., bei gleichzeitig unterdurchschnittlicher Winterbilanz von 0.9 m w.e.).
 
+### Ansatz 4: Lage der neun Gletscher auf der Karte
+
+**Frage:** Wo liegen die neun Gletscher des Samples, und lässt sich ein räumliches Muster der Verluste erkennen?
+
+**Aufbau der Visualisierung:** Punkte auf einer Karte der Schweiz. Die Position ergibt sich aus den Koordinaten (LV95, EPSG:2056) der GLAMOS-Gletscherliste. Die Punktgrösse zeigt die aktuelle Gletscherfläche, die Farbe die mittlere Jahresbilanz 1990–2025 (dunkelrot = stärkerer Verlust, wie in den übrigen Grafiken). Die Gletschernamen stehen direkt an den Punkten.
+
+```{r}
+#| label: fig-ansatz4-karte
+#| fig-cap: "Ansatz 4: Lage der neun ausgewählten Gletscher (Punktgrösse = Fläche, Farbe = mittlere Jahresbilanz 1990–2025)"
+#| fig-width: 9
+#| fig-height: 5.4
+#| warning: false
+
+library(sf)
+library(ggrepel)
+
+# Gletscherliste mit Koordinaten (LV95): Ost = coordx, Nord = coordy
+liste <- read_delim("glacier_list_mit_auswahl.csv", delim = ";", skip = 2,
+                    col_names = FALSE, col_types = cols(.default = col_character()),
+                    trim_ws = TRUE) |>
+  filter(!is.na(X2)) |>
+  transmute(glacier_id = X2, ost = as.numeric(X3), nord = as.numeric(X4),
+            flaeche_km2 = as.numeric(X5))
+
+mittel <- gl |>
+  filter(glacier_id %in% konstant$glacier_id, jahr >= 1990) |>
+  group_by(glacier_id, glacier_name) |>
+  summarise(Ba_mittel = mean(Ba_m), .groups = "drop")
+
+karte_punkte <- mittel |>
+  left_join(liste, by = "glacier_id") |>
+  st_as_sf(coords = c("ost", "nord"), crs = 2056, remove = FALSE)
+karte_punkte <- bind_cols(karte_punkte, as_tibble(st_coordinates(karte_punkte)))
+
+# Umriss der Schweiz (GeoJSON, WGS84) in LV95 umrechnen
+umriss <- st_read("schweiz_umriss.geojson", quiet = TRUE) |> st_transform(2056)
+
+ggplot() +
+  geom_sf(data = umriss, fill = "#f1f3f5", colour = "#adb5bd", linewidth = 0.4) +
+  geom_sf(data = karte_punkte, aes(fill = Ba_mittel, size = flaeche_km2),
+          shape = 21, colour = "white", stroke = 0.8) +
+  geom_text_repel(data = karte_punkte, aes(X, Y, label = glacier_name),
+                  size = 3.2, fontface = "italic", colour = "grey25",
+                  min.segment.length = 0, segment.colour = "grey60",
+                  box.padding = 0.8, seed = 4) +
+  scale_fill_gradient(low = "#b2182b", high = "#f4c7c3",
+                      name = "Mittlere Jahres-\nbilanz 1990–2025\n[m w.e.]") +
+  scale_size_area(max_size = 12, breaks = c(2, 10, 40, 75), name = "Fläche [km²]",
+                  guide = guide_legend(override.aes = list(fill = "grey70"))) +
+  theme_void(base_size = 11) +
+  theme(legend.position = "right")
+```
+
+**Erkenntnis:** Sechs der neun Gletscher liegen im Wallis und im Berner Alpenraum (Allalin, Hohlaub, Schwarzberg, Giétro, Aletsch, Gries). Je einer liegt im Tessin (Basòdino), in der Zentralschweiz (Claridenfirn) und in Graubünden (Silvretta). Das Sample ist also stark auf die Südwest- und Zentralalpen konzentriert und bildet nicht die ganze Schweiz ab. Der Grosse Aletschgletscher ist mit 75.8 km² mit Abstand der grösste, die meisten anderen sind kleiner als 10 km². Der Griesgletscher hat mit –1.4 m w.e. pro Jahr den stärksten mittleren Verlust, der Allalingletscher mit –0.6 m w.e. den schwächsten. Ein räumliches Muster lässt sich mit neun Punkten nicht belegen. Auch zwischen den eng benachbarten Gletschern im Wallis (Allalin, Hohlaub, Schwarzberg auf wenigen Kilometern) liegen die Werte nahe beieinander (–0.6 bis –0.8 m w.e.).
+
+#### Iteration 2: Alle Gletscher des Inventars, Sample hervorgehoben
+
+**Änderung:** Die Karte zeigt nun alle 168 Gletscher der GLAMOS-Gletscherliste als gleich grosse Punkte, ohne Darstellung der Gletschergrösse. Die neun Gletscher des Samples sind rot hervorgehoben und beschriftet. So ist sichtbar, wo das Sample im Verhältnis zu allen Schweizer Gletschern liegt.
+
+```{r}
+#| label: fig-iter2-karte-alle
+#| fig-cap: "Iteration 2: Alle 168 Gletscher des Inventars (grau) und die neun Gletscher des Samples (rot)"
+#| fig-width: 9
+#| fig-height: 5.6
+#| warning: false
+
+liste_alle <- read_delim("glacier_list_mit_auswahl.csv", delim = ";", skip = 2,
+                         col_names = FALSE, col_types = cols(.default = col_character()),
+                         trim_ws = TRUE) |>
+  filter(!is.na(X2)) |>
+  transmute(glacier_name = X1, glacier_id = X2,
+            ost = as.numeric(X3), nord = as.numeric(X4)) |>
+  mutate(im_sample = glacier_id %in% konstant$glacier_id)
+
+punkte_alle <- liste_alle |> st_as_sf(coords = c("ost", "nord"), crs = 2056, remove = FALSE)
+punkte_alle <- bind_cols(punkte_alle, as_tibble(st_coordinates(punkte_alle)))
+
+ggplot() +
+  geom_sf(data = umriss, fill = "#f1f3f5", colour = "#adb5bd", linewidth = 0.4) +
+  geom_sf(data = filter(punkte_alle, !im_sample),
+          aes(colour = "Übrige Gletscher im Inventar"), size = 1.4, alpha = 0.8) +
+  geom_sf(data = filter(punkte_alle, im_sample),
+          aes(colour = "Sample (9 Gletscher)"), size = 3.4) +
+  geom_text_repel(data = filter(punkte_alle, im_sample), aes(X, Y, label = glacier_name),
+                  size = 3.1, fontface = "italic", colour = "grey20",
+                  min.segment.length = 0, segment.colour = "grey55",
+                  box.padding = 0.7, max.overlaps = Inf, seed = 4) +
+  scale_colour_manual(values = c("Übrige Gletscher im Inventar" = "#9aa5b1",
+                                 "Sample (9 Gletscher)" = "#b2182b"),
+                      breaks = c("Sample (9 Gletscher)", "Übrige Gletscher im Inventar")) +
+  theme_void(base_size = 11) +
+  theme(legend.position = "bottom", legend.title = element_blank())
+```
+
+**Erkenntnis:** Die Gletscher konzentrieren sich im Wallis, in den Berner und Urner Alpen sowie in Graubünden und im Tessin. Das Sample deckt diese Regionen gut ab, im Wallis liegen allerdings mehrere Sample-Gletscher dicht beieinander (Allalin, Hohlaub, Schwarzberg).
+
+### Ergänzung: Temperatur der Schweiz als Erklärung
+
+**Frage:** Lässt sich der Verlauf der Sommerbilanz mit der Temperatur erklären, und wie hat sich die Temperatur in der Schweiz seit Messbeginn entwickelt?
+
+**Aufbau der Visualisierung:** Zuerst ein Liniendiagramm der mittleren Jahrestemperatur der Schweiz (Gebietsmittel, MeteoSchweiz) seit 1864. Danach die Winter- und Sommertemperatur im selben Zeitraum wie die Gletscherdaten, als eigenes Panel über der Massenbilanz mit gemeinsamer Jahresachse. In den Klimadaten entsprechen «winter» (Oktober bis März) und «summer» (April bis September) den Jahreszeiten der Hydrojahre der Gletscher, sie sind also direkt vergleichbar.
+
+```{r}
+#| label: fig-klima-linie
+#| fig-cap: "Mittlere Jahrestemperatur der Schweiz seit 1864 (grau: einzelne Jahre, rot: 11-Jahres-Mittel)"
+#| fig-width: 8
+#| fig-height: 4
+#| warning: false
+
+library(patchwork)
+
+pfad_klima <- "climate-data-swissmean_regSwiss_1.4.txt"   # MeteoSchweiz, Tab-getrennt
+
+# Kopfzeilen bis zur Zeile mit den Spaltennamen ("time ...") überspringen
+klima <- read_tsv(pfad_klima, skip = grep("^time\t", read_lines(pfad_klima))[1] - 1,
+                  na = "NA", show_col_types = FALSE) |>
+  rename(jahr = time) |>
+  select(jahr, jahr_temp = year, winter_temp = winter, sommer_temp = summer)
+
+klima_k <- klima |>
+  filter(!is.na(jahr_temp)) |>
+  mutate(glatt = as.numeric(stats::filter(jahr_temp, rep(1 / 11, 11), sides = 2)))
+
+ggplot(klima_k, aes(jahr)) +
+  geom_line(aes(y = jahr_temp), colour = "grey70", linewidth = 0.5) +
+  geom_line(aes(y = glatt), colour = "#b2182b", linewidth = 1.2, na.rm = TRUE) +
+  annotate("text", x = 1866, y = max(klima_k$jahr_temp), hjust = 0, vjust = 1, size = 3.3,
+           colour = "#b2182b", fontface = "bold", label = "11-Jahres-Mittel") +
+  labs(title = "Mittlere Jahrestemperatur der Schweiz seit 1864",
+       x = NULL, y = "Temperatur [°C]",
+       caption = "Daten: MeteoSchweiz, Gebietsmittel Schweiz (CHTM 1.4)") +
+  theme(plot.title.position = "plot")
+```
+
+**Erkenntnis:** Die Temperatur steigt über den ganzen Zeitraum, seit etwa 1980 deutlich steiler. Das Mittel der Jahre 2016 bis 2025 liegt bei 6.7 °C, dasjenige von 1990 bis 1999 bei 5.5 °C. Die einzelnen Jahre schwanken stark, das 11-Jahres-Mittel zeigt den Trend. Es endet fünf Jahre vor dem letzten Messjahr, weil es zentriert berechnet wird.
+
+```{r}
+#| label: fig-klima-saisons
+#| fig-cap: "Winter- und Sommertemperatur der Schweiz (oben) und Winter-, Sommer- und Jahresbilanz der neun Gletscher (unten), 1990–2025"
+#| fig-width: 8
+#| fig-height: 6.5
+#| warning: false
+
+x_ax <- scale_x_continuous(limits = c(1989.4, 2025.6), breaks = seq(1990, 2025, 5))
+
+klima_saison <- klima |>
+  filter(jahr >= 1990, jahr <= 2025) |>
+  pivot_longer(c(winter_temp, sommer_temp), names_to = "saison", values_to = "t") |>
+  mutate(saison = recode(saison, winter_temp = "Winter (Okt–Mär)", sommer_temp = "Sommer (Apr–Sep)"))
+
+p_temp <- ggplot(klima_saison, aes(jahr, t, colour = saison)) +
+  geom_line(linewidth = 1) + x_ax +
+  scale_colour_manual(values = c("Winter (Okt–Mär)" = "#4a8fc0", "Sommer (Apr–Sep)" = "#e08a2c")) +
+  labs(x = NULL, y = "Temperatur [°C]", colour = NULL, title = "Mittlere Temperatur der Schweiz") +
+  theme(legend.position = "top", plot.title.position = "plot", axis.text.x = element_blank())
+
+p_bilanz <- reihe_konstant |>
+  pivot_longer(c(Bw, Bs), names_to = "saison", values_to = "wert") |>
+  mutate(saison = recode(saison, Bw = "Winterbilanz", Bs = "Sommerbilanz")) |>
+  ggplot(aes(jahr, wert)) +
+  geom_hline(yintercept = 0, colour = "grey35") +
+  geom_col(aes(fill = saison), width = 0.8) + x_ax +
+  geom_line(data = reihe_konstant, aes(y = Ba), colour = "grey10", linewidth = 1) +
+  scale_fill_manual(values = c(Winterbilanz = "#9ecae1", Sommerbilanz = "#e08a2c")) +
+  labs(x = NULL, y = "Bilanz [m w.e.]", fill = NULL,
+       title = "Massenbilanz (Mittel der neun Gletscher)") +
+  theme(legend.position = "bottom", plot.title.position = "plot")
+
+p_temp / p_bilanz + plot_layout(heights = c(1, 1.5))
+
+# Zusammenhang: Sommertemperatur und Sommerbilanz (Korrelation nach Pearson)
+cor(reihe_konstant$Bs, klima$sommer_temp[match(reihe_konstant$jahr, klima$jahr)])
+```
+
+**Erkenntnis:** Die Sommertemperatur steigt. Die Winter-Temperatur steigt ebenfalls (Mittel 1990–1999: 0.6 °C, 2016–2025: 1.7 °C), die Winterbilanz bleibt aber ähnlich hoch. Warme Sommer wie 2003 und 2022 fallen mit den tiefsten Sommerbilanzen zusammen. Die Korrelation zwischen Sommertemperatur und Sommerbilanz der neun Gletscher beträgt −0.82, ein starker Zusammenhang, der aber nicht allein die Temperatur erklärt (auch Strahlung und Schneebedeckung spielen eine Rolle).
+
+
+
 ## Zwischenfazit
 
 **Einschätzung des Datensatzes:** Für Zeitauswertungen eignet sich dieser Datensatz deutlich besser als die Volumenänderung. Die Perioden sind jährlich, ein Gletscherjahr hat genau einen Wert. Der Preis ist eine kleine und zeitlich ungleiche Auswahl: Nur 43 Gletscher sind enthalten, nur drei davon seit 1915, und die Zahl der Gletscher pro Jahr schwankt zwischen 3 und 31. Eine Aussage für «die Schweizer Gletscher» ist damit nicht möglich.
