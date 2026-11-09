@@ -531,7 +531,14 @@ enden <- linien |>
   group_by(glacier_name) |>
   filter(jahr == max(jahr)) |>
   ungroup() |>
-  mutate(y_label = auseinander(Ba_m, 0.2))
+  transmute(jahr, name = glacier_name, y = Ba_m, mittel = FALSE)
+
+# Mittelwert als zehnte Beschriftung, die Positionen werden gemeinsam auseinandergezogen
+enden <- enden |>
+  bind_rows(reihe_konstant |>
+              filter(jahr == max(jahr)) |>
+              transmute(jahr, name = "Mittel der neun Gletscher", y = Ba, mittel = TRUE)) |>
+  mutate(y_label = auseinander(y, 0.2))
 
 # Position der Jahresbeschriftungen: unter der tiefsten Linie des Jahres
 extrem <- linien |>
@@ -545,8 +552,10 @@ ggplot(linien, aes(jahr, Ba_m)) +
   geom_line(aes(group = glacier_id), colour = "grey70", linewidth = 0.4) +
   geom_line(data = reihe_konstant, aes(y = Ba, colour = "Mittel der neun Gletscher"),
             linewidth = 1.3) +
-  geom_text(data = enden, aes(x = jahr + 0.4, y = y_label, label = glacier_name),
+  geom_text(data = filter(enden, !mittel), aes(x = jahr + 0.4, y = y_label, label = name),
             hjust = 0, size = 3, colour = "grey45", fontface = "italic") +
+  geom_text(data = filter(enden, mittel), aes(x = jahr + 0.4, y = y_label, label = name),
+            hjust = 0, size = 3.2, colour = "grey10", fontface = "bold") +
   geom_text(data = extrem, aes(x = jahr, y = y, label = text),
             vjust = 1, size = 3.5, fontface = "bold", colour = "grey20") +
   scale_colour_manual(values = c("Mittel der neun Gletscher" = "grey10")) +
@@ -554,7 +563,7 @@ ggplot(linien, aes(jahr, Ba_m)) +
   scale_y_continuous(limits = c(-4.4, 1.5)) +
   labs(title = "Entwicklung der jährlichen Massenbilanz ausgewählter Schweizer Gletscher seit 1990",
        x = "Jahr", y = "Jahresbilanz [m w.e.]", colour = NULL) +
-  theme(legend.position = "bottom", plot.title.position = "plot")
+  theme(legend.position = "none", plot.title.position = "plot")
 ```
 
 **Erkenntnis:** Der farbige Mittelwert hebt sich nun klar von den grauen Gletscherlinien ab, und die durchgezogene Nulllinie macht sichtbar, dass das Mittel nur in drei Jahren über null liegt (1993, 1995 und 2001). Die beiden Extremjahre sind beschriftet: 2003 (Hitzesommer, Mittel −2.1 m w.e., alle neun Gletscher zwischen −2.7 und −1.2) und 2022 (Rekordjahr, Mittel −3.1 m w.e., zwischen −3.9 und −2.4). Seit 2023 hat sich die Bilanz etwas erholt (−2.4, −1.1, −1.5 m w.e. in den Jahren 2023 bis 2025), bleibt aber klar negativ. Alle neun Gletscher lassen sich am Linienende direkt beschriften. Bei allen rund 30 Gletschern seit 1990 wäre das nicht mehr lesbar. Die Gletscher verlaufen weitgehend parallel, der Unterschied zwischen ihnen ist im Vergleich zu den Schwankungen zwischen den Jahren klein. Am stärksten ist der Verlust im Mittel beim Griesgletscher (−1.4 m w.e. pro Jahr seit 1990), am schwächsten beim Allalingletscher (−0.6).
@@ -697,16 +706,16 @@ punkte_alle <- bind_cols(punkte_alle, as_tibble(st_coordinates(punkte_alle)))
 ggplot() +
   geom_sf(data = umriss, fill = "#f1f3f5", colour = "#adb5bd", linewidth = 0.4) +
   geom_sf(data = filter(punkte_alle, !im_sample),
-          aes(colour = "Übrige Gletscher im Inventar"), size = 1.4, alpha = 0.8) +
+          aes(colour = "Übrige Gletscher im Gletscherinventar 2026 von Glamos"), size = 1.4, alpha = 0.8) +
   geom_sf(data = filter(punkte_alle, im_sample),
           aes(colour = "Sample (9 Gletscher)"), size = 3.4) +
   geom_text_repel(data = filter(punkte_alle, im_sample), aes(X, Y, label = glacier_name),
                   size = 3.1, fontface = "italic", colour = "grey20",
                   min.segment.length = 0, segment.colour = "grey55",
                   box.padding = 0.7, max.overlaps = Inf, seed = 4) +
-  scale_colour_manual(values = c("Übrige Gletscher im Inventar" = "#9aa5b1",
+  scale_colour_manual(values = c("Übrige Gletscher im Gletscherinventar 2026 von Glamos" = "#9aa5b1",
                                  "Sample (9 Gletscher)" = "#b2182b"),
-                      breaks = c("Sample (9 Gletscher)", "Übrige Gletscher im Inventar")) +
+                      breaks = c("Sample (9 Gletscher)", "Übrige Gletscher im Gletscherinventar 2026 von Glamos")) +
   theme_void(base_size = 11) +
   theme(legend.position = "bottom", legend.title = element_blank())
 ```
@@ -760,30 +769,59 @@ ggplot(klima_k, aes(jahr)) +
 #| fig-height: 6.5
 #| warning: false
 
-x_ax <- scale_x_continuous(limits = c(1989.4, 2025.6), breaks = seq(1990, 2025, 5))
+x_ax <- scale_x_continuous(limits = c(1989.4, 2034), breaks = seq(1990, 2025, 5))
+
+# Hervorgehobene Jahre: Schattierung über beide Teilgrafiken
+extremjahre <- tibble(jahr = c(2003, 2022), text = c("Hitzesommer 2003", "Rekordjahr 2022"))
+schatten <- geom_rect(data = extremjahre,
+                      aes(xmin = jahr - 0.5, xmax = jahr + 0.5, ymin = -Inf, ymax = Inf),
+                      inherit.aes = FALSE, fill = "#b2182b", alpha = 0.12)
 
 klima_saison <- klima |>
   filter(jahr >= 1990, jahr <= 2025) |>
   pivot_longer(c(winter_temp, sommer_temp), names_to = "saison", values_to = "t") |>
   mutate(saison = recode(saison, winter_temp = "Winter (Okt–Mär)", sommer_temp = "Sommer (Apr–Sep)"))
 
+# Beschriftung direkt am Linienende
+enden_temp <- klima_saison |> filter(jahr == 2025)
+
 p_temp <- ggplot(klima_saison, aes(jahr, t, colour = saison)) +
+  schatten +
   geom_line(linewidth = 1) + x_ax +
+  geom_text(data = enden_temp, aes(x = jahr + 0.5, label = saison), hjust = 0, size = 3.2,
+            fontface = "bold", show.legend = FALSE) +
   scale_colour_manual(values = c("Winter (Okt–Mär)" = "#4a8fc0", "Sommer (Apr–Sep)" = "#e08a2c")) +
-  labs(x = NULL, y = "Temperatur [°C]", colour = NULL, title = "Mittlere Temperatur der Schweiz") +
-  theme(legend.position = "top", plot.title.position = "plot", axis.text.x = element_blank())
+  labs(x = NULL, y = "Temperatur [°C]", title = "Mittlere Temperatur der Schweiz") +
+  theme(legend.position = "none", plot.title.position = "plot", axis.text.x = element_blank())
+
+letzte <- reihe_konstant |> filter(jahr == max(jahr))
+enden_bilanz <- tibble(
+  jahr = letzte$jahr, y = c(letzte$Bw, letzte$Ba, letzte$Bs),
+  text = c("Winterbilanz", "Jahresbilanz\n(Mittel)", "Sommerbilanz"),
+  farbe = c("#3b7ea6", "grey10", "#b36a14"))
+# Jahresbeschriftung unter dem tiefsten Balken des Jahres
+beschriftung <- reihe_konstant |>
+  inner_join(extremjahre, by = "jahr") |>
+  transmute(jahr, text, y = Bs - 0.15)
 
 p_bilanz <- reihe_konstant |>
   pivot_longer(c(Bw, Bs), names_to = "saison", values_to = "wert") |>
   mutate(saison = recode(saison, Bw = "Winterbilanz", Bs = "Sommerbilanz")) |>
   ggplot(aes(jahr, wert)) +
+  schatten +
   geom_hline(yintercept = 0, colour = "grey35") +
-  geom_col(aes(fill = saison), width = 0.8) + x_ax +
+  geom_col(aes(fill = saison), width = 0.8, show.legend = FALSE) + x_ax +
   geom_line(data = reihe_konstant, aes(y = Ba), colour = "grey10", linewidth = 1) +
+  geom_text(data = beschriftung, aes(y = y, label = text), vjust = 1, size = 3.3,
+            fontface = "bold", colour = "grey20") +
+  geom_text(data = enden_bilanz, aes(x = jahr + 0.7, y = y, label = text, colour = farbe),
+            hjust = 0, size = 3.2, fontface = "bold", lineheight = 0.9, show.legend = FALSE) +
+  scale_colour_identity() +
   scale_fill_manual(values = c(Winterbilanz = "#9ecae1", Sommerbilanz = "#e08a2c")) +
-  labs(x = NULL, y = "Bilanz [m w.e.]", fill = NULL,
+  scale_y_continuous(limits = c(-4.9, 2)) +
+  labs(x = NULL, y = "Bilanz [m w.e.]",
        title = "Massenbilanz (Mittel der neun Gletscher)") +
-  theme(legend.position = "bottom", plot.title.position = "plot")
+  theme(plot.title.position = "plot")
 
 p_temp / p_bilanz + plot_layout(heights = c(1, 1.5))
 
@@ -794,6 +832,243 @@ cor(reihe_konstant$Bs, klima$sommer_temp[match(reihe_konstant$jahr, klima$jahr)]
 **Erkenntnis:** Die Sommertemperatur steigt. Die Winter-Temperatur steigt ebenfalls (Mittel 1990–1999: 0.6 °C, 2016–2025: 1.7 °C), die Winterbilanz bleibt aber ähnlich hoch. Warme Sommer wie 2003 und 2022 fallen mit den tiefsten Sommerbilanzen zusammen. Die Korrelation zwischen Sommertemperatur und Sommerbilanz der neun Gletscher beträgt −0.82, ein starker Zusammenhang, der aber nicht allein die Temperatur erklärt (auch Strahlung und Schneebedeckung spielen eine Rolle).
 
 
+
+### Finalisierung der Grafiken für die Infografik
+
+**Ziel:** Die drei Grafiken der Infografik (Karte, Zeitverlauf, Temperatur und Massenbilanz) sollen einheitlich aussehen und direkt in die Infografik übernommen werden können. Die Grafiken werden deshalb in der Grösse exportiert, in der sie in der Infografik stehen (Breite und Höhe in Punkt). So ist die Schrift auf der Folie überall gleich gross.
+
+**Anpassungen gegenüber den bisherigen Iterationen:**
+
+- Einheitlicher Stil: fetter Titel, linksbündig; Achsen, Beschriftungen und Legenden in 7.5 pt.
+- Farbcode für die Jahreszeiten: Der **Sommer ist blau** (Assoziation mit dem Schmelzen), der **Winter hellgrau** (Assoziation mit Schnee). Er gilt für die Balken und für die Temperaturlinien.
+- Die Temperaturgrafik zeigt zusätzlich das **Jahresmittel** (orange, direkt beschriftet). Dieselbe Farbe hat die Jahresbilanz in der Bilanzgrafik, mit weissem Saum, damit sie sich auf den blauen Balken abhebt. Es ist das Mittel aus Winter- und Sommertemperatur und gilt damit für das Hydrojahr (Oktober bis September), wie die Gletscherbilanzen.
+- Die Jahre 2003 und 2022 sind in beiden Teilgrafiken rot hinterlegt, die Linien und Balken direkt beschriftet, auf Legenden wird verzichtet.
+
+```{r}
+#| label: finalisierung-setup
+#| warning: false
+
+library(sf)
+library(ggrepel)
+library(patchwork)
+
+# Schrift: Inter, falls installiert, sonst die Standardschrift
+schrift <- if (requireNamespace("systemfonts", quietly = TRUE) &&
+               "Inter" %in% systemfonts::system_fonts()$family) "Inter" else "sans"
+
+# Beschriftungsgrösse: 7.5 pt (ggplot rechnet Textgrössen in mm)
+sz <- 7.5 / .pt
+
+# Farben
+col_sommer <- "#2166ac"   # Sommer: blau (Schmelzen)
+col_winter <- "#9eb5ce"   # Winter: hellgrau (Schnee)
+txt_winter <- "#6b7785"   # dunkleres Grau für Beschriftungen und Linien
+col_extrem <- "#b2182b"   # Hervorhebung 2003 und 2022
+col_jahr   <- "#d97706"   # Jahresmittel / Jahresbilanz: Orange (Linien und Beschriftungen)
+txt_jahr   <- col_jahr     # Beschriftung in derselben Farbe wie die Linie
+
+# Einheitliches Theme
+theme_info <- function() {
+  theme_minimal(base_size = 8, base_family = schrift) +
+    theme(plot.title = element_text(face = "bold", size = 9.5, colour = "grey10"),
+          plot.title.position = "plot",
+          axis.title = element_text(size = 8, colour = "grey25"),
+          axis.text = element_text(size = 7.5, colour = "grey30"),
+          panel.grid.minor = element_blank(),
+          panel.grid.major = element_line(colour = "grey92", linewidth = 0.3),
+          legend.text = element_text(size = 7.5), legend.title = element_blank(),
+          plot.margin = margin(4, 6, 2, 4))
+}
+
+# Export in der Grösse der Infografik (Breite und Höhe in pt) nach infografik/
+dir.create("infografik", showWarnings = FALSE)
+exportieren <- function(p, datei, breite_pt, hoehe_pt) {
+  geraet <- if (requireNamespace("ragg", quietly = TRUE)) ragg::agg_png else "png"
+  ggsave(file.path("infografik", datei), p, width = breite_pt / 72, height = hoehe_pt / 72,
+         dpi = 300, bg = "white", device = geraet)
+}
+
+# Hervorgehobene Jahre
+extremjahre <- tibble(jahr = c(2003, 2022), text = c("Hitzesommer 2003", "Rekordjahr 2022"))
+
+# Gletscher des Samples ab 1990
+linien <- gl |> filter(glacier_id %in% konstant$glacier_id, jahr >= 1990)
+```
+
+#### Grafik 1: Lage der neun Gletscher
+
+Die Karte nutzt `punkte_alle` und `umriss` aus der Iteration 2 von Ansatz 4 (alle 168 Gletscher des Inventars, Sample rot).
+
+```{r}
+#| label: fig-final-karte
+#| fig-cap: "Lage der neun Gletscher des Samples (rot) unter allen Gletschern des Inventars (grau)"
+#| fig-width: 4.07
+#| fig-height: 2.53
+#| warning: false
+
+p_karte <- ggplot() +
+  geom_sf(data = umriss, fill = "#f1f3f5", colour = "#adb5bd", linewidth = 0.3) +
+  geom_sf(data = filter(punkte_alle, !im_sample),
+          aes(colour = "Übrige Gletscher im Inventar"), size = 0.7, alpha = 0.8) +
+  geom_sf(data = filter(punkte_alle, im_sample),
+          aes(colour = "Sample (9 Gletscher)"), size = 1.8) +
+  geom_text_repel(data = filter(punkte_alle, im_sample), aes(X, Y, label = glacier_name),
+                  size = sz * 0.9, family = schrift, fontface = "italic", colour = "grey20",
+                  min.segment.length = 0, segment.colour = "grey55", segment.size = 0.25,
+                  box.padding = 0.35, max.overlaps = Inf, seed = 4) +
+  scale_colour_manual(values = c("Übrige Gletscher im Inventar" = "#9aa5b1",
+                                 "Sample (9 Gletscher)" = col_extrem),
+                      breaks = c("Sample (9 Gletscher)", "Übrige Gletscher im Inventar")) +
+  labs(title = "Lage der neun Gletscher") +
+  theme_void(base_size = 8, base_family = schrift) +
+  theme(plot.title = element_text(face = "bold", size = 9.5, colour = "grey10"),
+        plot.title.position = "plot", legend.position = "bottom",
+        legend.title = element_blank(), legend.text = element_text(size = 7.5),
+        legend.margin = margin(0, 0, 0, 0), plot.margin = margin(4, 6, 2, 4))
+
+p_karte
+exportieren(p_karte, "g_karte.png", 293.04, 182.25)
+```
+
+#### Grafik 2: Jährliche Massenbilanz seit 1990
+
+```{r}
+#| label: fig-final-zeitverlauf
+#| fig-cap: "Jährliche Massenbilanz der neun Gletscher seit 1990, Mittel schwarz"
+#| fig-width: 5.62
+#| fig-height: 3.37
+#| warning: false
+
+# Beschriftungen am Linienende: Positionen vertikal etwas auseinanderziehen
+auseinander <- function(y, abstand) {
+  o <- order(y)
+  ys <- y[o]
+  for (i in seq_along(ys)[-1]) {
+    if (ys[i] - ys[i - 1] < abstand) ys[i] <- ys[i - 1] + abstand
+  }
+  ys <- ys - (mean(ys) - mean(y))
+  y[o] <- ys
+  y
+}
+
+# Namen der Gletscher und das Mittel als gemeinsame Beschriftungen am Linienende
+enden_z <- linien |>
+  group_by(glacier_name) |>
+  filter(jahr == max(jahr)) |>
+  ungroup() |>
+  transmute(jahr, name = glacier_name, y = Ba_m, mittel = FALSE) |>
+  bind_rows(reihe_konstant |>
+              filter(jahr == max(jahr)) |>
+              transmute(jahr, name = "Mittel der neun Gletscher", y = Ba, mittel = TRUE)) |>
+  mutate(y_label = auseinander(y, 0.25))
+
+# Jahresbeschriftung unter der tiefsten Linie des Jahres
+jahre_z <- linien |>
+  filter(jahr %in% extremjahre$jahr) |>
+  group_by(jahr) |>
+  summarise(y = min(Ba_m) - 0.12, .groups = "drop") |>
+  left_join(extremjahre, by = "jahr")
+
+p_zeit <- ggplot(linien, aes(jahr, Ba_m)) +
+  geom_hline(yintercept = 0, colour = "grey10", linewidth = 0.5) +
+  geom_line(aes(group = glacier_id), colour = "grey72", linewidth = 0.3) +
+  geom_line(data = reihe_konstant, aes(y = Ba), colour = col_jahr, linewidth = 1) +
+  geom_text(data = filter(enden_z, !mittel), aes(x = jahr + 0.5, y = y_label, label = name),
+            hjust = 0, size = sz, colour = "grey45", fontface = "italic", family = schrift) +
+  geom_text(data = filter(enden_z, mittel), aes(x = jahr + 0.5, y = y_label, label = name),
+            hjust = 0, size = sz, colour = txt_jahr, fontface = "bold", family = schrift) +
+  geom_text(data = jahre_z, aes(y = y, label = text), vjust = 1, size = sz,
+            fontface = "bold", colour = "grey15", family = schrift) +
+  scale_x_continuous(limits = c(1990, 2041), breaks = seq(1990, 2025, 5)) +
+  scale_y_continuous(limits = c(-4.4, 1.5)) +
+  labs(title = "Jährliche Massenbilanz der neun Gletscher seit 1990",
+       x = NULL, y = "Jahresbilanz [m w.e.]") +
+  theme_info()
+
+p_zeit
+exportieren(p_zeit, "g_zeitverlauf.png", 404.53, 242.72)
+```
+
+#### Grafik 3: Mittlere Temperatur und Massenbilanz
+
+```{r}
+#| label: fig-final-saisons
+#| fig-cap: "Temperatur der Schweiz (oben: Sommer blau, Winter grau, Jahresmittel orange) und Winter-, Sommer- und Jahresbilanz der neun Gletscher (unten), 1990–2025"
+#| fig-width: 6.96
+#| fig-height: 5.66
+#| warning: false
+
+x_final <- scale_x_continuous(limits = c(1989.4, 2036), breaks = seq(1990, 2025, 5))
+# Hervorgehobene Jahre: Schattierung (Deckkraft 10 %) über beide Teilgrafiken
+schatten_final <- geom_rect(data = extremjahre,
+                            aes(xmin = jahr - 0.5, xmax = jahr + 0.5, ymin = -Inf, ymax = Inf),
+                            inherit.aes = FALSE, fill = col_extrem, alpha = 0.10)
+
+# Temperatur: Jahresmittel = Mittel aus Winter (Okt–Mär) und Sommer (Apr–Sep), Hydrojahr
+temp_final <- klima |>
+  mutate(jahresmittel = (winter_temp + sommer_temp) / 2) |>
+  filter(jahr >= 1990, jahr <= 2025) |>
+  pivot_longer(c(sommer_temp, jahresmittel, winter_temp), names_to = "reihe", values_to = "t") |>
+  mutate(reihe = factor(reihe, levels = c("sommer_temp", "jahresmittel", "winter_temp"),
+                        labels = c("Sommer (Apr–Sep)", "Jahresmittel", "Winter (Okt–Mär)")))
+
+farben_temp <- c("Sommer (Apr–Sep)" = col_sommer, "Jahresmittel" = col_jahr,
+                 "Winter (Okt–Mär)" = "#7a93b0")
+
+p_temp <- ggplot(temp_final, aes(jahr, t, colour = reihe)) +
+  schatten_final +
+  geom_line(linewidth = 0.9) + x_final +
+  geom_text(data = filter(temp_final, jahr == 2025, reihe == "Sommer (Apr–Sep)"),
+            aes(x = jahr + 0.6, label = reihe), colour = col_sommer,
+            hjust = 0, size = sz, fontface = "bold", family = schrift) +
+  geom_text(data = filter(temp_final, jahr == 2025, reihe == "Jahresmittel"),
+            aes(x = jahr + 0.6, label = reihe), colour = txt_jahr,
+            hjust = 0, size = sz, fontface = "bold", family = schrift) +
+  geom_text(data = filter(temp_final, jahr == 2025, reihe == "Winter (Okt–Mär)"),
+            aes(x = jahr + 0.6, label = reihe), colour = txt_winter,
+            hjust = 0, size = sz, fontface = "bold", family = schrift) +
+  scale_colour_manual(values = farben_temp) +
+  labs(title = "Mittlere Temperatur der Schweiz", x = NULL, y = "Temperatur [°C]") +
+  theme_info() +
+  theme(legend.position = "none", axis.text.x = element_blank())
+
+# Bilanz: Winter hellgrau, Sommer blau, Jahresbilanz als schwarze Linie
+letzte_final <- reihe_konstant |> filter(jahr == max(jahr))
+enden_bilanz <- tibble(
+  jahr = letzte_final$jahr,
+  y = c(letzte_final$Bw, letzte_final$Ba, letzte_final$Bs),
+  text = c("Winterbilanz", "Jahresbilanz\n(Mittel)", "Sommerbilanz"),
+  farbe = c(txt_winter, txt_jahr, col_sommer))
+jahre_bilanz <- reihe_konstant |>
+  inner_join(extremjahre, by = "jahr") |>
+  transmute(jahr, text, y = Bs - 0.15)
+
+p_bilanz <- reihe_konstant |>
+  pivot_longer(c(Bw, Bs), names_to = "saison", values_to = "wert") |>
+  mutate(saison = recode(saison, Bw = "Winterbilanz", Bs = "Sommerbilanz")) |>
+  ggplot(aes(jahr, wert)) +
+  schatten_final +
+  geom_hline(yintercept = 0, colour = "grey35", linewidth = 0.5) +
+  geom_col(aes(fill = saison), width = 0.8, show.legend = FALSE) + x_final +
+  geom_line(data = reihe_konstant, aes(y = Ba), colour = "white", linewidth = 1.9) +   # weisser Saum
+  geom_line(data = reihe_konstant, aes(y = Ba), colour = col_jahr, linewidth = 0.9) +
+  geom_text(data = jahre_bilanz, aes(y = y, label = text), vjust = 1, size = sz,
+            fontface = "bold", colour = "grey15", family = schrift) +
+  geom_text(data = enden_bilanz, aes(x = jahr + 0.8, y = y, label = text, colour = farbe),
+            hjust = 0, size = sz, fontface = "bold", lineheight = 0.9, family = schrift,
+            show.legend = FALSE) +
+  scale_colour_identity() +
+  scale_fill_manual(values = c(Winterbilanz = col_winter, Sommerbilanz = col_sommer)) +
+  scale_y_continuous(limits = c(-4.9, 2)) +
+  labs(title = "Massenbilanz der neun Gletscher", x = NULL, y = "Bilanz [m w.e.]") +
+  theme_info()
+
+p_final <- p_temp / p_bilanz + plot_layout(heights = c(1, 1.45))
+p_final
+exportieren(p_final, "g_saisons.png", 501.35, 407.35)
+```
+
+**Hinweis:** Die Grafiken werden beim Rendern zusätzlich als PNG in den Ordner `infografik/` geschrieben (`g_karte.png`, `g_zeitverlauf.png`, `g_saisons.png`). Diese Dateien wurden in der Infografik (PowerPoint) verwendet.
 
 ## Zwischenfazit
 
